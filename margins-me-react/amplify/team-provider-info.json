@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-marginsmereact-dev-205104-authRole",
+      "UnauthRoleArn": "arn:aws:iam::516851544810:role/amplify-marginsmereact-dev-205104-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::516851544810:role/amplify-marginsmereact-dev-205104-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-marginsmereact-dev-205104-deployment",
+      "UnauthRoleName": "amplify-marginsmereact-dev-205104-unauthRole",
+      "StackName": "amplify-marginsmereact-dev-205104",
+      "StackId": "arn:aws:cloudformation:us-east-1:516851544810:stack/amplify-marginsmereact-dev-205104/437bb900-0fae-11eb-bc25-0afbd365c3b9",
+      "AmplifyAppId": "d2ar4n9n0hvz5r"
+    }
+  }
+}
