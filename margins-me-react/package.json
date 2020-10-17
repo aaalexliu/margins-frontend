@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^5.7.0",
+    "@emotion/core": "^10.0.35",
+    "@emotion/styled": "^10.0.27",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -14,6 +16,7 @@
     "antd": "^4.7.0",
     "aws-amplify": "^3.3.4",
     "craco-less": "^1.17.0",
+    "emotion": "^10.0.27",
     "history": "^5.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
