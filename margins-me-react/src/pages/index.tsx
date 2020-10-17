@@ -12,6 +12,7 @@ export default function Pages() {
     <Fragment>
       <PageLayout>
         <BrowserRouter>
+
           {/* <Launches path="/" />
           <Launch path="launch/:launchId" />
           <Cart path="cart" />
