@@ -3,10 +3,14 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import Pages from './pages';
 import './index.less';
+import { BrowserRouter } from 'react-router-dom';
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <Pages/>
+    <BrowserRouter>
+      <Pages/>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

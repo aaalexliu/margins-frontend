@@ -1,23 +1,21 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 // import Launch from './launch';
 // import Launches from './launches';
 // import Cart from './cart';
 // import Profile from './profile';
+
+import Login from './login';
 import { PageLayout } from '../components';
 
 export default function Pages() {
   return (
     <Fragment>
       <PageLayout>
-        <BrowserRouter>
-
-          {/* <Launches path="/" />
-          <Launch path="launch/:launchId" />
-          <Cart path="cart" />
-          <Profile path="profile" /> */}
-        </BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />}/>
+        </Routes>
       </PageLayout>
     </Fragment>
   );

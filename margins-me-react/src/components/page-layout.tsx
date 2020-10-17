@@ -1,17 +1,28 @@
 import React, { Fragment } from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu } from 'antd';
+import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
 const { Header, Content, Footer } = Layout;
+
+const RightAlignedMenuItems = styled.div`
+  margin-left: auto;
+`;
 
 export default function PageLayout (props: any) {
   return (
     <Layout className="layout">
       <Header>
         <Menu mode="horizontal">
-          <Menu.Item>Sign Up</Menu.Item>
-          <Menu.Item>Login</Menu.Item>  
+            <Menu.Item>
+              <Link to="/">Home</Link>
+            </Menu.Item>
+            <Menu.Item>
+              <Link to ="/login">
+                Login
+              </Link>
+            </Menu.Item>
         </Menu>
       </Header>
       <Content>
