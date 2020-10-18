@@ -4,8 +4,21 @@ import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 
-const onFinish = (values: any) => {
+import { Auth } from 'aws-amplify';
+import { isLoggedInVar } from '../cache';
+
+
+const onFinish = async (values: any) => {
   console.log('Success:', values);
+  const { username, password } = values;
+  try {
+    const user = await Auth.signIn(username, password);
+    console.log('logged in');
+    const userInfo = await Auth.currentSession();
+    console.log(userInfo);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const onFinishFailed = (errorInfo: any) => {
