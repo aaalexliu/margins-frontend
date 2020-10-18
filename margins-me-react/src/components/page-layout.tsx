@@ -25,7 +25,7 @@ export default function PageLayout (props: any) {
             </Menu.Item>
         </Menu>
       </Header>
-      <Content>
+      <Content style={{padding: '24px'}}>
         {props.children}
       </Content>
       <Footer>
