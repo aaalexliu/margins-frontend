@@ -5,6 +5,19 @@ import Pages from './pages';
 import './index.less';
 import { BrowserRouter } from 'react-router-dom';
 
+import { Amplify } from 'aws-amplify';
+
+import awsConfig from './aws.config';
+
+Amplify.configure({
+  Auth: {
+    mandatorySignIn: true,
+    region: awsConfig.cognito.REGION,
+    userPoolId: awsConfig.cognito.USER_POOL_ID,
+    identityPoolId: awsConfig.cognito.IDENTITY_POOL_ID,
+    userPoolWebClientId: awsConfig.cognito.APP_CLIENT_ID
+  }
+})
 
 ReactDOM.render(
   <React.StrictMode>

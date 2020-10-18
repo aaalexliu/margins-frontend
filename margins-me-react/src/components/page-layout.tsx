@@ -14,7 +14,7 @@ export default function PageLayout (props: any) {
   return (
     <Layout className="layout">
       <Header>
-        <Menu mode="horizontal">
+        <Menu theme="dark" mode="horizontal">
             <Menu.Item>
               <Link to="/">Home</Link>
             </Menu.Item>
