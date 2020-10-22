@@ -20,3 +20,5 @@ export default function Pages() {
     </Fragment>
   );
 }
+
+export { default as Loading } from '../pages/loading';
