@@ -5,26 +5,10 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 
 import { Auth } from 'aws-amplify';
-import { isLoggedInVar } from '../cache';
+import { CognitoUser } from '@aws-amplify/auth';
+import { isLoggedInVar, accessTokenVar } from '../cache';
 import { gql, useQuery } from '@apollo/client';
-
-
-const onFinish = async (values: any) => {
-  console.log('Success:', values);
-  const { username, password } = values;
-  try {
-    const user = await Auth.signIn(username, password);
-    console.log('logged in');
-    const userInfo = await Auth.currentSession();
-    console.log(userInfo);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const onFinishFailed = (errorInfo: any) => {
-  console.log('Failed:', errorInfo);
-};
+import { useNavigate } from 'react-router-dom';
 
 const CenteredDiv = styled.div`
   margin: 0 auto;
@@ -46,16 +30,34 @@ const CenteredDiv = styled.div`
 
 export default function LoginForm() {
 
-  const IS_LOGGED_IN = gql`
-  query IsUserLoggedIn {
-    isLoggedIn @client
-  }
-`;
-
-  const { data } = useQuery(IS_LOGGED_IN);
-  console.log(data);
-
   const [form] = Form.useForm();
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
+  const onFinish = async (values: any) => {
+    console.log('Success:', values);
+    const { username, password } = values;
+    setLoading(true);
+    try {
+      const user: CognitoUser = await Auth.signIn(username, password);
+      setLoading(false);
+      const userSession = user.getSignInUserSession();
+      if (!userSession) throw new Error('sign in session null');
+      const accessToken = userSession.getAccessToken().getJwtToken();
+      isLoggedInVar(true);
+      accessTokenVar(accessToken);
+      navigate('/');
+      console.log('logged in');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   return (
     <CenteredDiv>
@@ -93,7 +95,7 @@ export default function LoginForm() {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button type="primary" loading={loading} htmlType="submit" className="login-form-button">
             Log in
           </Button>
           Or <a href="">register now!</a>
