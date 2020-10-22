@@ -4,12 +4,12 @@ import * as serviceWorker from './serviceWorker';
 import Pages, { Loading } from './pages';
 import './index.less';
 import { BrowserRouter } from 'react-router-dom';
+import { typeDefs } from './client-schema';
 
 import {
   ApolloClient,
   NormalizedCacheObject,
   ApolloProvider,
-  gql,
   createHttpLink
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
@@ -27,13 +27,6 @@ Amplify.configure({
     userPoolWebClientId: awsConfig.cognito.APP_CLIENT_ID
   }
 });
-
-
-const typeDefs = gql`
-  extend type Query {
-    isLoggedIn: Boolean!
-  }
-`
 
 const httpLink = createHttpLink({
   uri: 'http://ec2-34-232-69-157.compute-1.amazonaws.com:8080/graphql'

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Button } from 'antd';
 import { Link } from 'react-router-dom';
+import { LoginOrLogout } from './index';
 
 import styled from '@emotion/styled';
 
@@ -9,6 +10,7 @@ const { Header, Content, Footer } = Layout;
 const RightAlignedMenuItems = styled.div`
   margin-left: auto;
 `;
+
 
 export default function PageLayout (props: any) {
   return (
@@ -19,9 +21,7 @@ export default function PageLayout (props: any) {
               <Link to="/">Home</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to ="/login">
-                Login
-              </Link>
+              <LoginOrLogout />
             </Menu.Item>
         </Menu>
       </Header>
