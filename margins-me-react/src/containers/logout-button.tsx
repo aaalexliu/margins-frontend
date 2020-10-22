@@ -1,13 +1,19 @@
 import React from 'react';
-import { Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { isLoggedInVar } from '../cache';
+import { isLoggedInVar, accessTokenVar } from '../cache';
+import { Auth } from 'aws-amplify';
 
 export default function LogoutButton() {
 
-  const LogoutCallback = () => {
-    isLoggedInVar(false);
-    console.log(isLoggedInVar());
+  const LogoutCallback = async () => {
+    try {
+      await Auth.signOut();
+      isLoggedInVar(false);
+      accessTokenVar('');
+      console.log('logout success');
+    } catch(error) {
+      console.log('error signing out', error);
+    }
   }
 
   return (
