@@ -8,7 +8,7 @@ import { Auth } from 'aws-amplify';
 import { CognitoUser } from '@aws-amplify/auth';
 import { isLoggedInVar, accessTokenVar } from '../cache';
 import { gql, useQuery } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const CenteredDiv = styled.div`
   margin: 0 auto;
@@ -98,7 +98,7 @@ export default function LoginForm() {
           <Button type="primary" loading={loading} htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          Or <a href="">register now!</a>
+          Or <Link to="/signup">sign up now!</Link>
         </Form.Item>
       </Form>
     </CenteredDiv>

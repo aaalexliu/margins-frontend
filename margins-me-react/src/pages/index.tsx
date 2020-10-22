@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 // import Profile from './profile';
 
 import Login from './login';
+import Signup from './signup';
 import { PageLayout } from '../components';
 
 export default function Pages() {
@@ -15,6 +16,7 @@ export default function Pages() {
       <PageLayout>
         <Routes>
           <Route path="/login" element={<Login />}/>
+          <Route path="/signup" element={<Signup />}/>
         </Routes>
       </PageLayout>
     </Fragment>
