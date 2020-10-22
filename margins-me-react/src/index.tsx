@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-import Pages from './pages';
-import { Loading } from './components';
+import Pages, { Loading } from './pages';
 import './index.less';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -12,21 +11,13 @@ import {
   ApolloProvider,
   useQuery,
   gql,
+  createHttpLink
 } from '@apollo/client';
-import { cache } from './cache';
+import { setContext } from '@apollo/client/link/context';
+import { cache, accessTokenVar, isLoggedInVar } from './cache';
 
 import { Amplify, Auth } from 'aws-amplify';
 import awsConfig from './aws.config';
-import { isLoggedInVar}  from './cache';
-
-
-
-export const typeDefs = gql`
-  extend type Query {
-    isLoggedIn: Boolean!
-    # cartItems: [ID!]!
-  }
-`;
 
 Amplify.configure({
   Auth: {
@@ -38,39 +29,70 @@ Amplify.configure({
   }
 });
 
+
+const typeDefs = gql`
+  extend type Query {
+    isLoggedIn: Boolean!
+  }
+`
+
+const httpLink = createHttpLink({
+  uri: 'http://ec2-34-232-69-157.compute-1.amazonaws.com:8080/graphql'
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get access token from cache if exists
+  const accessToken = accessTokenVar();
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: accessToken ? `Bearer ${accessToken}` : ""
+    }
+  }
+})
+
+const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  cache,
+  link: authLink.concat(httpLink),
+  // headers: {
+  //   'client-name': 'Margins Me [dev]',
+  //   'client-version': '1.0.0',
+  // },
+  typeDefs,
+  connectToDevTools: true,
+});
+
+
 function CheckLogin() {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
 
   Auth.currentSession().then(user => {
-    if (!!user) {
+    console.log(user);
+    console.log(user.getAccessToken());
+
+    if (!!user && !!user.getAccessToken()) {
+      accessTokenVar(user.getAccessToken().getJwtToken());
       isLoggedInVar(true);
     }
+  }).finally(() => {
+    console.log('heloo');
     setIsAuthenticating(false);
-  })
+  });
+
 
   return (
     isAuthenticating ? <Loading /> : <Pages />
   )
 }
 
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache,
-  uri: 'http://localhost:4000/graphql',
-  headers: {
-    authorization: localStorage.getItem('token') || '',
-    'client-name': 'Margins Me [dev]',
-    'client-version': '1.0.0',
-  },
-  typeDefs,
-  resolvers: {},
-});
-
-
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <CheckLogin />
-    </BrowserRouter>
+    <ApolloProvider client={client}>
+      <BrowserRouter>
+        <CheckLogin />
+      </BrowserRouter>
+    </ApolloProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

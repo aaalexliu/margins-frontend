@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 
 import { Auth } from 'aws-amplify';
 import { isLoggedInVar } from '../cache';
+import { gql, useQuery } from '@apollo/client';
 
 
 const onFinish = async (values: any) => {
@@ -44,6 +45,15 @@ const CenteredDiv = styled.div`
 `;
 
 export default function LoginForm() {
+
+  const IS_LOGGED_IN = gql`
+  query IsUserLoggedIn {
+    isLoggedIn @client
+  }
+`;
+
+  const { data } = useQuery(IS_LOGGED_IN);
+  console.log(data);
 
   const [form] = Form.useForm();
 

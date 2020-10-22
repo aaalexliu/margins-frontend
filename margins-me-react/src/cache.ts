@@ -1,35 +1,23 @@
-import { InMemoryCache, Reference } from '@apollo/client';
+import { InMemoryCache, makeVar, Reference } from '@apollo/client';
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        isLoggedIn() {
-          return isLoggedInVar();
+        isLoggedIn: {
+          read() {
+            return isLoggedInVar();
+          }
         },
-        // cartItems() {
-        //   return cartItemsVar();
-        // },
-        // launches: {
-        //   keyArgs: false,
-        //   merge(existing, incoming) {
-        //     let launches: Reference[] = [];
-        //     if (existing && existing.launches) {
-        //       launches = launches.concat(existing.launches);
-        //     }
-        //     if (incoming && incoming.launches) {
-        //       launches = launches.concat(incoming.launches);
-        //     }
-        //     return {
-        //       ...incoming,
-        //       launches,
-        //     };
-        //   }
-        // }
+        accessToken: {
+          read() {
+            return accessTokenVar();
+          }
+        },
       }
     }
   }
 });
 
-export const isLoggedInVar =cache.makeVar<boolean>(false);
-export const cartItemsVar = cache.makeVar<string[]>([]);
+export const isLoggedInVar = makeVar<boolean>(false);
+export const accessTokenVar = makeVar<string>('');
