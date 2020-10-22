@@ -2,25 +2,31 @@ import React, { Fragment } from 'react';
 import { Layout, Menu, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { LoginOrLogout } from './index';
+import { useLocation } from 'react-router';
 
 import styled from '@emotion/styled';
 
 const { Header, Content, Footer } = Layout;
 
-const RightAlignedMenuItems = styled.div`
-  margin-left: auto;
-`;
+// const RightAlignedMenuItems = styled.div`
+//   margin-left: auto;
+// `;
+
+
 
 
 export default function PageLayout (props: any) {
+
+  const location = useLocation();
+  const { pathname } = location;
   return (
     <Layout className="layout">
       <Header>
-        <Menu theme="dark" mode="horizontal">
-            <Menu.Item>
+        <Menu theme="dark" mode="horizontal" selectedKeys={[pathname]}>
+            <Menu.Item key = "/">
               <Link to="/">Home</Link>
             </Menu.Item>
-            <Menu.Item>
+            <Menu.Item key="/login">
               <LoginOrLogout />
             </Menu.Item>
         </Menu>
