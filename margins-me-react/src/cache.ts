@@ -1,4 +1,4 @@
-import { InMemoryCache, makeVar, Reference } from '@apollo/client';
+import { InMemoryCache } from '@apollo/client';
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -19,5 +19,5 @@ export const cache: InMemoryCache = new InMemoryCache({
   }
 });
 
-export const isLoggedInVar = makeVar<boolean>(false);
-export const accessTokenVar = makeVar<string>('');
+export const isLoggedInVar = cache.makeVar<boolean>(false);
+export const accessTokenVar = cache.makeVar<string>('');
