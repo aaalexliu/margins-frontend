@@ -9,7 +9,6 @@ import {
   ApolloClient,
   NormalizedCacheObject,
   ApolloProvider,
-  useQuery,
   gql,
   createHttpLink
 } from '@apollo/client';
@@ -55,10 +54,6 @@ const authLink = setContext((_, { headers }) => {
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
   link: authLink.concat(httpLink),
-  // headers: {
-  //   'client-name': 'Margins Me [dev]',
-  //   'client-version': '1.0.0',
-  // },
   typeDefs,
   connectToDevTools: true,
 });
