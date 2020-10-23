@@ -5,8 +5,8 @@ export const typeDefs = gql`
   type CurrentAccount {
     isLoggedIn: Boolean,
     accessToken: String,
-    unverifiedEmail: String,
-    account: Account
+    email: String,
+    sub: String
   }
 
   extend type Query {

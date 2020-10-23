@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const IS_LOGGED_IN = gql`
   query isAccountLoggedIn {
     currentAccount @client {
-      isLoggedIn @client
+      isLoggedIn
     }
   }
 `;
@@ -14,9 +14,8 @@ const IS_LOGGED_IN = gql`
 export default function LoginOrLogout() {
   
   const { data } = useQuery(IS_LOGGED_IN);
-  console.log(data);
 
-  const isLoggedIn = true;
+  const isLoggedIn = data.currentAccount.isLoggedIn;
 
   return (
     isLoggedIn ?

@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 
 import { Auth } from 'aws-amplify';
 import { CognitoUser } from '@aws-amplify/auth';
-import { isLoggedInVar, accessTokenVar } from '../cache';
+import { currentAccountVar } from '../cache';
 import { gql, useQuery } from '@apollo/client';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -49,8 +49,16 @@ const Login = () => {
       const userSession = user.getSignInUserSession();
       if (!userSession) throw new Error('sign in session null');
       const accessToken = userSession.getAccessToken().getJwtToken();
-      isLoggedInVar(true);
-      accessTokenVar(accessToken);
+
+      const { attributes } = await Auth.currentAuthenticatedUser();
+
+      currentAccountVar({
+        isLoggedIn: true,
+        accessToken,
+        email: attributes.email,
+        sub: attributes.sub
+      });
+      
       navigate('/');
       console.log('logged in');
     } catch (error) {

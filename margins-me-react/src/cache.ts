@@ -32,8 +32,8 @@ export const cache: InMemoryCache = new InMemoryCache({
 const currentAccountInitialValue = {
   isLoggedIn: false,
   accessToken: '',
-  unverifiedEmail: '',
-  account: null
+  email: '',
+  sub: ''
 }
 
 export const currentAccountVar = cache.makeVar(currentAccountInitialValue);
