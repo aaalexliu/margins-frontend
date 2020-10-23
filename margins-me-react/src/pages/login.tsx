@@ -58,11 +58,21 @@ const Login = () => {
         email: attributes.email,
         sub: attributes.sub
       });
-      
+
       navigate('/');
       console.log('logged in');
     } catch (error) {
-      console.log(error);
+      console.log('error logging in:', error);
+      const code = error.code;
+      switch (code) {
+        case 'UserNotConfirmedException':
+          alert('Your account is not verified, please confirm your account!');
+          currentAccountVar({
+            ...currentAccountVar(),
+            email: username
+          });
+          navigate('/confirm-signup');
+      }
     }
   };
 

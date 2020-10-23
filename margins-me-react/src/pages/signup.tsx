@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import { Auth } from 'aws-amplify';
+import { currentAccountVar } from '../cache';
 
 const CenteredSignup = styled.div`
   margin: 0 auto;
@@ -58,12 +59,21 @@ const Signup = () => {
         username: values.email,
         password: values.password
       });
-      console.log(user);
+
+      currentAccountVar({
+        ...currentAccountVar(),
+        email: values.email,
+      })
 
       navigate('/confirm-signup');
     } catch(error) {
       console.log('error signing up:', error);
-      setIsLoading(false);
+      const code = error.code;
+      switch (code) {
+        case 'UsernameExistsException':
+          alert('User already exists, please Login!');
+          navigate('/login');
+      }
     }
   };
 
