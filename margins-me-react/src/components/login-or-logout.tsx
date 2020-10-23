@@ -4,16 +4,19 @@ import { gql, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 
 const IS_LOGGED_IN = gql`
-  query isUserLoggedIn {
-    isLoggedIn @client
+  query isAccountLoggedIn {
+    currentAccount @client {
+      isLoggedIn @client
+    }
   }
 `;
 
 export default function LoginOrLogout() {
   
   const { data } = useQuery(IS_LOGGED_IN);
+  console.log(data);
 
-  const isLoggedIn = data.isLoggedIn;
+  const isLoggedIn = true;
 
   return (
     isLoggedIn ?

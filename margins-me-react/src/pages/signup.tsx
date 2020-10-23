@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import { Auth } from 'aws-amplify';
-import { currentCognitoUserVar } from '../cache';
 
 const CenteredSignup = styled.div`
   margin: 0 auto;
@@ -60,7 +59,7 @@ const Signup = () => {
         password: values.password
       });
       console.log(user);
-      currentCognitoUserVar(user);
+
       navigate('/confirm-signup');
     } catch(error) {
       console.log('error signing up:', error);
