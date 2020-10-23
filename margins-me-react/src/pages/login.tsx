@@ -34,7 +34,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [confirmAccount, setConfirmAccount] = useState(false);
+  const [wrongPassword, setWrongPassword] = useState("");
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -44,24 +44,23 @@ const Login = () => {
     console.log('Success:', values);
     const { username, password } = values;
     setIsLoading(true);
+
     try {
       const user: CognitoUser = await Auth.signIn(username, password);
-      setIsLoading(false);
       const userSession = user.getSignInUserSession();
-      if (!userSession) throw new Error('sign in session null');
-      const accessToken = userSession.getAccessToken().getJwtToken();
-
-      const { attributes } = await Auth.currentAuthenticatedUser();
-
-      currentAccountVar({
-        isLoggedIn: true,
-        accessToken,
-        email: attributes.email,
-        sub: attributes.sub
-      });
-
+        if (!userSession) throw new Error('sign in session null');
+        const accessToken = userSession.getAccessToken().getJwtToken();
+  
+        const { attributes } = await Auth.currentAuthenticatedUser();
+  
+        currentAccountVar({
+          isLoggedIn: true,
+          accessToken,
+          email: attributes.email,
+          sub: attributes.sub
+        });
+      
       navigate('/');
-      console.log('logged in');
     } catch (error) {
       console.log('error logging in:', error);
       const code = error.code;
@@ -74,6 +73,15 @@ const Login = () => {
           });
           passwordVar(password);
           navigate('/confirm-signup');
+          break;
+        case 'NotAuthorizedException':
+          setIsLoading(false);
+          setWrongPassword('Wrong Password');
+          return true;
+        case 'PasswordResetRequiredException':
+          return true;
+        default:
+            return false;
       }
     }
   };
@@ -114,7 +122,9 @@ const Login = () => {
           </a>
         </Form.Item>
 
-        <Form.Item>
+        <Form.Item
+          help={wrongPassword}
+        >
           <Button type="primary" loading={isLoading} htmlType="submit" className="login-form-button">
             Log in
           </Button>
