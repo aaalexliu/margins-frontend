@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import {
   Form,
   Input,
-  Tooltip,
-  Cascader,
-  Select,
-  Row,
-  Col,
   Button,
-  AutoComplete,
 } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
 import styled from '@emotion/styled';
+
+import { Auth } from 'aws-amplify';
+import { currentCognitoUserVar } from '../cache';
 
 const CenteredSignup = styled.div`
   margin: 0 auto;
@@ -44,8 +43,29 @@ const tailFormItemLayout = {
 const Signup = () => {
   const [form] = Form.useForm();
 
-  const onFinish = (values: any) => {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onFinishFailed = (errorInfo: any) => {
+    console.log('Failed:', errorInfo);
+  };
+
+
+  const onFinish = async (values: any) => {
     console.log('Received values of form: ', values);
+    setIsLoading(true);
+    try {
+      const { user } = await Auth.signUp({
+        username: values.email,
+        password: values.password
+      });
+      console.log(user);
+      currentCognitoUserVar(user);
+      navigate('/confirm-signup');
+    } catch(error) {
+      console.log('error signing up:', error);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -55,6 +75,7 @@ const Signup = () => {
         form={form}
         name="register"
         onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
         scrollToFirstError
         className="signup-form"
       >
@@ -113,7 +134,7 @@ const Signup = () => {
         </Form.Item>
 
         <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={isLoading}>
             Register
           </Button>
         </Form.Item>
