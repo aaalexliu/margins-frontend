@@ -42,6 +42,8 @@ const ConfirmSignup = () => {
       );
       console.log(success);
       const user = await Auth.signIn(email, passwordVar());
+      //clear passwordVar after confirming and signing in
+      passwordVar('');
       const userSession = user.getSignInUserSession();
         if (!userSession) throw new Error('sign in session null');
         const accessToken = userSession.getAccessToken().getJwtToken();
