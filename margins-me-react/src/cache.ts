@@ -37,7 +37,3 @@ const currentAccountInitialValue = {
 }
 
 export const currentAccountVar = cache.makeVar(currentAccountInitialValue);
-
-export const isLoggedInVar = cache.makeVar<boolean>(false);
-export const accessTokenVar = cache.makeVar<string>('');
-export const unverifiedEmail = cache.makeVar<string>('');

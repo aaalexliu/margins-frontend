@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { isLoggedInVar, accessTokenVar } from '../cache';
+import { currentAccountVar } from '../cache';
 import { Auth } from 'aws-amplify';
 
 export default function LogoutButton() {
@@ -8,8 +8,12 @@ export default function LogoutButton() {
   const LogoutCallback = async () => {
     try {
       await Auth.signOut();
-      isLoggedInVar(false);
-      accessTokenVar('');
+      currentAccountVar({
+        accessToken: '',
+        isLoggedIn: false,
+        sub: '',
+        email: ''
+      })
       console.log('logout success');
     } catch(error) {
       console.log('error signing out', error);
