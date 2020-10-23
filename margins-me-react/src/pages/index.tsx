@@ -8,6 +8,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import Login from './login';
 import Signup from './signup';
+import ConfirmSignup from './confirm-signup';
 import { PageLayout } from '../components';
 
 export default function Pages() {
@@ -17,6 +18,7 @@ export default function Pages() {
         <Routes>
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>
+          <Route path="/confirm-signup" element={<ConfirmSignup />} />
         </Routes>
       </PageLayout>
     </Fragment>

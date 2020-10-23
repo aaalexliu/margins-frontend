@@ -28,7 +28,7 @@ const CenteredDiv = styled.div`
   }
 `;
 
-export default function LoginForm() {
+const Login = () => {
 
   const [form] = Form.useForm();
 
@@ -104,3 +104,5 @@ export default function LoginForm() {
     </CenteredDiv>
   );
 }
+
+export default Login;
