@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import { Auth } from 'aws-amplify';
-import { currentAccountVar } from '../cache';
+import { currentAccountVar, passwordVar } from '../cache';
 
 const CenteredSignup = styled.div`
   margin: 0 auto;
@@ -54,16 +54,19 @@ const Signup = () => {
   const onFinish = async (values: any) => {
     console.log('Received values of form: ', values);
     setIsLoading(true);
+    const { email, password } = values;
     try {
       const { user } = await Auth.signUp({
-        username: values.email,
-        password: values.password
+        username: email,
+        password: password
       });
 
       currentAccountVar({
         ...currentAccountVar(),
-        email: values.email,
-      })
+        email: email,
+      });
+
+      passwordVar(password);
 
       navigate('/confirm-signup');
     } catch(error) {

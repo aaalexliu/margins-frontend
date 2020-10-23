@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom'
 import { Form, Input, Button } from 'antd';
 
 import { Auth } from 'aws-amplify';
-import { currentAccountVar } from '../cache';
+import { currentAccountVar, passwordVar } from '../cache';
 import { useQuery, gql } from '@apollo/client';
 
 import styled from '@emotion/styled';
@@ -28,17 +28,36 @@ const CURRENT_EMAIL = gql`
 
 const ConfirmSignup = () => {
 
+  const navigate = useNavigate();
   const { data } = useQuery(CURRENT_EMAIL);
 
   const email = data.currentAccount.email;
 
   const onFinish = async (values: any) => {
     console.log('success: ', values);
-    const success = await Auth.confirmSignUp(
-      email,
-      values.code
-    );
-    console.log(success);
+    try {
+      const success = await Auth.confirmSignUp(
+        email,
+        values.code
+      );
+      console.log(success);
+      const user = await Auth.signIn(email, passwordVar());
+      const userSession = user.getSignInUserSession();
+        if (!userSession) throw new Error('sign in session null');
+        const accessToken = userSession.getAccessToken().getJwtToken();
+  
+        const { attributes } = await Auth.currentAuthenticatedUser();
+  
+        currentAccountVar({
+          isLoggedIn: true,
+          accessToken,
+          email: attributes.email,
+          sub: attributes.sub
+        });
+        navigate('/');
+    } catch(error) {
+      console.log(error);
+    }
   }
 
 

@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 
 import { Auth } from 'aws-amplify';
 import { CognitoUser } from '@aws-amplify/auth';
-import { currentAccountVar } from '../cache';
+import { currentAccountVar, passwordVar } from '../cache';
 import { gql, useQuery } from '@apollo/client';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -33,7 +33,8 @@ const Login = () => {
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [confirmAccount, setConfirmAccount] = useState(false);
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -42,10 +43,10 @@ const Login = () => {
   const onFinish = async (values: any) => {
     console.log('Success:', values);
     const { username, password } = values;
-    setLoading(true);
+    setIsLoading(true);
     try {
       const user: CognitoUser = await Auth.signIn(username, password);
-      setLoading(false);
+      setIsLoading(false);
       const userSession = user.getSignInUserSession();
       if (!userSession) throw new Error('sign in session null');
       const accessToken = userSession.getAccessToken().getJwtToken();
@@ -71,6 +72,7 @@ const Login = () => {
             ...currentAccountVar(),
             email: username
           });
+          passwordVar(password);
           navigate('/confirm-signup');
       }
     }
@@ -113,7 +115,7 @@ const Login = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" loading={loading} htmlType="submit" className="login-form-button">
+          <Button type="primary" loading={isLoading} htmlType="submit" className="login-form-button">
             Log in
           </Button>
           Or <Link to="/signup">sign up now!</Link>

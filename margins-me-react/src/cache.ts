@@ -1,4 +1,4 @@
-import { InMemoryCache } from '@apollo/client';
+import { InMemoryCache, makeVar } from '@apollo/client';
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -9,21 +9,6 @@ export const cache: InMemoryCache = new InMemoryCache({
             return currentAccountVar();
           }
         }
-        // isLoggedIn: {
-        //   read() {
-        //     return isLoggedInVar();
-        //   }
-        // },
-        // accessToken: {
-        //   read() {
-        //     return accessTokenVar();
-        //   }
-        // }, 
-        // unverifiedEmail: {
-        //   read() {
-        //     return unverifiedEmail();
-        //   }
-        // }
       }
     }
   }
@@ -36,4 +21,7 @@ const currentAccountInitialValue = {
   sub: ''
 }
 
-export const currentAccountVar = cache.makeVar(currentAccountInitialValue);
+export const currentAccountVar = makeVar(currentAccountInitialValue);
+//only used to temporarily hold password in state to confirm account
+//cannot be queried from cache, only used in authentication components
+export const passwordVar = makeVar('');
