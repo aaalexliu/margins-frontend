@@ -13,7 +13,7 @@ import {
   createHttpLink
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { cache, accessTokenVar, isLoggedInVar } from './cache';
+import { cache, currentAccountVar } from './cache';
 
 import { Amplify, Auth } from 'aws-amplify';
 import awsConfig from './aws.config';
@@ -34,7 +34,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get access token from cache if exists
-  const accessToken = accessTokenVar();
+  const accessToken = currentAccountVar().accessToken;
   // return the headers to the context so httpLink can read them
   return {
     headers: {
@@ -57,11 +57,20 @@ function CheckLogin() {
 
   Auth.currentSession().then(user => {
     console.log(user);
-    console.log(user.getAccessToken());
+    // console.log(user.getAccessToken());
 
-    if (!!user && !!user.getAccessToken()) {
-      accessTokenVar(user.getAccessToken().getJwtToken());
-      isLoggedInVar(true);
+    if (!!user) {
+      const accessToken = user.getAccessToken().getJwtToken();
+      const idToken = user.getIdToken()
+      const email = idToken.payload.email;
+      const sub = idToken.payload.sub;
+
+      currentAccountVar({
+        accessToken,
+        email,
+        sub,
+        isLoggedIn: true
+      });
     }
   }).finally(() => {
     console.log('heloo');
