@@ -9,7 +9,7 @@ const CenteredDiv = styled.div`
   height: 100vh;
 `;
 
-export default function Loading() {
+export default function LoadingPage() {
   return (
     <CenteredDiv>
       <Spin size="large" />
