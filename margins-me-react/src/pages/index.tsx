@@ -11,6 +11,7 @@ import Signup from './signup';
 import ConfirmSignup from './confirm-signup';
 import { PageLayout } from '../components';
 import Publications from './publications';
+import PublicationAnnotations from './publication-annotations';
 
 export default function Pages() {
   return (
@@ -21,6 +22,7 @@ export default function Pages() {
           <Route path="/signup" element={<Signup />}/>
           <Route path="/confirm-signup" element={<ConfirmSignup />} />
           <Route path="/publications" element={<Publications />} />
+          <Route path="/publications/:publicationId" element={<PublicationAnnotations />} />
         </Routes>
       </PageLayout>
     </Fragment>
