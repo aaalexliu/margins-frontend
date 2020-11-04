@@ -34,7 +34,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "codegen": "apollo client:codegen --target typescript --watch"
+    "codegen": "apollo client:codegen --target typescript -c apollo.config.js --globalTypesFile=src/__generated__/globalTypes.ts"
   },
   "eslintConfig": {
     "extends": "react-app"
