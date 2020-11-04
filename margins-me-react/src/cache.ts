@@ -1,4 +1,5 @@
 import { InMemoryCache, makeVar } from '@apollo/client';
+import { relayStylePagination } from "@apollo/client/utilities";
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -8,7 +9,8 @@ export const cache: InMemoryCache = new InMemoryCache({
           read() {
             return currentAccountVar();
           }
-        }
+        },
+        allPublications: relayStylePagination(),
       }
     }
   }

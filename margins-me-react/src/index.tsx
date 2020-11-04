@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-import Pages, { Loading } from './pages';
+import Pages, { LoadingPage } from './pages';
 import './index.less';
 import { BrowserRouter } from 'react-router-dom';
 import { typeDefs } from './client-schema';
@@ -79,7 +79,7 @@ function CheckLogin() {
 
 
   return (
-    isAuthenticating ? <Loading /> : <Pages />
+    isAuthenticating ? <LoadingPage /> : <Pages />
   )
 }
 
