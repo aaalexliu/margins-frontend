@@ -10,6 +10,7 @@ import Login from './login';
 import Signup from './signup';
 import ConfirmSignup from './confirm-signup';
 import { PageLayout } from '../components';
+import Publications from './publications';
 
 export default function Pages() {
   return (
@@ -19,10 +20,11 @@ export default function Pages() {
           <Route path="/login" element={<Login />}/>
           <Route path="/signup" element={<Signup />}/>
           <Route path="/confirm-signup" element={<ConfirmSignup />} />
+          <Route path="/publications" element={<Publications />} />
         </Routes>
       </PageLayout>
     </Fragment>
   );
 }
 
-export { default as Loading } from '../pages/loading';
+export { default as LoadingPage } from '../pages/loading';
