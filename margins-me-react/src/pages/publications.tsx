@@ -8,8 +8,8 @@ import { PublicationListItem, Loading } from '../components';
 
 const { Title } = Typography;
 
-export const PUBLICATION_LIST_ITEM_DATA = gql`
-  fragment PublicationListItem on Publication{
+export const PUBLICATION_AUTHOR_ANNOTATION_COUNT = gql`
+  fragment PublicationAuthorAnnotationCount on Publication{
     __typename
     accountId
     additionalMeta
@@ -43,12 +43,12 @@ export const GET_ALL_PUBLICATIONS = gql`
       edges {
         cursor
         node {
-          ...PublicationListItem
+          ...PublicationAuthorAnnotationCount
         }
       }
     }
   }
-  ${PUBLICATION_LIST_ITEM_DATA}
+  ${PUBLICATION_AUTHOR_ANNOTATION_COUNT}
 `;
 
 const Publications = () => {

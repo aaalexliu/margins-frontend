@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL fragment: PublicationListItem
+// GraphQL fragment: PublicationAuthorAnnotationCount
 // ====================================================
 
-export interface PublicationListItem_annotationsByPublicationId {
+export interface PublicationAuthorAnnotationCount_annotationsByPublicationId {
   __typename: "AnnotationsConnection";
   /**
    * The count of *all* `Annotation` you could get from the connection.
@@ -15,21 +15,21 @@ export interface PublicationListItem_annotationsByPublicationId {
   totalCount: number;
 }
 
-export interface PublicationListItem_authorsByPublicationAuthorPublicationIdAndAuthorId_nodes {
+export interface PublicationAuthorAnnotationCount_authorsByPublicationAuthorPublicationIdAndAuthorId_nodes {
   __typename: "Author";
   authorId: string;
   fullName: string;
 }
 
-export interface PublicationListItem_authorsByPublicationAuthorPublicationIdAndAuthorId {
+export interface PublicationAuthorAnnotationCount_authorsByPublicationAuthorPublicationIdAndAuthorId {
   __typename: "PublicationAuthorsByPublicationAuthorPublicationIdAndAuthorIdManyToManyConnection";
   /**
    * A list of `Author` objects.
    */
-  nodes: (PublicationListItem_authorsByPublicationAuthorPublicationIdAndAuthorId_nodes | null)[];
+  nodes: (PublicationAuthorAnnotationCount_authorsByPublicationAuthorPublicationIdAndAuthorId_nodes | null)[];
 }
 
-export interface PublicationListItem {
+export interface PublicationAuthorAnnotationCount {
   __typename: "Publication";
   accountId: any;
   additionalMeta: any | null;
@@ -44,9 +44,9 @@ export interface PublicationListItem {
   /**
    * Reads and enables pagination through a set of `Annotation`.
    */
-  annotationsByPublicationId: PublicationListItem_annotationsByPublicationId;
+  annotationsByPublicationId: PublicationAuthorAnnotationCount_annotationsByPublicationId;
   /**
    * Reads and enables pagination through a set of `Author`.
    */
-  authorsByPublicationAuthorPublicationIdAndAuthorId: PublicationListItem_authorsByPublicationAuthorPublicationIdAndAuthorId;
+  authorsByPublicationAuthorPublicationIdAndAuthorId: PublicationAuthorAnnotationCount_authorsByPublicationAuthorPublicationIdAndAuthorId;
 }

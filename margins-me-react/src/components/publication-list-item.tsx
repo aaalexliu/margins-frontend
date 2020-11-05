@@ -3,30 +3,17 @@ import { List } from 'antd';
 
 // import * as LaunchTileTypes from '../pages/__generated__/LaunchTile';
 
-import * as PublicationListItemTypes from '../pages/__generated__/PublicationListItem';
+import * as PublicationAuthorAnnotationCountTypes from '../pages/__generated__/PublicationAuthorAnnotationCount';
+import { extractPublicationAuthorAnnotationCount } from '../utils/publication-author-annotation-count';
 
 interface PublicationListItemProps {
-  publication: PublicationListItemTypes.PublicationListItem;
+  publication: PublicationAuthorAnnotationCountTypes.PublicationAuthorAnnotationCount;
 }
 
 const PublicationListItem: React.FC<PublicationListItemProps>
   = ({ publication }) => {
 
-  const {
-    title,
-    annotationsByPublicationId: {
-      totalCount: annotationCount
-    },
-    authorsByPublicationAuthorPublicationIdAndAuthorId: {
-      nodes: authors
-    },
-  } = publication;
-
-
-  const authorNames = authors
-    .filter((node): node is PublicationListItemTypes.PublicationListItem_authorsByPublicationAuthorPublicationIdAndAuthorId_nodes => node !== null)
-    .map(author => author.fullName)
-    .join(' ');
+  const {title, annotationCount, authorNames} = extractPublicationAuthorAnnotationCount(publication);
 
   return(  
     <List.Item
