@@ -25,6 +25,7 @@ export const PUBLICATION_AUTHOR_ANNOTATION_COUNT = gql`
 
 export const extractPublicationAuthorAnnotationCount = (publication: PublicationAuthorAnnotationCountTypes.PublicationAuthorAnnotationCount) => {
   const {
+    publicationId,
     title,
     annotationsByPublicationId: {
       totalCount: annotationCount
@@ -41,6 +42,7 @@ export const extractPublicationAuthorAnnotationCount = (publication: Publication
     .join(' ');
 
   return {
+    publicationId,
     title,
     annotationCount,
     authorNames

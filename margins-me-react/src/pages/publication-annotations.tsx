@@ -2,13 +2,13 @@ import React, { Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, gql } from '@apollo/client';
 import { Loading } from '../components';
+import { PublicationCard } from '../containers';
 
 import {
   PUBLICATION_AUTHOR_ANNOTATION_COUNT,
   extractPublicationAuthorAnnotationCount
 } from '../utils/publication-author-annotation-count';
 import * as GetPublicationByPublicationIdTypes from './__generated__/GetPublicationByPublicationId';
-import { isNullOrUndefined } from 'util';
 
 export const GET_PUBLICATION_BY_PUBLICATION_ID = gql`
   query GetPublicationByPublicationId($publicationId: String!) {
@@ -56,15 +56,15 @@ const PublicationAnnotations = () => {
   if (loading) return <Loading />;
   if (error || !data) return <p>ERROR</p>;
 
-  const publicationData = data.publicationByPublicationId !== null ?
-    extractPublicationAuthorAnnotationCount(data.publicationByPublicationId)
+  const publication = data.publicationByPublicationId !== null ?
+    data.publicationByPublicationId
     : null;
 
   return(
     <Fragment>
     {
-      publicationData !== null ?
-      <p>hello {publicationData.title}</p>
+      publication !== null ?
+      <PublicationCard publication={publication} />
       :
       <p>boo</p>
     }
