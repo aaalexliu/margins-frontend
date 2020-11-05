@@ -5,30 +5,9 @@ import { PublicationsOrderBy } from '../__generated__/globalTypes';
 
 import { Typography, List } from 'antd';
 import { PublicationListItem, Loading } from '../components';
+import { PUBLICATION_AUTHOR_ANNOTATION_COUNT } from '../utils/publication-author-annotation-count';
 
 const { Title } = Typography;
-
-export const PUBLICATION_AUTHOR_ANNOTATION_COUNT = gql`
-  fragment PublicationAuthorAnnotationCount on Publication{
-    __typename
-    accountId
-    additionalMeta
-    createdAt
-    id
-    publicationId
-    title
-    updatedAt
-    annotationsByPublicationId {
-      totalCount
-    }
-    authorsByPublicationAuthorPublicationIdAndAuthorId {
-      nodes {
-        authorId
-        fullName
-      }
-    }
-  }
-`;
 
 export const GET_ALL_PUBLICATIONS = gql`
   query GetAllPublications($orderBy: [PublicationsOrderBy!], $first: Int, $afterCursor: Cursor) {

@@ -3,8 +3,8 @@ import { List } from 'antd';
 
 // import * as LaunchTileTypes from '../pages/__generated__/LaunchTile';
 
-import * as PublicationAuthorAnnotationCountTypes from '../pages/__generated__/PublicationAuthorAnnotationCount';
 import { extractPublicationAuthorAnnotationCount } from '../utils/publication-author-annotation-count';
+import * as PublicationAuthorAnnotationCountTypes from '../utils/__generated__/PublicationAuthorAnnotationCount';
 
 interface PublicationListItemProps {
   publication: PublicationAuthorAnnotationCountTypes.PublicationAuthorAnnotationCount;
@@ -15,7 +15,7 @@ const PublicationListItem: React.FC<PublicationListItemProps>
 
   const {title, annotationCount, authorNames} = extractPublicationAuthorAnnotationCount(publication);
 
-  return(  
+  return(
     <List.Item
       key={title}
       extra={<p>Annotations: {annotationCount}</p>}
