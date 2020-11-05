@@ -1,18 +1,17 @@
 import React, { Fragment } from 'react';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { Card, Descriptions } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
+import { Loading } from '../components';
 
 import {
+  PUBLICATION_AUTHOR_ANNOTATION_COUNT,
   extractPublicationAuthorAnnotationCount
 } from '../utils/publication-author-annotation-count';
 import * as PublicationAuthorAnnotationCountTypes from '../utils/__generated__/PublicationAuthorAnnotationCount';
+import * as GetPublicationByPublicationIdTypes from './__generated__/GetPublicationByPublicationId';
 
 const { Meta } = Card;
-
-interface PublicationCardProps {
-  publication: PublicationAuthorAnnotationCountTypes.PublicationAuthorAnnotationCount
-}
 
 interface PublicationDescriptionProps {
   authorNames: string,
@@ -34,11 +33,60 @@ const PublicationDescription: React.FC<PublicationDescriptionProps> =
   )
 }
 
+export const GET_PUBLICATION_BY_PUBLICATION_ID = gql`
+  query GetPublicationByPublicationId($publicationId: String!) {
+    publicationByPublicationId(publicationId: $publicationId) {
+      ...PublicationAuthorAnnotationCount
+      bookByPublicationId {
+        bookTitle
+        bookType
+        description
+        imageUrl
+        languageCode
+        isbn13
+        publicationDate
+        publicationId
+        publisher
+      }
+    }
+  }
+  ${PUBLICATION_AUTHOR_ANNOTATION_COUNT}
+`;
+
+interface PublicationCardProps {
+  publicationId: string
+}
+
 const PublicationCard: React.FC<PublicationCardProps>
-   = ({ publication }) => {
+   = ({ publicationId }) => {
+
+  const {
+    data,
+    loading,
+    error,
+    fetchMore
+  } = useQuery<
+    GetPublicationByPublicationIdTypes.GetPublicationByPublicationId,
+    GetPublicationByPublicationIdTypes.GetPublicationByPublicationIdVariables
+  >(
+    GET_PUBLICATION_BY_PUBLICATION_ID,
+    {
+      variables: {
+        publicationId
+      }
+    }
+  );
+
+  if (loading) return <Loading />;
+  if (error || !data) return <p>Error in retrieving publication data</p>
+
+
+  const publication = data.publicationByPublicationId !== null ?
+    data.publicationByPublicationId
+    : null;
+  if (publication === null) return <p>Error in Publication Data</p>
   
   const {
-    publicationId,
     title,
     authorNames,
     annotationCount
