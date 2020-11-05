@@ -1,10 +1,47 @@
 import React, { Fragment } from 'react';
 import { useParams } from 'react-router-dom';
-// import { useQuery, gql } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import { PublicationCard } from '../containers';
 import { Layout } from 'antd';
 
 const { Header, Content, Footer, Sider } = Layout;
+
+export const ANNOTATION_FRAGMENT = gql`
+  fragment Annotation
+`;
+
+export const GET_ALL_ANNOTATIONS_FOR_PUBLICATION = gql`
+  query GetAllAnnotationsForPublication($publicationId: String!, $first: Int, $afterCursor: Cursor){
+  allAnnotations(condition: {publicationId: $publicationId}, first: $first, after: $afterCursor) {
+    edges {
+      cursor
+      node {
+        annotationId
+        color
+        createdAt
+        editedHighlightText
+        editedNoteText
+        extraEdits
+        highlightLocation
+        highlightText
+        noteLocation
+        noteText
+        publicationId
+        recordedAt
+        updatedAt
+      }
+    }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+  }
+}
+
+`;
 
 const PublicationAnnotations = () => {
 

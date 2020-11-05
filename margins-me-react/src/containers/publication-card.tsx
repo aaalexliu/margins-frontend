@@ -5,7 +5,7 @@ import { EditOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 
 import {
-  PUBLICATION_AUTHOR_ANNOTATION_COUNT,
+  PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT,
   extractPublicationAuthorAnnotationCount
 } from '../utils/publication-author-annotation-count';
 import * as PublicationAuthorAnnotationCountTypes from '../utils/__generated__/PublicationAuthorAnnotationCount';
@@ -50,7 +50,7 @@ export const GET_PUBLICATION_BY_PUBLICATION_ID = gql`
       }
     }
   }
-  ${PUBLICATION_AUTHOR_ANNOTATION_COUNT}
+  ${PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT}
 `;
 
 interface PublicationCardProps {

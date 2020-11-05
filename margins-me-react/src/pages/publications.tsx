@@ -5,7 +5,7 @@ import { PublicationsOrderBy } from '../__generated__/globalTypes';
 
 import { Typography, List } from 'antd';
 import { PublicationListItem, Loading } from '../components';
-import { PUBLICATION_AUTHOR_ANNOTATION_COUNT } from '../utils/publication-author-annotation-count';
+import { PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT } from '../utils/publication-author-annotation-count';
 
 const { Title } = Typography;
 
@@ -27,7 +27,7 @@ export const GET_ALL_PUBLICATIONS = gql`
       }
     }
   }
-  ${PUBLICATION_AUTHOR_ANNOTATION_COUNT}
+  ${PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT}
 `;
 
 const Publications = () => {

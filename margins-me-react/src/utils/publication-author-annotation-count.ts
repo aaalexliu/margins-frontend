@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import * as PublicationAuthorAnnotationCountTypes from './__generated__/PublicationAuthorAnnotationCount';
 
-export const PUBLICATION_AUTHOR_ANNOTATION_COUNT = gql`
+export const PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT = gql`
   fragment PublicationAuthorAnnotationCount on Publication{
     __typename
     accountId
