@@ -1,8 +1,6 @@
 import { Amplify, Auth } from 'aws-amplify';
 import awsConfig from './aws.config';
-// import { currentAccountVar, passwordVar } from '../apollo/cache';
 import { CognitoUser } from '@aws-amplify/auth';
-import { currentAccountVar } from '../apollo/cache';
 
 
 export const isBrowser = typeof window !== 'undefined';
@@ -19,37 +17,34 @@ isBrowser && Amplify.configure({
   }
 });
 
-type AuthCallback = (err: any, res?: any) => any;
+// type AuthCallback = (err: any, res?: any) => any;
 
-const setSession = (callback: AuthCallback) => {
+const setSession = async () => {
   if(!isBrowser) return;
-
-  Auth.currentSession().then(user => {
-    console.log(user);
-    // console.log(user.getAccessToken());
-
+  let user;
+  try {
+    user = await Auth.currentSession();
     if (!!user) {
       const accessToken = user.getAccessToken().getJwtToken();
       const idToken = user.getIdToken()
       const email = idToken.payload.email;
       const sub = idToken.payload.sub;
 
-      callback(null, {
+      return {
+        status: 'success',
         accessToken,
         email,
         sub,
-        // isLoggedIn: true
-      })
+      };
     } else {
       console.log('no current user');
     }
-  }).catch(error => {
-    callback(error);
-  })
+  } catch (error) {
+    return error;
+  }
 }
 
-const login = async (account: {username: string, password: string}, callback: AuthCallback) => {
-  const { username, password } = account;
+const login = async (username: string, password: string) => {
   try {
     const cognitoUser: CognitoUser = await Auth.signIn(username, password);
     const userSession = cognitoUser.getSignInUserSession();
@@ -57,34 +52,39 @@ const login = async (account: {username: string, password: string}, callback: Au
       const accessToken = userSession.getAccessToken().getJwtToken();
 
       const { attributes } = await Auth.currentAuthenticatedUser();
-      callback(null, {
-        // isLoggedIn: true,
+      return {
+        status: 'success',
         accessToken,
         email: attributes.email,
         sub: attributes.sub
-      })
+      };
   } catch (error) {
-    callback(error);
+    return {
+      status: 'error',
+      error
+    }
   }
 }
 
-const signup = async (account: {username: string, password: string}, callback: AuthCallback) => {
-  const { username, password }  = account;
+const signup = async (username: string, password: string) => {
   try {
     const { user } = await Auth.signUp({
       username,
       password
     });
-    callback(null, 'success');
+    return{
+      status: 'success'
+    };
   } catch (error) {
     console.log('error signing up:', error);
-    callback(error);
+    return {
+      status: 'error',
+      error
+    }
   }
 }
 
-const confirmSignup = async (account: {username: string, password: string, code: string},
-  callback: AuthCallback) => {
-    const {username, password, code} = account;
+const confirmSignup = async (username: string, password: string, code: string) => {
     try {
       const success = await Auth.confirmSignUp(
         username,
@@ -92,19 +92,31 @@ const confirmSignup = async (account: {username: string, password: string, code:
       );
       console.log(success);
       const user = await Auth.signIn(username, password);
-      setSession(callback);
+      setSession();
+      return ({
+        status: 'success'
+      })
     } catch(error) {
+      console.log('error confirming user');
       console.log(error);
+      return {
+        status: 'error',
+        error
+      }
     }
   }
 
-const logout = async(callback: AuthCallback) => {
+const logout = async () => {
   try {
     await Auth.signOut();
-    callback(null, 'success');
+    return {
+      status: 'success'
+    };
   } catch(error) {
     console.log('error logging out');
-    console.log('error');
-    callback(error);
+    return {
+      status: 'error',
+      error
+    }
   }
 }
