@@ -19,7 +19,7 @@ isBrowser && Amplify.configure({
 
 // type AuthCallback = (err: any, res?: any) => any;
 
-export const getSession = async () => {
+export const getAccountFromSession = async () => {
   if(!isBrowser) return;
   let user;
   try {
@@ -92,8 +92,7 @@ export const confirmSignup = async (username: string, password: string, code: st
       );
       console.log(success);
       const user = await Auth.signIn(username, password);
-      const session = await getSession();
-      return session;
+      return await getAccountFromSession();;
     } catch(error) {
       console.log('error confirming user');
       console.log(error);

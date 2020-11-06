@@ -9,6 +9,7 @@ import React from "react"
 import { Layout, Menu, Button } from 'antd';
 import { useLocation } from "@reach/router"
 import { Link } from 'gatsby';
+import { LoginOrLogout } from '../components';
 
 const { Header, Content, Footer } = Layout;
 
@@ -23,9 +24,9 @@ export default function PageLayout (props: any) {
             <Menu.Item key = "/">
               <Link to="/">Home</Link>
             </Menu.Item>
-            {/* <Menu.Item key="/login">
+            <Menu.Item key="/login">
               <LoginOrLogout />
-            </Menu.Item> */}
+            </Menu.Item>
         </Menu>
       </Header>
       <Content style={{padding: '24px'}}>
