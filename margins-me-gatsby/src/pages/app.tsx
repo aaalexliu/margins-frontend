@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { PageLayout } from '../app/components';
-import { LoadingPage, NotFound, Publications } from '../app/pages';
+import { LoadingPage, NotFound, Publications, PublicationAnnotations } from '../app/pages';
 import { Home } from '../app/pages';
 import { Router, Redirect } from "@reach/router";
 import { navigate } from 'gatsby';
@@ -35,9 +35,8 @@ const App =  () => {
     <PageLayout>
       <Router basepath='/app'>
         <Home path='/'/>
-        <Publications path='/publications'>
-          
-        </Publications>
+        <Publications path='/publications' />
+        <PublicationAnnotations path='/annotations/:publicationId' />
         <NotFound default={true}/>
       </Router>
     </PageLayout>

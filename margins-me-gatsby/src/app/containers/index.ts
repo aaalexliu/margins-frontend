@@ -1,0 +1,1 @@
+export { default as PublicationCard } from './publication-card';

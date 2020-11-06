@@ -1,5 +1,6 @@
 import React from 'react';
 import { List } from 'antd';
+import { Link } from 'gatsby';
 
 // import * as LaunchTileTypes from '../pages/__generated__/LaunchTile';
 
@@ -13,18 +14,20 @@ interface PublicationListItemProps {
 const PublicationListItem: React.FC<PublicationListItemProps>
   = ({ publication }) => {
 
-  const {title, annotationCount, authorNames} = extractPublicationAuthorAnnotationCount(publication);
+  const {title, annotationCount, authorNames, publicationId} = extractPublicationAuthorAnnotationCount(publication);
 
   return(
-    <List.Item
-      key={title}
-      extra={<p>Annotations: {annotationCount}</p>}
-    >
-      <List.Item.Meta
-        title={title}
-        description={authorNames}
-      />
-    </List.Item>
+    <Link to={`/app/annotations/${publicationId}`}>
+      <List.Item
+        key={title}
+        extra={<p>Annotations: {annotationCount}</p>}
+      >
+        <List.Item.Meta
+          title={title}
+          description={authorNames}
+        />
+      </List.Item>
+    </Link>
   )
 }
 
