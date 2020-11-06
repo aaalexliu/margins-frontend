@@ -10,6 +10,7 @@ import { Layout, Menu, Button } from 'antd';
 import { useLocation } from "@reach/router"
 import { Link } from 'gatsby';
 import { LoginOrLogout } from '../components';
+import './layout.less';
 
 const { Header, Content, Footer } = Layout;
 
