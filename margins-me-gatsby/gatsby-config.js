@@ -36,6 +36,7 @@ module.exports = {
         allExtensions: true, // defaults to false
       },
     },
+    `gatsby-plugin-emotion`,
     {
       resolve: "gatsby-plugin-antd",
       options: {

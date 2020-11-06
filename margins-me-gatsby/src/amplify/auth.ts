@@ -19,7 +19,7 @@ isBrowser && Amplify.configure({
 
 // type AuthCallback = (err: any, res?: any) => any;
 
-const setSession = async () => {
+export const getSession = async () => {
   if(!isBrowser) return;
   let user;
   try {
@@ -31,10 +31,11 @@ const setSession = async () => {
       const sub = idToken.payload.sub;
 
       return {
-        status: 'success',
-        accessToken,
-        email,
-        sub,
+        account: {
+          accessToken,
+          email,
+          sub,
+        }
       };
     } else {
       console.log('no current user');
@@ -44,7 +45,7 @@ const setSession = async () => {
   }
 }
 
-const login = async (username: string, password: string) => {
+export const login = async (username: string, password: string) => {
   try {
     const cognitoUser: CognitoUser = await Auth.signIn(username, password);
     const userSession = cognitoUser.getSignInUserSession();
@@ -53,38 +54,37 @@ const login = async (username: string, password: string) => {
 
       const { attributes } = await Auth.currentAuthenticatedUser();
       return {
-        status: 'success',
-        accessToken,
-        email: attributes.email,
-        sub: attributes.sub
+        account: {
+          accessToken,
+          email: attributes.email,
+          sub: attributes.sub
+        }
       };
   } catch (error) {
     return {
-      status: 'error',
       error
     }
   }
 }
 
-const signup = async (username: string, password: string) => {
+export const signup = async (username: string, password: string) => {
   try {
     const { user } = await Auth.signUp({
       username,
       password
     });
     return{
-      status: 'success'
+      success: 'success'
     };
   } catch (error) {
     console.log('error signing up:', error);
     return {
-      status: 'error',
       error
     }
   }
 }
 
-const confirmSignup = async (username: string, password: string, code: string) => {
+export const confirmSignup = async (username: string, password: string, code: string) => {
     try {
       const success = await Auth.confirmSignUp(
         username,
@@ -92,30 +92,26 @@ const confirmSignup = async (username: string, password: string, code: string) =
       );
       console.log(success);
       const user = await Auth.signIn(username, password);
-      setSession();
-      return ({
-        status: 'success'
-      })
+      const session = await getSession();
+      return session;
     } catch(error) {
       console.log('error confirming user');
       console.log(error);
       return {
-        status: 'error',
         error
       }
     }
   }
 
-const logout = async () => {
+export const logout = async () => {
   try {
     await Auth.signOut();
     return {
-      status: 'success'
+      success: 'success'
     };
   } catch(error) {
     console.log('error logging out');
     return {
-      status: 'error',
       error
     }
   }
