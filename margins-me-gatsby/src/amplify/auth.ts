@@ -39,9 +39,12 @@ export const getAccountFromSession = async () => {
       };
     } else {
       console.log('no current user');
+      return null;
     }
   } catch (error) {
-    return error;
+    return {
+      error
+    };
   }
 }
 
