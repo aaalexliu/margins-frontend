@@ -11,6 +11,7 @@ export const cache: InMemoryCache = new InMemoryCache({
           }
         },
         allPublications: relayStylePagination(),
+        // allAnnotations: relayStylePagination(),
       }
     }
   }
