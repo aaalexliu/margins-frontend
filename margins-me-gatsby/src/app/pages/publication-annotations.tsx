@@ -3,44 +3,29 @@ import { useParams, RouteComponentProps } from '@reach/router';
 import { useQuery, gql } from '@apollo/client';
 import { PublicationCard } from '../containers';
 import { Layout } from 'antd';
+import { ANNOTATION_ALL_FRAGMENT } from '../utils/annotation-all';
 
 const { Header, Content, Footer, Sider } = Layout;
 
-// export const ANNOTATION_FRAGMENT = gql`
-//   fragment Annotation
-// `;
-
 export const GET_ALL_ANNOTATIONS_FOR_PUBLICATION = gql`
   query GetAllAnnotationsForPublication($publicationId: String!, $first: Int, $afterCursor: Cursor){
-  allAnnotations(condition: {publicationId: $publicationId}, first: $first, after: $afterCursor) {
-    edges {
-      cursor
-      node {
-        annotationId
-        color
-        createdAt
-        editedHighlightText
-        editedNoteText
-        extraEdits
-        highlightLocation
-        highlightText
-        noteLocation
-        noteText
-        publicationId
-        recordedAt
-        updatedAt
+    allAnnotations(condition: {publicationId: $publicationId}, first: $first, after: $afterCursor) {
+      edges {
+        cursor
+        node {
+          ...AnnotationAll
+        }
+      }
+      totalCount
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
       }
     }
-    totalCount
-    pageInfo {
-      endCursor
-      hasNextPage
-      hasPreviousPage
-      startCursor
-    }
   }
-}
-
+  ${ANNOTATION_ALL_FRAGMENT}
 `;
 
 const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
