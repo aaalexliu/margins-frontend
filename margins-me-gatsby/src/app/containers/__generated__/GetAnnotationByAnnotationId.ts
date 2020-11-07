@@ -9,6 +9,10 @@
 
 export interface GetAnnotationByAnnotationId_annotationByAnnotationId {
   __typename: "Annotation";
+  /**
+   * A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+   */
+  id: string;
   annotationId: string;
   color: string | null;
   createdAt: any | null;

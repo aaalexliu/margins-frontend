@@ -1,9 +1,11 @@
 import React, { Fragment } from 'react';
 import { useParams, RouteComponentProps } from '@reach/router';
 import { useQuery, gql } from '@apollo/client';
-import { PublicationCard } from '../containers';
+import { PublicationCard, AnnotationCard } from '../containers';
+import { Loading } from '../components';
 import { Layout } from 'antd';
 import { ANNOTATION_ALL_FRAGMENT } from '../utils/annotation-all';
+import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -32,9 +34,46 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
 
   const { publicationId } = useParams();
 
+  const {
+    data,
+    loading,
+    error,
+    fetchMore
+  } = useQuery<
+    GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication,
+    GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublicationVariables
+  >(
+    GET_ALL_ANNOTATIONS_FOR_PUBLICATION,
+    {
+      variables: {
+        publicationId,
+        first: 100
+      }
+    }
+  );
+
+  if (loading) return <Loading />;
+  if (error || !data) return <p>ERROR</p>;
+
+  const annotationNodes = data?.allAnnotations?.edges.map(edge => edge.node);
+  const annotations = annotationNodes ?
+    annotationNodes.filter(
+      (node): node is GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication_allAnnotations_edges_node => node !== null
+    ) :
+    undefined;
+
+  let annotationList;
+  if (annotations !== undefined) {
+    annotationList = annotations?.map(annotation => {
+      return <AnnotationCard key={annotation.id} annotationId={annotation.annotationId} />
+    });
+  }
+
   return (
     <Fragment>
       <PublicationCard publicationId={publicationId} />
+      {annotationList ? annotationList :
+        <p>No Annotations Found</p>}
     </Fragment>
   )
 }

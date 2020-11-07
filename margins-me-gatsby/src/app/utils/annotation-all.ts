@@ -3,6 +3,7 @@ import * as AnnotationAllTypes from './__generated__/AnnotationAll';
 
 export const ANNOTATION_ALL_FRAGMENT = gql`
   fragment AnnotationAll on Annotation {
+    id
     annotationId
     color
     createdAt
@@ -23,7 +24,8 @@ export const extractAnnotationAll = (annotation: AnnotationAllTypes.AnnotationAl
   let {
     extraEdits,
     highlightLocation,
-    noteLocation
+    noteLocation,
+    color
   } = annotation;
   try {
     extraEdits = extraEdits ? JSON.parse(extraEdits) : undefined;
@@ -33,10 +35,13 @@ export const extractAnnotationAll = (annotation: AnnotationAllTypes.AnnotationAl
     console.log('error parsing json return from graphql for annotation');
     console.log(error);
   }
+
+  color = color === 'blue' ? 'lightskyblue' : color;
   return {
     ...annotation,
     highlightLocation,
     noteLocation,
-    extraEdits
+    extraEdits,
+    color
   }
 }

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
-import { Card } from 'antd';
+import { Card, Divider, Typography } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import {
@@ -11,16 +11,23 @@ import * as GetAnnotationByAnnotationIdTypes from './__generated__/GetAnnotation
 import styled from '@emotion/styled';
 
 const { Meta } = Card;
+const { Title, Paragraph, Text } = Typography;
 
 const ColoredQuote = styled.blockquote`
   // margin:50px auto;
   // padding:1.2em 30px 1.2em 75px;
   padding-left: 10px;
-  border-left:8px solid;
+  border-left:4px solid;
   border-color: ${props => props.color ? props.color : 'grey'};
 `;
 
+function isOrphanNote(highlightText: any, noteText: any): boolean {
+  if (!highlightText && noteText) return true;
+  return false;
+}
+
 function stringifyLocation(location: any): string {
+  if (location === undefined ) return '';
   const locationArr: string[] = [];
   if (location.chapter !== undefined) locationArr.push(location.chapter);
   if (location.page !== undefined) locationArr.push(`Page: ${location.page}`);
@@ -84,16 +91,37 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     updatedAt
   } = extractAnnotationAll(annotation);
 
+
+  const notOrphanNote = !isOrphanNote(highlightText, noteText);
+
+  const cardTitle = <Text strong={true}>{notOrphanNote ? 'Highlight' : 'Note'}</Text>;
+
+  const cardLocation = 
+    <Paragraph type="secondary" ellipsis={{ rows: 1, expandable: true, symbol: '..more' }}>
+      {notOrphanNote ? stringifyLocation(highlightLocation): stringifyLocation(noteLocation)}
+    </Paragraph>
+  // const cardDescription = notOrphanNote ? stringifyLocation(highlightLocation) : stringifyLocation(noteLocation);
+
+  const NoteDivider = notOrphanNote && noteText ?
+    <Divider orientation="left" plain={true}>{`Note`}</Divider>:
+    null;
+
   return (
     <Card
-      title={stringifyLocation(highlightLocation)}
+      // title={cardTitle}
       actions={[
         <EditOutlined key="edit"/>,
       ]}
+      size="default"
     >
+      {cardTitle}
+      {cardLocation}
+      {highlightText &&
       <ColoredQuote color={color ? color : undefined}>
         {highlightText}
-      </ColoredQuote>
+      </ColoredQuote>}
+      {NoteDivider}
+      {noteText}
     </Card>
   )
 }
