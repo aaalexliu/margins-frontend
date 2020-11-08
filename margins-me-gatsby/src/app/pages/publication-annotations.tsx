@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useParams, RouteComponentProps } from '@reach/router';
 import { useQuery, gql } from '@apollo/client';
 import { PublicationCard, AnnotationCard } from '../containers';
-import { Loading } from '../components';
+import { Loading, SectionsSidebar } from '../components';
 import { Layout, Typography, Card, Affix, Menu } from 'antd';
 import styled from '@emotion/styled';
 import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
 import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
-import { stripIgnoredCharacters } from 'graphql';
+import { Section, extractAnnotationSections } from '../utils/annotation-sections';
 
 const { Header, Content, Footer, Sider } = Layout;
 const { Title } = Typography;
@@ -25,6 +25,36 @@ const UnstyledList = styled.ul`
 const H3NoMargins = styled.h3`
   margin: 0;
 `;
+
+interface SectionCardProps {
+  section: Section<HTMLLIElement>,
+  sectionStack: string[],
+  setSectionStack: React.Dispatch<React.SetStateAction<string[]>>
+}
+
+const SectionCard: React.FC<SectionCardProps> =
+  ({section, sectionStack, setSectionStack}) => {
+
+  const [ hideCard, setHideCard] = useState(false);
+
+  const handleAffixChange = (affixed: boolean | undefined) => {
+    if (affixed) {
+      setHideCard(true);
+      setSectionStack(sectionStack.concat(section.sectionId));
+    };
+    if (!affixed) {
+      setHideCard(false);
+      setSectionStack(sectionStack.slice(0, -1));
+    }
+  }
+
+  return (
+    <Affix offsetTop={-40} onChange={handleAffixChange}>
+      {hideCard ? null:
+      <Card size="small"><H3NoMargins>{section.name}</H3NoMargins></Card>}
+    </Affix>
+  )
+}
 
 export const GET_ALL_ANNOTATIONS_FOR_PUBLICATION = gql`
   query GetAllAnnotationsForPublication($publicationId: String!, $first: Int, $afterCursor: Cursor){
@@ -50,6 +80,7 @@ export const GET_ALL_ANNOTATIONS_FOR_PUBLICATION = gql`
 const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
 
   const { publicationId } = useParams();
+  const [ sectionStack, setSectionStack ] = useState(['']);
 
   const {
     data,
@@ -78,91 +109,17 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
       (node): node is GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication_allAnnotations_edges_node => node !== null
     ) : null;
 
-  let annotationList;
   if (annotations == null) return <p>No annotations exist</p>;
 
-  let lastSection = '';
-  let sectionCount = 0;
-  const sections: any= [];
-  let annotationsWithLocations = annotations.flatMap(annotation => {
-    const { highlightLocation, noteLocation } = extractAnnotationAll(annotation);
-    const location = highlightLocation ? highlightLocation : noteLocation;
-    // console.log(location);
-    // console.log(location.section);
-    // console.log(location.section != null);
-    // console.log(location.section !== lastSection);
-    if (location.section !=  null && location.section !== lastSection) {
-      lastSection = location.section;
-      sectionCount++;
-      // console.log(lastSection);
-      const ref = React.createRef<HTMLLIElement>();
-      const section = {sectionId: `section-${sectionCount}-${lastSection}`, sectionName: lastSection, ref};
-      sections.push(section);
-      return [ section, annotation];
-    } else {
-      return [annotation];
-    }
-  });
-
-  const sectionMenuItems = sections.map(section => {
-    const clickHandler = (ref: any) => {
-      ref.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-        inline: 'start'
-      })
-    }
-    return (
-      <Menu.Item key={section.sectionId} onClick={() => clickHandler(section.ref)}>
-        {section.sectionName}
-      </Menu.Item>
-    )
-  });
-
-  const [ topElement, setTopElement ] = useState(['']);
-  const sectionSider = sectionMenuItems.length > 0 ?
-  <Affix offsetTop={0}>
-    <Sider
-      style={{
-        overflow: 'auto',
-        height: '100vh',
-        // position: 'fixed',
-        // left: 0,
-      }}
-      theme="light"
-    >
-      <Menu theme="light" selectedKeys={[topElement.slice(-1)[0]]}>
-        {sectionMenuItems}
-      </Menu>
-    </Sider>
-    </Affix>:
-    null;
+  const {annotationsAndSections, sections } = extractAnnotationSections(annotations);
   
-  // console.log(annotationsWithLocations);
-  const annotationsLocationsList = annotationsWithLocations.map(item => {
+  console.log(annotationsAndSections);
+  console.log(sections);
+  const annotationsAndSectionsList = annotationsAndSections.map(item => {
     if("sectionId" in item)  {
-      // const scrollHandler = () => {
-      //   console.log('yelloooo');
-      //   const scrollY  = window.scrollY;
-      //   console.log(`on scroll ${item.sectionName} location: ${scrollY}`);
-      // }
-      const [ hideAffixed, setHideAffixed] = useState(false);
-      const handleAffixChange = (affixed: any) => {
-        if (affixed) {
-          setHideAffixed(true);
-          setTopElement(topElement.concat(item.sectionId));
-        };
-        if (!affixed) {
-          setHideAffixed(false);
-          setTopElement(topElement.slice(0, -1));
-        }
-      }
       return (
       <PaddedListItem key={item.sectionId} ref={item.ref}>
-        <Affix offsetTop={0} onChange={handleAffixChange}>
-          {hideAffixed ? null:
-          <Card size="small"><H3NoMargins>{item.sectionName}</H3NoMargins></Card>}
-        </Affix>
+        <SectionCard section={item} sectionStack={sectionStack} setSectionStack={setSectionStack}/>
       </PaddedListItem>
       )
     } else {
@@ -174,22 +131,13 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
     }
   });
 
-
-  // annotationList = annotations.map(annotation => {
-  //   return (
-  //   <PaddedListItem key={annotation.id}>
-  //     <AnnotationCard annotationId={annotation.annotationId} />
-  //   </PaddedListItem>
-  //   );
-  // });
-
   return (
     <Layout>
-      {sectionSider}
+      <SectionsSidebar sections={sections} sectionStack={sectionStack}/>
       <Content>
         <PublicationCard publicationId={publicationId} />
         <UnstyledList>
-        {annotationsLocationsList ? annotationsLocationsList :
+        {annotationsAndSectionsList ? annotationsAndSectionsList :
           <p>No Annotations Found</p>}
         </UnstyledList>
       </Content>
