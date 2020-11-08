@@ -1,7 +1,19 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { Section } from '../utils/annotation-sections';
-import { Menu, Affix, Layout } from 'antd';
+import { Menu, Affix, Layout, Button } from 'antd';
 import { css } from '@emotion/core';
+import styled from '@emotion/styled';
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined
+} from '@ant-design/icons';
+
+const RightAlignedDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 0;
+`;
 
 const { Sider } = Layout;
 
@@ -12,6 +24,8 @@ interface SectionsSidebarProps<T>{
 
 const SectionsSidebar: React.FC<SectionsSidebarProps<HTMLLIElement>>
   =({ sections, sectionStack }) => {
+  
+  const [ siderCollapsed, setSiderCollapsed ] = useState(false);
 
   const sectionMenuItems = sections.map(section => {
     const clickHandler = (ref: any) => {
@@ -42,9 +56,25 @@ const SectionsSidebar: React.FC<SectionsSidebarProps<HTMLLIElement>>
       }}
       theme="light"
       breakpoint="md"
-      collapsedWidth="0"
-      collapsible={true}
+      collapsedWidth="32px"
+      trigger={null}
+      collapsed={siderCollapsed}
+      onCollapse={() => setSiderCollapsed(true)}
     >
+      <RightAlignedDiv>
+        <Button
+          css={{
+            marginLeft: 'auto',
+            marginRight: 0
+          }}
+          type="primary"
+          icon={siderCollapsed?
+            <MenuUnfoldOutlined /> :
+            <MenuFoldOutlined />
+          }
+          onClick={() => setSiderCollapsed(!siderCollapsed)}
+        />
+      </RightAlignedDiv>
       <Menu theme="light" selectedKeys={[sectionStack.slice(-1)[0]]}>
         {sectionMenuItems}
       </Menu>
