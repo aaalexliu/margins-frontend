@@ -1,13 +1,30 @@
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import { useParams, RouteComponentProps } from '@reach/router';
 import { useQuery, gql } from '@apollo/client';
 import { PublicationCard, AnnotationCard } from '../containers';
 import { Loading } from '../components';
-import { Layout } from 'antd';
-import { ANNOTATION_ALL_FRAGMENT } from '../utils/annotation-all';
+import { Layout, Typography, Card, Affix, Menu } from 'antd';
+import styled from '@emotion/styled';
+import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
 import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
+import { stripIgnoredCharacters } from 'graphql';
 
 const { Header, Content, Footer, Sider } = Layout;
+const { Title } = Typography;
+
+const PaddedListItem = styled.li`
+  padding-top: 10px;
+`;
+
+const UnstyledList = styled.ul`
+  list-style: none;
+  outline: none;
+  padding: 0;
+`;
+
+const H3NoMargins = styled.h3`
+  margin: 0;
+`;
 
 export const GET_ALL_ANNOTATIONS_FOR_PUBLICATION = gql`
   query GetAllAnnotationsForPublication($publicationId: String!, $first: Int, $afterCursor: Cursor){
@@ -59,22 +76,124 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   const annotations = annotationNodes ?
     annotationNodes.filter(
       (node): node is GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication_allAnnotations_edges_node => node !== null
-    ) :
-    undefined;
+    ) : null;
 
   let annotationList;
-  if (annotations !== undefined) {
-    annotationList = annotations?.map(annotation => {
-      return <AnnotationCard key={annotation.id} annotationId={annotation.annotationId} />
-    });
-  }
+  if (annotations == null) return <p>No annotations exist</p>;
+
+  let lastSection = '';
+  let sectionCount = 0;
+  const sections: any= [];
+  let annotationsWithLocations = annotations.flatMap(annotation => {
+    const { highlightLocation, noteLocation } = extractAnnotationAll(annotation);
+    const location = highlightLocation ? highlightLocation : noteLocation;
+    // console.log(location);
+    // console.log(location.section);
+    // console.log(location.section != null);
+    // console.log(location.section !== lastSection);
+    if (location.section !=  null && location.section !== lastSection) {
+      lastSection = location.section;
+      sectionCount++;
+      // console.log(lastSection);
+      const ref = React.createRef<HTMLLIElement>();
+      const section = {sectionId: `section-${sectionCount}-${lastSection}`, sectionName: lastSection, ref};
+      sections.push(section);
+      return [ section, annotation];
+    } else {
+      return [annotation];
+    }
+  });
+
+  const sectionMenuItems = sections.map(section => {
+    const clickHandler = (ref: any) => {
+      ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'start'
+      })
+    }
+    return (
+      <Menu.Item key={section.sectionId} onClick={() => clickHandler(section.ref)}>
+        {section.sectionName}
+      </Menu.Item>
+    )
+  });
+
+  const [ topElement, setTopElement ] = useState(['']);
+  const sectionSider = sectionMenuItems.length > 0 ?
+  <Affix offsetTop={0}>
+    <Sider
+      style={{
+        overflow: 'auto',
+        height: '100vh',
+        // position: 'fixed',
+        // left: 0,
+      }}
+      theme="light"
+    >
+      <Menu theme="light" selectedKeys={[topElement.slice(-1)[0]]}>
+        {sectionMenuItems}
+      </Menu>
+    </Sider>
+    </Affix>:
+    null;
+  
+  // console.log(annotationsWithLocations);
+  const annotationsLocationsList = annotationsWithLocations.map(item => {
+    if("sectionId" in item)  {
+      // const scrollHandler = () => {
+      //   console.log('yelloooo');
+      //   const scrollY  = window.scrollY;
+      //   console.log(`on scroll ${item.sectionName} location: ${scrollY}`);
+      // }
+      const [ hideAffixed, setHideAffixed] = useState(false);
+      const handleAffixChange = (affixed: any) => {
+        if (affixed) {
+          setHideAffixed(true);
+          setTopElement(topElement.concat(item.sectionId));
+        };
+        if (!affixed) {
+          setHideAffixed(false);
+          setTopElement(topElement.slice(0, -1));
+        }
+      }
+      return (
+      <PaddedListItem key={item.sectionId} ref={item.ref}>
+        <Affix offsetTop={0} onChange={handleAffixChange}>
+          {hideAffixed ? null:
+          <Card size="small"><H3NoMargins>{item.sectionName}</H3NoMargins></Card>}
+        </Affix>
+      </PaddedListItem>
+      )
+    } else {
+      return(
+      <PaddedListItem key={item.annotationId}>
+        <AnnotationCard annotationId={item.annotationId} />
+      </PaddedListItem>
+      )
+    }
+  });
+
+
+  // annotationList = annotations.map(annotation => {
+  //   return (
+  //   <PaddedListItem key={annotation.id}>
+  //     <AnnotationCard annotationId={annotation.annotationId} />
+  //   </PaddedListItem>
+  //   );
+  // });
 
   return (
-    <Fragment>
-      <PublicationCard publicationId={publicationId} />
-      {annotationList ? annotationList :
-        <p>No Annotations Found</p>}
-    </Fragment>
+    <Layout>
+      {sectionSider}
+      <Content>
+        <PublicationCard publicationId={publicationId} />
+        <UnstyledList>
+        {annotationsLocationsList ? annotationsLocationsList :
+          <p>No Annotations Found</p>}
+        </UnstyledList>
+      </Content>
+    </Layout>
   )
 }
 
