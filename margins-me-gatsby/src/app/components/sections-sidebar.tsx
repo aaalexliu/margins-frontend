@@ -1,6 +1,7 @@
 import React from 'react';
 import { Section } from '../utils/annotation-sections';
 import { Menu, Affix, Layout } from 'antd';
+import { css } from '@emotion/core';
 
 const { Sider } = Layout;
 
@@ -32,13 +33,17 @@ const SectionsSidebar: React.FC<SectionsSidebarProps<HTMLLIElement>>
   return(
   <Affix offsetTop={0}>
     <Sider
-      style={{
+      css={{
         overflow: 'auto',
         height: '100vh',
         // position: 'fixed',
         // left: 0,
+        marginRight: '10px'
       }}
       theme="light"
+      breakpoint="md"
+      collapsedWidth="0"
+      collapsible={true}
     >
       <Menu theme="light" selectedKeys={[sectionStack.slice(-1)[0]]}>
         {sectionMenuItems}

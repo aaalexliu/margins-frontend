@@ -3,8 +3,13 @@ import { useParams, RouteComponentProps } from '@reach/router';
 import { useQuery, gql } from '@apollo/client';
 import { PublicationCard, AnnotationCard } from '../containers';
 import { Loading, SectionsSidebar } from '../components';
-import { Layout, Typography, Card, Affix, Menu } from 'antd';
+import { Layout, Typography, Card, Affix, Menu, Button } from 'antd';
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined
+} from '@ant-design/icons';
 import styled from '@emotion/styled';
+import css from '@emotion/core';
 import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
 import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
 import { Section, extractAnnotationSections } from '../utils/annotation-sections';
@@ -24,6 +29,13 @@ const UnstyledList = styled.ul`
 
 const H3NoMargins = styled.h3`
   margin: 0;
+`;
+
+const RightAlignedDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 0;
 `;
 
 interface SectionCardProps {
@@ -81,6 +93,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
 
   const { publicationId } = useParams();
   const [ sectionStack, setSectionStack ] = useState(['']);
+  const [ siderCollapsed, setSiderCollapsed ] = useState(false);
 
   const {
     data,
@@ -95,7 +108,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
     {
       variables: {
         publicationId,
-        first: 100
+        // first: 100
       }
     }
   );
@@ -131,9 +144,66 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
     }
   });
 
+  const sectionMenuItems = sections.map(section => {
+    const clickHandler = (ref: any) => {
+      ref.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'start'
+      })
+    }
+    return (
+      <Menu.Item key={section.sectionId} onClick={() => clickHandler(section.ref)}>
+        {section.name}
+      </Menu.Item>
+    )
+  });
+
+  let sectionsSidebar = null;
+  if (sectionMenuItems.length > 0) {
+    sectionsSidebar = (
+  <Affix offsetTop={0}>
+    <Sider
+      css={{
+        overflow: 'auto',
+        height: '100vh',
+        // position: 'fixed',
+        // left: 0,
+        marginRight: '10px'
+      }}
+      theme="light"
+      breakpoint="md"
+      collapsedWidth="32px"
+      trigger={null}
+      collapsed={siderCollapsed}
+      onCollapse={() => setSiderCollapsed(true)}
+    >
+      <RightAlignedDiv>
+      <Button
+      css={{
+        marginLeft: 'auto',
+        marginRight: 0
+      }}
+      type="primary"
+      icon={siderCollapsed?
+        <MenuUnfoldOutlined /> :
+        <MenuFoldOutlined />
+      }
+          onClick={() => setSiderCollapsed(!siderCollapsed)}
+      />
+      </RightAlignedDiv>
+      <Menu theme="light" selectedKeys={[sectionStack.slice(-1)[0]]}>
+        {sectionMenuItems}
+      </Menu>
+    </Sider>
+  </Affix>
+    );
+  }
   return (
     <Layout>
-      <SectionsSidebar sections={sections} sectionStack={sectionStack}/>
+      {/* <SectionsSidebar sections={sections} sectionStack={sectionStack}/> */}
+      {sectionsSidebar}
+      <Layout>
       <Content>
         <PublicationCard publicationId={publicationId} />
         <UnstyledList>
@@ -141,6 +211,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
           <p>No Annotations Found</p>}
         </UnstyledList>
       </Content>
+      </Layout>
     </Layout>
   )
 }
