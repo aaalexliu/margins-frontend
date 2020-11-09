@@ -11,9 +11,18 @@ export const cache: InMemoryCache = new InMemoryCache({
           }
         },
         allPublications: relayStylePagination(),
-        // allAnnotations: relayStylePagination(),
+        allAnnotations: relayStylePagination(['condition']),
+        annotation(_, { args, toReference }) {
+          if (args && typeof args.id === 'string') {
+            return toReference({
+              __typename: 'Annotation',
+              id: args.id,
+            });
+          }
+        }
       }
     }
+
   }
 });
 

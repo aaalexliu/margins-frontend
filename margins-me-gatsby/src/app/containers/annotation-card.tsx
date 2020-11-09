@@ -65,17 +65,17 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     data,
     loading,
     error,
-    fetchMore
   } = useQuery<
   GetAnnotationTypes.GetAnnotation,
   GetAnnotationTypes.GetAnnotationVariables
   >(
-    GET_ANNOTATION,
+  GET_ANNOTATION,
     {
       variables: {
         id
-      }
-    }
+      },
+      // fetchPolicy: "cache-only",
+    },
   );
 
   if (loading) return <Loading />;
