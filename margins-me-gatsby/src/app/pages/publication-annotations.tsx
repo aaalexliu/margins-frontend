@@ -5,13 +5,12 @@ import { PublicationCard, AnnotationCard } from '../containers';
 import { Loading, SectionsSidebar } from '../components';
 import { Layout, Typography, Card, Affix, Menu, Button } from 'antd';
 import styled from '@emotion/styled';
-import css from '@emotion/core';
+// import css from '@emotion/core';
 import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
 import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
 import { Section, extractAnnotationSections } from '../utils/annotation-sections';
 
-const { Header, Content, Footer, Sider } = Layout;
-const { Title } = Typography;
+const { Content } = Layout;
 
 const PaddedListItem = styled.li`
   padding-top: 10px;
@@ -126,7 +125,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
     } else {
       return(
       <PaddedListItem key={item.annotationId}>
-        <AnnotationCard annotationId={item.annotationId} />
+        <AnnotationCard id={item.id} />
       </PaddedListItem>
       )
     }

@@ -7,7 +7,8 @@ import {
   ANNOTATION_ALL_FRAGMENT,
   extractAnnotationAll
 } from '../utils/annotation-all'
-import * as GetAnnotationByAnnotationIdTypes from './__generated__/GetAnnotationByAnnotationId';
+// import * as GetAnnotationByAnnotationIdTypes from './__generated__/GetAnnotationByAnnotationId';
+import * as GetAnnotationTypes from './__generated__/GetAnnotation';
 import styled from '@emotion/styled';
 
 const { Meta } = Card;
@@ -35,9 +36,18 @@ function stringifyLocation(location: any): string {
   return locationArr.join(' - ');
 }
 
-export const GET_ANNOTATION_BY_ANNOTATION_ID = gql`
-  query GetAnnotationByAnnotationId($annotationId: String!) {
-    annotationByAnnotationId(annotationId: $annotationId) {
+// export const GET_ANNOTATION_BY_ANNOTATION_ID = gql`
+//   query GetAnnotationByAnnotationId($annotationId: String!) {
+//     annotationByAnnotationId(annotationId: $annotationId) {
+//       ...AnnotationAll
+//     }
+//   }
+//   ${ANNOTATION_ALL_FRAGMENT}
+// `;
+
+export const GET_ANNOTATION = gql`
+  query GetAnnotation($id: ID!) {
+    annotation(id: $id) {
       ...AnnotationAll
     }
   }
@@ -45,11 +55,11 @@ export const GET_ANNOTATION_BY_ANNOTATION_ID = gql`
 `;
 
 interface AnnotationCardProps {
-  annotationId: string
+  id: string
 }
 
 const AnnotationCard: React.FC<AnnotationCardProps>
-  = ({ annotationId }) => {
+  = ({ id }) => {
 
   const {
     data,
@@ -57,13 +67,13 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     error,
     fetchMore
   } = useQuery<
-  GetAnnotationByAnnotationIdTypes.GetAnnotationByAnnotationId,
-  GetAnnotationByAnnotationIdTypes.GetAnnotationByAnnotationIdVariables
+  GetAnnotationTypes.GetAnnotation,
+  GetAnnotationTypes.GetAnnotationVariables
   >(
-    GET_ANNOTATION_BY_ANNOTATION_ID,
+    GET_ANNOTATION,
     {
       variables: {
-        annotationId
+        id
       }
     }
   );
@@ -71,10 +81,10 @@ const AnnotationCard: React.FC<AnnotationCardProps>
   if (loading) return <Loading />;
   if (error || !data) return <p>Error in retrieving annotation data</p>
 
-  const annotation = data.annotationByAnnotationId !== null ?
-    data.annotationByAnnotationId :
+  const annotation = data.annotation !== null ?
+    data.annotation :
     null;
-  if (annotation === null) return <p>No Annotation Exists for ID {annotationId}</p>
+  if (annotation === null) return <p>No Annotation Exists</p>
   
   const {
     color,
