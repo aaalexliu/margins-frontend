@@ -3,7 +3,7 @@ import { useParams, RouteComponentProps } from '@reach/router';
 import { useQuery, gql } from '@apollo/client';
 import { PublicationCard, AnnotationCard } from '../containers';
 import { Loading, SectionsSidebar } from '../components';
-import { Layout, Typography, Card, Affix, Menu, Button } from 'antd';
+import { Layout, Typography, Card, Affix, Menu, Button, Statistic } from 'antd';
 import styled from '@emotion/styled';
 // import css from '@emotion/core';
 import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
@@ -81,6 +81,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
 
   const { publicationId } = useParams();
   const [ sectionStack, setSectionStack ] = useState(['']);
+  const [ loadingMore, setIsLoadingMore ] = useState(false);
 
   const {
     data,
@@ -95,7 +96,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
     {
       variables: {
         publicationId,
-        // first: 100
+        first: 50
       }
     }
   );
@@ -103,13 +104,14 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   if (loading) return <Loading />;
   if (error || !data) return <p>ERROR</p>;
 
-  const annotationNodes = data?.allAnnotations?.edges.map(edge => edge.node);
-  const annotations = annotationNodes ?
-    annotationNodes.filter(
-      (node): node is GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication_allAnnotations_edges_node => node !== null
-    ) : null;
+  const totalCount = data.allAnnotations?.totalCount;
+  const annotationEdges = data?.allAnnotations?.edges;
+  if ( annotationEdges === undefined ) return <p>No annotations exist</p>;
 
-  if (annotations == null) return <p>No annotations exist</p>;
+  const annotations = annotationEdges.map(edge => edge.node).filter(
+    (node): node is GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication_allAnnotations_edges_node => node !== null)
+
+  // if (annotations == null) return 
 
   const {annotationsAndSections, sections } = extractAnnotationSections(annotations);
   
@@ -131,12 +133,74 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
     }
   });
 
+  const hasMore = data.allAnnotations?.pageInfo.hasNextPage;
+  
+  const fetch50More = 
+    <Button
+      type="primary"
+      onClick={async () => {
+        setIsLoadingMore(true);
+        await fetchMore({
+          variables: {
+            afterCursor: annotationEdges.slice(-1)[0].cursor,
+            first: 50
+          },
+        });
+        setIsLoadingMore(false);
+      }}
+      loading={loadingMore}
+      disabled={!hasMore}
+    >
+      Next 50
+    </Button>;
+  
+  const fetchAll = 
+  <Button
+    type="default"
+    onClick={async () => {
+    setIsLoadingMore(true);
+    await fetchMore({
+      variables: {
+        afterCursor: annotationEdges.slice(-1)[0].cursor,
+        first: totalCount ? totalCount - annotations.length : 100
+      },
+    });
+    setIsLoadingMore(false);
+  }}
+  loading={loadingMore}
+  disabled={!hasMore}
+>
+  Remaining {totalCount ? totalCount - annotations.length : ''}
+</Button>;
+
   return (
     <Layout>
       <SectionsSidebar sections={sections} sectionStack={sectionStack}/>
       <Layout>
       <Content>
         <PublicationCard publicationId={publicationId} />
+        <Card>
+          <div
+            css={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '100%'
+              // marginLeft: 'auto'
+            }}
+          >
+          <Statistic
+            title="Loaded Annotations"
+            value={annotations.length}
+            suffix={`/ ${totalCount}`}
+          />
+
+          {/* {`Loaded ${annotations.length} out of ${data.allAnnotations?.totalCount}`} */}
+          <div>
+          {fetch50More} {fetchAll}
+          </div>
+          </div>
+        </Card>
         <UnstyledList>
         {annotationsAndSectionsList ? annotationsAndSectionsList :
           <p>No Annotations Found</p>}
