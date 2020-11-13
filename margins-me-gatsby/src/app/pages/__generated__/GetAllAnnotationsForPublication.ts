@@ -7,6 +7,24 @@
 // GraphQL query operation: GetAllAnnotationsForPublication
 // ====================================================
 
+export interface GetAllAnnotationsForPublication_allAnnotations_edges_node_tagsByAnnotationTagAnnotationIdAndTagId_nodes {
+  __typename: "Tag";
+  /**
+   * A globally unique identifier. Can be used in various places throughout the system to identify this single value.
+   */
+  id: string;
+  tagId: string;
+  tagName: string;
+}
+
+export interface GetAllAnnotationsForPublication_allAnnotations_edges_node_tagsByAnnotationTagAnnotationIdAndTagId {
+  __typename: "AnnotationTagsByAnnotationTagAnnotationIdAndTagIdManyToManyConnection";
+  /**
+   * A list of `Tag` objects.
+   */
+  nodes: (GetAllAnnotationsForPublication_allAnnotations_edges_node_tagsByAnnotationTagAnnotationIdAndTagId_nodes | null)[];
+}
+
 export interface GetAllAnnotationsForPublication_allAnnotations_edges_node {
   __typename: "Annotation";
   /**
@@ -26,6 +44,10 @@ export interface GetAllAnnotationsForPublication_allAnnotations_edges_node {
   publicationId: string;
   recordedAt: any | null;
   updatedAt: any | null;
+  /**
+   * Reads and enables pagination through a set of `Tag`.
+   */
+  tagsByAnnotationTagAnnotationIdAndTagId: GetAllAnnotationsForPublication_allAnnotations_edges_node_tagsByAnnotationTagAnnotationIdAndTagId;
 }
 
 export interface GetAllAnnotationsForPublication_allAnnotations_edges {

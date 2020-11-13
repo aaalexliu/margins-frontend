@@ -8,6 +8,8 @@ import styled from '@emotion/styled';
 // import css from '@emotion/core';
 import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
 import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
+import * as GetAllTagsTypes from '../utils/__generated__/GetAllTags';
+import { GET_ALL_TAGS } from '../utils/get-all-tags';
 import { Section, extractAnnotationSections } from '../utils/annotation-sections';
 
 const { Content } = Layout;
@@ -49,9 +51,10 @@ const SectionCard: React.FC<SectionCardProps> =
   }
 
   return (
-    <Affix offsetTop={-40} onChange={handleAffixChange}>
-      {hideCard ? null:
-      <Card size="small"><H3NoMargins>{section.name}</H3NoMargins></Card>}
+    <Affix offsetTop={-45} onChange={handleAffixChange}>
+      {/* {hideCard ? null:
+      <Card size="small"><H3NoMargins>{section.name}</H3NoMargins></Card>} */}
+      <Card size="small"><H3NoMargins>{section.name}</H3NoMargins></Card>
     </Affix>
   )
 }
@@ -82,6 +85,14 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   const { publicationId } = useParams();
   const [ sectionStack, setSectionStack ] = useState(['']);
   const [ loadingMore, setIsLoadingMore ] = useState(false);
+
+  //this is mainly to load all tags into cache.
+  let {
+    data: tagData,
+    error: tagError
+  } = useQuery<
+    GetAllTagsTypes.GetAllTags
+  >(GET_ALL_TAGS);
 
   const {
     data,
@@ -195,7 +206,6 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
             suffix={`/ ${totalCount}`}
           />
 
-          {/* {`Loaded ${annotations.length} out of ${data.allAnnotations?.totalCount}`} */}
           <div>
           {fetch50More} {fetchAll}
           </div>
