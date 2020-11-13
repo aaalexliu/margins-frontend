@@ -19,6 +19,14 @@ export const cache: InMemoryCache = new InMemoryCache({
               id: args.id,
             });
           }
+        },
+        tag(_, { args, toReference }) {
+          if (args && typeof args.id === 'string') {
+            return toReference({
+              __typename: 'Tag',
+              id: args.id,
+            });
+          }
         }
       }
     }
