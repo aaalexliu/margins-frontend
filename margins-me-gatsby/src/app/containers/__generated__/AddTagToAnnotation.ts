@@ -4,10 +4,10 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: GetAnnotation
+// GraphQL mutation operation: AddTagToAnnotation
 // ====================================================
 
-export interface GetAnnotation_annotation_tagsByAnnotationTagAnnotationIdAndTagId_nodes {
+export interface AddTagToAnnotation_createAnnotationTag_annotationByAnnotationId_tagsByAnnotationTagAnnotationIdAndTagId_nodes {
   __typename: "Tag";
   /**
    * A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -17,15 +17,15 @@ export interface GetAnnotation_annotation_tagsByAnnotationTagAnnotationIdAndTagI
   tagName: string;
 }
 
-export interface GetAnnotation_annotation_tagsByAnnotationTagAnnotationIdAndTagId {
+export interface AddTagToAnnotation_createAnnotationTag_annotationByAnnotationId_tagsByAnnotationTagAnnotationIdAndTagId {
   __typename: "AnnotationTagsByAnnotationTagAnnotationIdAndTagIdManyToManyConnection";
   /**
    * A list of `Tag` objects.
    */
-  nodes: (GetAnnotation_annotation_tagsByAnnotationTagAnnotationIdAndTagId_nodes | null)[];
+  nodes: (AddTagToAnnotation_createAnnotationTag_annotationByAnnotationId_tagsByAnnotationTagAnnotationIdAndTagId_nodes | null)[];
 }
 
-export interface GetAnnotation_annotation {
+export interface AddTagToAnnotation_createAnnotationTag_annotationByAnnotationId {
   __typename: "Annotation";
   /**
    * A globally unique identifier. Can be used in various places throughout the system to identify this single value.
@@ -47,16 +47,25 @@ export interface GetAnnotation_annotation {
   /**
    * Reads and enables pagination through a set of `Tag`.
    */
-  tagsByAnnotationTagAnnotationIdAndTagId: GetAnnotation_annotation_tagsByAnnotationTagAnnotationIdAndTagId;
+  tagsByAnnotationTagAnnotationIdAndTagId: AddTagToAnnotation_createAnnotationTag_annotationByAnnotationId_tagsByAnnotationTagAnnotationIdAndTagId;
 }
 
-export interface GetAnnotation {
+export interface AddTagToAnnotation_createAnnotationTag {
+  __typename: "CreateAnnotationTagPayload";
   /**
-   * Reads a single `Annotation` using its globally unique `ID`.
+   * Reads a single `Annotation` that is related to this `AnnotationTag`.
    */
-  annotation: GetAnnotation_annotation | null;
+  annotationByAnnotationId: AddTagToAnnotation_createAnnotationTag_annotationByAnnotationId | null;
 }
 
-export interface GetAnnotationVariables {
-  id: string;
+export interface AddTagToAnnotation {
+  /**
+   * Creates a single `AnnotationTag`.
+   */
+  createAnnotationTag: AddTagToAnnotation_createAnnotationTag | null;
+}
+
+export interface AddTagToAnnotationVariables {
+  annotationId: string;
+  tagId: string;
 }
