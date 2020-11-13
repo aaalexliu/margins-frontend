@@ -17,6 +17,13 @@ export const ANNOTATION_ALL_FRAGMENT = gql`
     publicationId
     recordedAt
     updatedAt
+    tagsByAnnotationTagAnnotationIdAndTagId {
+      nodes {
+        id
+        tagId
+        tagName
+      }
+    }
   }
 `;
 
@@ -27,6 +34,8 @@ export const extractAnnotationAll = (annotation: AnnotationAllTypes.AnnotationAl
     noteLocation,
     color
   } = annotation;
+  const tags = annotation.tagsByAnnotationTagAnnotationIdAndTagId.nodes;
+
   try {
     extraEdits = extraEdits ? JSON.parse(extraEdits) : undefined;
     highlightLocation = highlightLocation ? JSON.parse(highlightLocation) : undefined;
@@ -42,6 +51,7 @@ export const extractAnnotationAll = (annotation: AnnotationAllTypes.AnnotationAl
     highlightLocation,
     noteLocation,
     extraEdits,
-    color
+    color,
+    tags
   }
 }
