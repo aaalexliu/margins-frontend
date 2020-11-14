@@ -6,6 +6,10 @@ import { Card, Divider, Typography, Tag, Select, Button } from 'antd';
 import { EditOutlined, SyncOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import {
+  ANNOTATION_ALL_FRAGMENT,
+  extractAnnotationAll
+} from '../utils/annotation-all'
+import {
   GetAllTagsDocument,
   AddTagToAnnotationDocument,
   CreateTagAndAddToAnnotationDocument,
@@ -13,6 +17,85 @@ import {
   DeleteTagDocument,
   DeleteAnnotationTagDocument
 } from '../__generated__/graphql-types';
+
+export const ADD_TAG_TO_ANNOTATION = gql`
+  mutation AddTagToAnnotation($annotationId: String!, $tagId: String!) {
+    createAnnotationTag(
+      input: {
+        annotationTag: {
+          annotationId: $annotationId
+          tagId: $tagId
+        }
+      }) {
+      annotationByAnnotationId {
+        ...AnnotationAll
+      }
+    }
+  }
+  ${ANNOTATION_ALL_FRAGMENT}
+`
+
+export const CREATE_AND_ADD_TAG_TO_ANNOTATION = gql`
+  mutation CreateTagAndAddToAnnotation(
+    $tagId: String!
+    $tagName: String!
+    $annotationId: String!
+    $accountId: UUID!
+  ) {
+    __typename
+    createTag(
+      input: {
+        tag: {
+          tagId: $tagId
+          tagName: $tagName
+          annotationTagsUsingTagId: { create: { annotationId: $annotationId } }
+          accountId: $accountId
+        }
+      }
+    ) {
+      tag {
+        id
+        tagId
+        tagName
+      }
+      query {
+        annotationByAnnotationId(annotationId: $annotationId) {
+          ...AnnotationAll
+        }
+      }
+    }
+  }
+  ${ANNOTATION_ALL_FRAGMENT}
+`
+
+export const DELETE_ANNOTATION_TAG = gql`
+  mutation DeleteAnnotationTag($annotationId: String!, $tagId: String!) {
+    __typename
+    deleteAnnotationTagByAnnotationIdAndTagId(input: {annotationId: $annotationId, tagId: $tagId}) {
+      tagByTagId {
+        annotationTagsByTagId {
+          totalCount
+        }
+        tagId
+        tagName
+        id
+      }
+      annotationByAnnotationId {
+        ...AnnotationAll
+      }
+    }
+  }
+  ${ANNOTATION_ALL_FRAGMENT}
+`
+
+export const DELETE_TAG = gql`
+  mutation DeleteTag($tagId: String!) {
+    __typename
+    deleteTagByTagId(input: {tagId: $tagId}) {
+      deletedTagId
+    }
+  }
+`
 
 interface AnnotationTagProps {
   annotationId: string,
