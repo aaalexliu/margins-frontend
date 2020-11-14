@@ -9,14 +9,16 @@ import {
   ANNOTATION_ALL_FRAGMENT,
   extractAnnotationAll
 } from '../utils/annotation-all'
-import { GET_ALL_TAGS } from '../utils/get-all-tags';
-import * as GetAllTagsTypes from '../utils/__generated__/GetAllTags';
-// import * as GetAnnotationByAnnotationIdTypes from './__generated__/GetAnnotationByAnnotationId';
-import * as GetAnnotationTypes from './__generated__/GetAnnotation';
-import * as DeleteAnnotationTagTypes from './__generated__/DeleteAnnotationTag';
-import * as AddTagToAnnotationTypes from './__generated__/AddTagToAnnotation';
-import * as CreateTagAndAddToAnnotationTypes from './__generated__/CreateTagAndAddToAnnotation';
-import * as DeleteTagTypes from './__generated__/DeleteTag';
+
+import {
+  GetAllTagsDocument,
+  AddTagToAnnotationDocument,
+  CreateTagAndAddToAnnotationDocument,
+  TagInput,
+  GetAnnotationDocument,
+  DeleteTagDocument,
+  DeleteAnnotationTagDocument
+} from '../__generated__/graphql-types';
 import styled from '@emotion/styled';
 
 const { Meta } = Card;
@@ -145,16 +147,17 @@ interface AnnotationCardProps {
   id: string
 }
 
-function AnnotationTag({annotationId, tag}) {
-  const [deleteAnnotationTag, { error: deleteError, loading: deleteLoading }] = useMutation<
-    DeleteAnnotationTagTypes.DeleteAnnotationTag,
-    DeleteAnnotationTagTypes.DeleteAnnotationTagVariables
-    >(DELETE_ANNOTATION_TAG);
+interface AnnotationTagProps {
+  annotationId: string,
+  tag: TagInput
+}
 
-  const [deleteTag] = useMutation<
-    DeleteTagTypes.DeleteTag,
-    DeleteTagTypes.DeleteTagVariables
-  >(DELETE_TAG,{
+function AnnotationTag({annotationId, tag}: AnnotationTagProps) {
+  const [deleteAnnotationTag, { error: deleteError, loading: deleteLoading }] =
+  useMutation(DeleteAnnotationTagDocument);
+
+  const [deleteTag] = useMutation(DeleteTagDocument,
+  {
     update(cache, { data }) {
       console.log('delete tag data: ', data);
       const deletedTagId = data?.deleteTagByTagId?.deletedTagId;
@@ -168,7 +171,7 @@ function AnnotationTag({annotationId, tag}) {
         },
       });
     }
-  })
+  });
 
   const onCloseHandler = async () => {
     const { data } = await deleteAnnotationTag({variables: {
@@ -194,28 +197,27 @@ function AnnotationTag({annotationId, tag}) {
         {tag.tagName}
     </Tag>
     )
-
 }
 
-function AnnotationCardTags({annotationId, tags}) {
+interface AnnotationCardTagsProps {
+  annotationId: string,
+  tags: TagInput[]
+}
+
+function AnnotationCardTags({annotationId, tags}: AnnotationCardTagsProps) {
   // console.log('current tags\n', tags);
-  const { data: allTagsData, loading: allTagsLoading } = useQuery<
-    GetAllTagsTypes.GetAllTags
-  >(GET_ALL_TAGS,
+  const { data: allTagsData, loading: allTagsLoading } = useQuery(
+    GetAllTagsDocument,
     {
       //just to test if it's reading from cache
       // fetchPolicy: "cache-only"  
     });
 
-  const [addAnnotationTag, { data: addTagData, loading: addTagLoading}] = useMutation<
-    AddTagToAnnotationTypes.AddTagToAnnotation,
-    AddTagToAnnotationTypes.AddTagToAnnotationVariables
-  >(ADD_TAG_TO_ANNOTATION);
+  const [addAnnotationTag, { data: addTagData, loading: addTagLoading}] = 
+    useMutation(AddTagToAnnotationDocument);
 
-  const [createAndAddTag, { data: createAndAddData, loading: createAndAddLoading }] = useMutation<
-    CreateTagAndAddToAnnotationTypes.CreateTagAndAddToAnnotation,
-    CreateTagAndAddToAnnotationTypes.CreateTagAndAddToAnnotationVariables
-  >(CREATE_AND_ADD_TAG_TO_ANNOTATION);
+  const [createAndAddTag, { data: createAndAddData, loading: createAndAddLoading }] =
+    useMutation(CreateTagAndAddToAnnotationDocument);
 
   const [ inputValue, setInputValue ] = useState('');
   // const [ addTagLoading, setAddTagLoading ] = useState(false);
@@ -272,6 +274,10 @@ function AnnotationCardTags({annotationId, tags}) {
       console.log('option exists, not adding create option');
       return;
     }
+    if (tags.filter(tag => tag.tagName === data).length > 0) {
+      console.log('tag already added to annotation, not adding create option');
+      return;
+    }
     setTagOptions([...availableTags, {label: `Create: ${data}`, value: `CREATE:${data}`}])
   }
 
@@ -326,11 +332,7 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     data,
     loading,
     error,
-  } = useQuery<
-  GetAnnotationTypes.GetAnnotation,
-  GetAnnotationTypes.GetAnnotationVariables
-  >(
-  GET_ANNOTATION,
+  } = useQuery(GetAnnotationDocument,
     {
       variables: {
         id
@@ -347,7 +349,7 @@ const AnnotationCard: React.FC<AnnotationCardProps>
   const annotation = data.annotation !== null ?
     data.annotation :
     null;
-  if (annotation === null) return <p>No Annotation Exists</p>
+  if (annotation == null) return <p>No Annotation Exists</p>
   
   const {
     annotationId,

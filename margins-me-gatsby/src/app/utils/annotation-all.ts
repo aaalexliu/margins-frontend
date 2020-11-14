@@ -1,8 +1,10 @@
 import { gql } from '@apollo/client';
-import * as AnnotationAllTypes from './__generated__/AnnotationAll';
+// import * as AnnotationAllTypes from './__generated__/AnnotationAll';
+import { AnnotationAllFragment, Tag } from '../__generated__/graphql-types';
 
 export const ANNOTATION_ALL_FRAGMENT = gql`
   fragment AnnotationAll on Annotation {
+    __typename
     id
     annotationId
     color
@@ -19,6 +21,7 @@ export const ANNOTATION_ALL_FRAGMENT = gql`
     updatedAt
     tagsByAnnotationTagAnnotationIdAndTagId {
       nodes {
+        __typename
         id
         tagId
         tagName
@@ -27,14 +30,15 @@ export const ANNOTATION_ALL_FRAGMENT = gql`
   }
 `;
 
-export const extractAnnotationAll = (annotation: AnnotationAllTypes.AnnotationAll) => {
+export const extractAnnotationAll = (annotation: AnnotationAllFragment) => {
   let {
     extraEdits,
     highlightLocation,
     noteLocation,
     color
   } = annotation;
-  const tags = annotation.tagsByAnnotationTagAnnotationIdAndTagId.nodes;
+  let tags = annotation.tagsByAnnotationTagAnnotationIdAndTagId.nodes
+    .filter((node): node is Pick<Tag, 'id' | 'tagId' | 'tagName'> => node != null);
 
   try {
     extraEdits = extraEdits ? JSON.parse(extraEdits) : undefined;

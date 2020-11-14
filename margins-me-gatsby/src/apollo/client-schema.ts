@@ -13,3 +13,5 @@ export const typeDefs = gql`
     currentAccount: CurrentAccount
   }
 `
+
+export default typeDefs;
