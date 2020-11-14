@@ -1,0 +1,37 @@
+schema:
+  - ${GRAPHQL_ENDPOINT}:
+      headers:
+        Authorization: ${GRAPHQL_AUTH_HEADING}
+documents:
+  - ./src/app/**/*.{ts,tsx,graphql}
+  - ./.cache/fragments/*.js
+  ## major issues right now with gatsby integration, see:
+  ## https://github.com/dotansimha/graphql-code-generator/issues/5024
+  # - ./node_modules/gatsby-*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-c*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-g*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-i*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-l*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-p*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-s*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-r*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-t*/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-source-contentful/!(node_modules)/**/*.js
+  # - ./node_modules/gatsby-transformer-sharp/!(node_modules)/**/*.js
+overwrite: true
+generates:
+  ./src/app/__generated__/graphql-types.ts:
+    schema: ./src/apollo/client-schema.ts
+    plugins:
+      - typescript
+      - typescript-operations
+      - typed-document-node
+    config:
+      enumsAsTypes: true
+      skipTypename: false,
+  # ./graphql.schema.json:
+  #   plugins:
+  #     - "introspection"
+require:
+  - ts-node/register
