@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { generateObjectId } from '../utils/object-id';
 import { getAccountId } from '../utils/account-id';
-import { Card, Divider, Typography, Tag, Select } from 'antd';
+import { Card, Divider, Typography } from 'antd';
 import { EditOutlined, SyncOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import {
@@ -32,13 +32,18 @@ function isOrphanNote(highlightText: any, noteText: any): boolean {
   return false;
 }
 
-function stringifyLocation(location: any): string {
-  if (location === undefined ) return '';
+function stringifyLocation(location: any) {
+  if (location === undefined ) return null;
   const locationArr: string[] = [];
+  console.log(location);
+  if (location.section !== undefined) locationArr.push(location.section);
   if (location.chapter !== undefined) locationArr.push(location.chapter);
   if (location.page !== undefined) locationArr.push(`Page: ${location.page}`);
   if (location.kindleLocation !== undefined) locationArr.push(`Kindle Location: ${location.kindleLocation}`);
-  return locationArr.join(' - ');
+  return {
+    fullLocation: locationArr.slice(0, -1).join(' - '),
+    suffixLocation: ` - ${locationArr.slice(-1)}`
+  }
 }
 
 // export const GET_ANNOTATION_BY_ANNOTATION_ID = gql`
@@ -192,29 +197,41 @@ const AnnotationCard: React.FC<AnnotationCardProps>
 
   const cardTitle = <Text strong={true}>{notOrphanNote ? 'Highlight' : 'Note'}</Text>;
 
-  const cardLocation = 
-    <Paragraph type="secondary" ellipsis={{ rows: 1, expandable: true, symbol: '..more' }}>
-      {notOrphanNote ? stringifyLocation(highlightLocation): stringifyLocation(noteLocation)}
+  let annotationLocation = notOrphanNote ? stringifyLocation(highlightLocation): stringifyLocation(noteLocation)
+  const cardLocation = annotationLocation ?
+    <Paragraph type="secondary"
+      ellipsis={{
+        rows: 1,
+        expandable: true,
+        symbol: '..full',
+        suffix: annotationLocation.suffixLocation
+      }}
+    >
+      {annotationLocation.fullLocation}
     </Paragraph>
+    :
+    null;
   // const cardDescription = notOrphanNote ? stringifyLocation(highlightLocation) : stringifyLocation(noteLocation);
 
   const NoteDivider = notOrphanNote && noteText ?
     <Divider orientation="left" plain={true}>{`Note`}</Divider>:
     null;
 
+  let quoteText = editedHighlightText ? editedHighlightText : highlightText;
+
   return (
     <Card
       // title={cardTitle}
-      actions={[
+      extra={[
         <EditOutlined key="edit"/>,
       ]}
       size="default"
     >
       {cardTitle}
       {cardLocation}
-      {highlightText &&
+      {quoteText &&
       <ColoredQuote color={color ? color : undefined}>
-        {highlightText}
+        {quoteText}
       </ColoredQuote>}
       {NoteDivider}
       {noteText}
