@@ -1,0 +1,11 @@
+mutation CreateAnnotation($inputAnnotation: CreateAnnotationInput!) {
+  __typename
+  createAnnotation(input: $inputAnnotation) {
+    annotationEdge {
+      cursor
+      node {
+        ...AnnotationAll
+      }
+    }
+  }
+}
