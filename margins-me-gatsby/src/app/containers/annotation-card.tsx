@@ -2,9 +2,9 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { generateObjectId } from '../utils/object-id';
 import { getAccountId } from '../utils/account-id';
-import { Card, Divider, Typography, Input, Button, Modal } from 'antd';
+import { Card, Divider, Typography, Input, Button, Modal, Form } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Loading } from '../components';
+import { Loading, AnnotationForm } from '../components';
 import {
   ANNOTATION_ALL_FRAGMENT,
   extractAnnotationAll
@@ -12,7 +12,8 @@ import {
 
 import {
   GetAnnotationDocument,
-  DeleteAnnotationDocument
+  DeleteAnnotationDocument,
+  UpdateAnnotationDocument
 } from '../__generated__/graphql-types';
 import styled from '@emotion/styled';
 import { AnnotationCardTags } from './annotation-tags';
@@ -89,7 +90,12 @@ const AnnotationCard: React.FC<AnnotationCardProps>
   );
 
   const [ isEditing, setIsEditing ] = useState(false);
+  const [ updateLoading, setUpdateLoading ] = useState(false);
+  const [ form ] = Form.useForm();
   const [ confirmDelete, setConfirmDelete ] = useState(false);
+
+  const [ updateAnnotation ] = useMutation(UpdateAnnotationDocument);
+
   const [ deleteAnnotation ] = useMutation(DeleteAnnotationDocument,
     {
       update(cache, { data }) {
@@ -146,6 +152,28 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     setConfirmDelete(true);
   }
 
+  const onSubmitEdit = async () => {
+    setUpdateLoading(true);
+    const values = await form.validateFields();
+    console.log('update annotation values:\n', values);
+    try {
+      const updateResponse = await updateAnnotation({
+        variables: {
+          inputAnnotation: {
+            id,
+            annotationPatch: {
+              ...values,
+              highlightLocation: JSON.stringify(values.highlightLocation)
+            }
+          }
+        }
+      });
+    } finally {
+      setIsEditing(false);
+      setUpdateLoading(false);
+    }
+  }
+
   console.log(`${highlightText} tags:`, tags);
 
   const notOrphanNote = !isOrphanNote(highlightText, noteText);
@@ -177,13 +205,25 @@ const AnnotationCard: React.FC<AnnotationCardProps>
   let cardQuote = editedHighlightText ? editedHighlightText : highlightText;
   let cardNote = editedNoteText ? editedNoteText : noteText;
 
-
+  const displayAnnotation =
+  <Fragment>
+    {cardLocation}
+      {cardQuote &&
+      <ColoredQuote color={color ? color : undefined}>
+        {cardQuote}
+      </ColoredQuote>}
+      {NoteDivider}
+      {cardNote}
+      <AnnotationCardTags annotationId={annotationId} tags={tags}/>
+  </Fragment>;
 
   return (
     <Card
       title={cardTitle}
       extra={[
-        <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"/>,
+        <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
+          onClick={() => setIsEditing(!isEditing)}
+        />,
         <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
           onClick={onDelete}
         />,
@@ -205,15 +245,35 @@ const AnnotationCard: React.FC<AnnotationCardProps>
         >
           Are you sure you want to delete this annotation?
         </Modal>
-      {/* {cardTitle} */}
-      {cardLocation}
-      {cardQuote &&
-      <ColoredQuote color={color ? color : undefined}>
-        {cardQuote}
-      </ColoredQuote>}
-      {NoteDivider}
-      {cardNote}
-      <AnnotationCardTags annotationId={annotationId} tags={tags}/>
+
+        {isEditing ?
+        <Fragment>
+          <AnnotationForm form={form}
+            initialValues={{
+              ...annotation,
+              highlightLocation
+            }}
+          />
+          <div css={{
+            display: 'flex',
+            justifyContent: 'flex-end'
+          }}>
+            <Button type="primary"
+              onClick={onSubmitEdit}
+              loading={updateLoading}
+            >Submit</Button>
+            <Button
+              onClick={() => setIsEditing(false)}
+              css={{
+                marginLeft: '5px'
+              }}
+              disabled={updateLoading}
+            >
+              Cancel</Button>
+          </div>
+        </Fragment>
+          : displayAnnotation
+        }
     </Card>
   )
 }
