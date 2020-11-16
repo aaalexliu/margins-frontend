@@ -18,6 +18,17 @@ import {
   DeleteAnnotationTagDocument
 } from '../__generated__/graphql-types';
 
+export const TAG_AND_COUNT_FRAGMENT = gql`
+  fragment TagAndCount on Tag {
+    annotationTagsByTagId {
+      totalCount
+    }
+    tagId
+    tagName
+    id
+  }
+`
+
 export const ADD_TAG_TO_ANNOTATION = gql`
   mutation AddTagToAnnotation($annotationId: String!, $tagId: String!) {
     createAnnotationTag(
@@ -54,9 +65,7 @@ export const CREATE_AND_ADD_TAG_TO_ANNOTATION = gql`
       }
     ) {
       tag {
-        id
-        tagId
-        tagName
+        ...TagAndCount
       }
       query {
         annotationByAnnotationId(annotationId: $annotationId) {
@@ -73,12 +82,7 @@ export const DELETE_ANNOTATION_TAG = gql`
     __typename
     deleteAnnotationTagByAnnotationIdAndTagId(input: {annotationId: $annotationId, tagId: $tagId}) {
       tagByTagId {
-        annotationTagsByTagId {
-          totalCount
-        }
-        tagId
-        tagName
-        id
+        ...TagAndCount
       }
       annotationByAnnotationId {
         ...AnnotationAll
@@ -93,6 +97,10 @@ export const DELETE_TAG = gql`
     __typename
     deleteTagByTagId(input: {tagId: $tagId}) {
       deletedTagId
+      tag {
+        tagId
+        tagName
+      }
     }
   }
 `
@@ -110,13 +118,17 @@ export function AnnotationTag({annotationId, tag}: AnnotationTagProps) {
   {
     update(cache, { data }) {
       console.log('delete tag data: ', data);
-      const deletedTagId = data?.deleteTagByTagId?.deletedTagId;
+      const deletedTagId = data?.deleteTagByTagId?.tag?.tagId;
       cache.modify({
         fields: {
-          allTags({nodes: existingTagRefs}, { readField }) {
-            console.log(existingTagRefs);
-            return existingTagRefs.filter((tagRef: any) => deletedTagId !== readField('tagId', tagRef)
-            );
+          allTags(allTagsConnection, { readField }) {
+            let { nodes } = allTagsConnection;
+            console.log('current tag nodes\n', nodes);
+            let newNodes = nodes.filter((tagRef: any) => deletedTagId !== readField('tagId', tagRef));
+            return {
+              ...allTagsConnection,
+              nodes: newNodes
+            };
           },
         },
       });
@@ -167,7 +179,38 @@ export function AnnotationCardTags({annotationId, tags}: AnnotationCardTagsProps
     useMutation(AddTagToAnnotationDocument);
 
   const [createAndAddTag, { data: createAndAddData, loading: createAndAddLoading }] =
-    useMutation(CreateTagAndAddToAnnotationDocument);
+    useMutation(CreateTagAndAddToAnnotationDocument, {
+      update(cache, { data }) {
+        console.log('add tag data: ', data);
+        const createdTag = data?.createTag?.tag;
+        const allTagsData = cache.readQuery({ query: GetAllTagsDocument});
+        if (createdTag && allTagsData?.allTags?.nodes) {
+          cache.writeQuery({
+            query: GetAllTagsDocument,
+            data: {
+              allTags: {
+                nodes: [...allTagsData.allTags.nodes, createdTag]
+              }
+            }
+          });
+        };
+
+        // cache.modify({
+        //   fields: {
+        //     allTags(allTagsConnection, { readField }) {
+        //       let { nodes } = allTagsConnection;
+        //       console.log('current tag nodes\n', nodes);
+        //       let createdTagRef = cache.identify(createdTag);
+        //       // let newNodes = nodes.filter((tagRef: any) => deletedTagId !== readField('tagId', tagRef));
+        //       return {
+        //         ...allTagsConnection,
+        //         nodes: [...nodes, createdTagRef]
+        //       };
+        //     },
+        //   },
+        // });
+      }
+    });
 
   const [ inputValue, setInputValue ] = useState('');
   const [ addTagMode, setAddTagMode ] = useState(false);
