@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, RouteComponentProps } from '@reach/router';
 import { useQuery, gql } from '@apollo/client';
-import { PublicationCard, AnnotationCard } from '../containers';
+import { PublicationCard, AnnotationCard, CreateAnnotationModal } from '../containers';
 import { Loading, SectionsSidebar } from '../components';
-import { Layout, Typography, Card, Affix, Menu, Button, Statistic } from 'antd';
+import { Layout, Typography, Card, Affix, Form, Button, Statistic, Modal } from 'antd';
 import styled from '@emotion/styled';
 // import css from '@emotion/core';
 import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
@@ -85,6 +85,9 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   const { publicationId } = useParams();
   const [ sectionStack, setSectionStack ] = useState(['']);
   const [ loadingMore, setIsLoadingMore ] = useState(false);
+  const [ modalVisible, setModalVisible ] = useState(false);
+  const [form] = Form.useForm();
+
 
   //this is mainly to load all tags into cache.
   let {
@@ -184,6 +187,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   Remaining {totalCount ? totalCount - annotations.length : ''}
 </Button>;
 
+
   return (
     <Layout>
       <SectionsSidebar sections={sections} sectionStack={sectionStack}/>
@@ -200,6 +204,19 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
               // marginLeft: 'auto'
             }}
           >
+          <Button type="primary" onClick={() => setModalVisible(true)}>
+            New Annotation
+          </Button>
+          <CreateAnnotationModal
+            visible={modalVisible}
+            publicationId={publicationId}
+            onCreate={(values) => {
+              console.log('boomshakalaka');
+              console.log(values);
+            }}
+            onCancel={() => setModalVisible(false)}
+          />
+
           <Statistic
             title="Loaded Annotations"
             value={annotations.length}
@@ -210,6 +227,8 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
           {fetch50More} {fetchAll}
           </div>
           </div>
+        </Card>
+        <Card>
         </Card>
         <UnstyledList>
         {annotationsAndSectionsList ? annotationsAndSectionsList :
