@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
-import * as PublicationAuthorAnnotationCountTypes from './__generated__/PublicationAuthorAnnotationCount';
+// import * as PublicationAuthorAnnotationCountTypes from './__generated__/PublicationAuthorAnnotationCount';
+import { PublicationAuthorAnnotationCountFragment, Author } from '../__generated__/graphql-types';
 
 export const PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT = gql`
   fragment PublicationAuthorAnnotationCount on Publication{
@@ -23,7 +24,7 @@ export const PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT = gql`
   }
 `;
 
-export const extractPublicationAuthorAnnotationCount = (publication: PublicationAuthorAnnotationCountTypes.PublicationAuthorAnnotationCount) => {
+export const extractPublicationAuthorAnnotationCount = (publication: PublicationAuthorAnnotationCountFragment) => {
   const {
     publicationId,
     title,
@@ -37,7 +38,7 @@ export const extractPublicationAuthorAnnotationCount = (publication: Publication
 
 
   const authorNames = authors
-    .filter((node): node is PublicationAuthorAnnotationCountTypes.PublicationAuthorAnnotationCount_authorsByPublicationAuthorPublicationIdAndAuthorId_nodes => node !== null)
+    .filter((node): node is Author => node !== null)
     .map(author => author.fullName)
     .join(' ');
 

@@ -1,15 +1,14 @@
 import React, { Fragment } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
-import { Card, Descriptions } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { Card, Descriptions, Button } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 
 import {
   PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT,
   extractPublicationAuthorAnnotationCount
 } from '../utils/publication-author-annotation-count';
-import * as PublicationAuthorAnnotationCountTypes from '../utils/__generated__/PublicationAuthorAnnotationCount';
-import * as GetPublicationByPublicationIdTypes from './__generated__/GetPublicationByPublicationId';
+import { GetPublicationByPublicationIdDocument } from '../__generated__/graphql-types';
 
 const { Meta } = Card;
 
@@ -37,20 +36,8 @@ export const GET_PUBLICATION_BY_PUBLICATION_ID = gql`
   query GetPublicationByPublicationId($publicationId: String!) {
     publicationByPublicationId(publicationId: $publicationId) {
       ...PublicationAuthorAnnotationCount
-      bookByPublicationId {
-        bookTitle
-        bookType
-        description
-        imageUrl
-        languageCode
-        isbn13
-        publicationDate
-        publicationId
-        publisher
-      }
     }
   }
-  ${PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT}
 `;
 
 interface PublicationCardProps {
@@ -65,11 +52,8 @@ const PublicationCard: React.FC<PublicationCardProps>
     loading,
     error,
     fetchMore
-  } = useQuery<
-    GetPublicationByPublicationIdTypes.GetPublicationByPublicationId,
-    GetPublicationByPublicationIdTypes.GetPublicationByPublicationIdVariables
-  >(
-    GET_PUBLICATION_BY_PUBLICATION_ID,
+  } = useQuery(
+    GetPublicationByPublicationIdDocument,
     {
       variables: {
         publicationId
@@ -81,10 +65,9 @@ const PublicationCard: React.FC<PublicationCardProps>
   if (error || !data) return <p>Error in retrieving publication data</p>
 
 
-  const publication = data.publicationByPublicationId !== null ?
-    data.publicationByPublicationId
-    : null;
-  if (publication === null) return <p>Error in Publication Data</p>
+  const publication = data.publicationByPublicationId;
+
+  if (publication == null) return <p>Error in Publication Data</p>
   
   const {
     title,
@@ -94,18 +77,19 @@ const PublicationCard: React.FC<PublicationCardProps>
 
   return (
     <Card
-      actions={[
-        <EditOutlined key="edit" />,
+      title={title}
+      extra={[
+        <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
+          // onClick={() => setIsEditing(!isEditing)}
+        />,
+        <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
+          // onClick={onDelete}
+        />,
       ]}
     >
-      <Meta
-        title={title}
-        description={
-          <PublicationDescription
-            authorNames={authorNames}
-            annotationCount={annotationCount}
-          />
-        }
+      <PublicationDescription
+        authorNames={authorNames}
+        annotationCount={annotationCount}
       />
     </Card>
   )
