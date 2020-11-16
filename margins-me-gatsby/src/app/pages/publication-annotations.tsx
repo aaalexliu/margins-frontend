@@ -13,6 +13,7 @@ import { GET_ALL_TAGS } from '../utils/get-all-tags';
 import { Section, extractAnnotationSections } from '../utils/annotation-sections';
 
 const { Content } = Layout;
+const { Text } = Typography;
 
 const PaddedListItem = styled.li`
   padding-top: 10px;
@@ -165,7 +166,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
       loading={loadingMore}
       disabled={!hasMore}
     >
-      Next 50
+      50
     </Button>;
   
   const fetchAll = 
@@ -184,7 +185,8 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   loading={loadingMore}
   disabled={!hasMore}
 >
-  Remaining {totalCount ? totalCount - annotations.length : ''}
+  {/* {totalCount ? totalCount - annotations.length : ''} */}
+  All
 </Button>;
 
 
@@ -218,18 +220,16 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
             onCancel={() => setModalVisible(false)}
           />
 
+          <div>
+            <Text type="secondary">Load Next </Text> {fetch50More} {fetchAll}
+          </div>
           <Statistic
             title="Loaded Annotations"
             value={annotations.length}
             suffix={`/ ${totalCount}`}
           />
 
-          <div>
-          {fetch50More} {fetchAll}
           </div>
-          </div>
-        </Card>
-        <Card>
         </Card>
         <UnstyledList>
         {annotationsAndSectionsList ? annotationsAndSectionsList :
