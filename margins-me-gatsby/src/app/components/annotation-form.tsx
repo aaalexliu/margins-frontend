@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Input, Button, Row, Col, Select } from 'antd';
+import { Form, Input, InputNumber, Button, Row, Col, Select } from 'antd';
+import { Rule } from 'antd/lib/form';
 
 const { TextArea } = Input;
 
@@ -17,6 +18,18 @@ export const AnnotationForm: React.FC<AnnotationFormProps> = ({ form = undefined
   const colors = ['none', 'yellow', 'blue', 'pink', 'orange'];
 
   const colorOptions = colors.map(color => {return {label: color, value: color}});
+
+  const textValidator: Rule = ({ getFieldValue }) => ({
+    validator(_, __) {
+      const highlightText = getFieldValue('highlightText');
+      const noteText = getFieldValue('noteText');
+      if (!noteText && !highlightText) {
+        return Promise.reject('Either Highlight or Note must have text')
+      }
+      return Promise.resolve();
+    },
+  });
+
   return ( 
     <Form
       layout="vertical"
@@ -42,21 +55,25 @@ export const AnnotationForm: React.FC<AnnotationFormProps> = ({ form = undefined
         </Col>
         <Col span={6}>
           <Form.Item label="Kindle Location" name={['location', 'kindleLocation']}>
-            <Input />
+            <InputNumber />
           </Form.Item>
         </Col>
       </Row>
       
-      <Form.Item label="Highlight" name="highlightText" >
+      <Form.Item label="Highlight" name="highlightText"
+        rules={[textValidator]}
+      >
         <TextArea
           placeholder="Higlight Text"
           autoSize={{ minRows: 2, maxRows: 6 }}
         />
       </Form.Item>
-      <Form.Item name="highlightColor" label="Highlight Color" style={{width: 100}}>
+      <Form.Item name="color" label="Highlight Color" style={{width: 100}}>
         <Select options={colorOptions}/>
       </Form.Item>
-      <Form.Item label="Note" name="noteText">
+      <Form.Item label="Note" name="noteText"
+        rules={[textValidator]}
+      >
         <TextArea
           placeholder="Note Text"
           autoSize={{ minRows: 2, maxRows: 6 }}
