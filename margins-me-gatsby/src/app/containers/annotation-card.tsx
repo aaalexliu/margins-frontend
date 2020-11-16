@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { generateObjectId } from '../utils/object-id';
 import { getAccountId } from '../utils/account-id';
-import { Card, Divider, Typography, Input, Button } from 'antd';
+import { Card, Divider, Typography, Input, Button, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import {
@@ -89,6 +89,7 @@ const AnnotationCard: React.FC<AnnotationCardProps>
   );
 
   const [ isEditing, setIsEditing ] = useState(false);
+  const [ confirmDelete, setConfirmDelete ] = useState(false);
   const [ deleteAnnotation ] = useMutation(DeleteAnnotationDocument,
     {
       update(cache, { data }) {
@@ -140,9 +141,9 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     tags
   } = extractAnnotationAll(annotation);
 
-  const onDelete = () => {
+  const onDelete = async () => {
     console.log('delete meee');
-    const deleteRes = deleteAnnotation({ variables: { annotationId }})
+    setConfirmDelete(true);
   }
 
   console.log(`${highlightText} tags:`, tags);
@@ -182,8 +183,10 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     <Card
       title={cardTitle}
       extra={[
-        <Button icon={<EditOutlined />} size="small" shape="circle" type="link"/>,
-        <Button icon={<DeleteOutlined />} onClick={onDelete} size="small" shape="circle" type="link"/>,
+        <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"/>,
+        <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
+          onClick={onDelete}
+        />,
       ]}
       size="small"
       bodyStyle={{
@@ -192,6 +195,16 @@ const AnnotationCard: React.FC<AnnotationCardProps>
         paddingBottom: '20px'
       }}
     >
+      <Modal
+        visible={confirmDelete}
+        title="Confirm Delete"
+        okText="Delete"
+        okButtonProps={{danger: true}}
+        onOk={() => deleteAnnotation({ variables: { annotationId }})}
+        onCancel={() => setConfirmDelete(false)}
+        >
+          Are you sure you want to delete this annotation?
+        </Modal>
       {/* {cardTitle} */}
       {cardLocation}
       {cardQuote &&
