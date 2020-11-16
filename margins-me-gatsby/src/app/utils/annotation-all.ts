@@ -38,7 +38,7 @@ export const extractAnnotationAll = (annotation: AnnotationAllFragment) => {
     color
   } = annotation;
   let tags = annotation.tagsByAnnotationTagAnnotationIdAndTagId.nodes
-    .filter((node): node is Pick<Tag, 'id' | 'tagId' | 'tagName'> => node != null);
+    .filter((node): node is ({ __typename: 'Tag' } & Pick<Tag, 'id' | 'tagId' | 'tagName'>) => node != null);
 
   try {
     extraEdits = extraEdits ? JSON.parse(extraEdits) : undefined;
