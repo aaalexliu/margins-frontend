@@ -39,22 +39,22 @@ export const AnnotationForm: React.FC<AnnotationFormProps> = ({ form = undefined
     >
       <Row gutter={[24,0]}>
         <Col span={6}>
-          <Form.Item label="Section" name={['location', 'section']}>
+          <Form.Item label="Section" name={['highlightLocation', 'section']}>
             <Input />
           </Form.Item>
         </Col>
         <Col span={6}>
-          <Form.Item label="Chapter" name={['location', 'chapter']}>
+          <Form.Item label="Chapter" name={['highlightLocation', 'chapter']}>
             <Input />
           </Form.Item>
         </Col>
         <Col span={6}>
-          <Form.Item label="Page" name={['location', 'page']}>
+          <Form.Item label="Page" name={['highlightLocation', 'page']}>
             <Input />
           </Form.Item>
         </Col>
         <Col span={6}>
-          <Form.Item label="Kindle Location" name={['location', 'kindleLocation']}>
+          <Form.Item label="Kindle Location" name={['highlightLocation', 'kindleLocation']}>
             <InputNumber />
           </Form.Item>
         </Col>
