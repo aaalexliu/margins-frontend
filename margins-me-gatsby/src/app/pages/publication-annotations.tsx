@@ -210,9 +210,10 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
           <CreateAnnotationModal
             visible={modalVisible}
             publicationId={publicationId}
-            onCreate={(values) => {
+            onCreate={(data) => {
               console.log('boomshakalaka');
-              console.log(values);
+              console.log(data);
+              setModalVisible(false);
             }}
             onCancel={() => setModalVisible(false)}
           />
