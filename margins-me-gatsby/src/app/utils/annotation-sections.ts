@@ -23,7 +23,7 @@ export function extractAnnotationSections(
     // console.log(location.section);
     // console.log(location.section != null);
     // console.log(location.section !== lastSection);
-    if (location.section !=  null && location.section !== lastSection) {
+    if (location != null && location.section !=  null && location.section !== lastSection) {
       lastSection = location.section;
       sectionCount++;
       // console.log(lastSection);
