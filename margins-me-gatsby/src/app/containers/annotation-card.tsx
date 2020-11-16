@@ -2,8 +2,8 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { generateObjectId } from '../utils/object-id';
 import { getAccountId } from '../utils/account-id';
-import { Card, Divider, Typography } from 'antd';
-import { EditOutlined, SyncOutlined } from '@ant-design/icons';
+import { Card, Divider, Typography, Input, Button } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import {
   ANNOTATION_ALL_FRAGMENT,
@@ -12,12 +12,14 @@ import {
 
 import {
   GetAnnotationDocument,
+  DeleteAnnotationDocument
 } from '../__generated__/graphql-types';
 import styled from '@emotion/styled';
 import { AnnotationCardTags } from './annotation-tags';
 
 const { Meta } = Card;
 const { Title, Paragraph, Text } = Typography;
+const { TextArea } = Input;
 
 const ColoredQuote = styled.blockquote`
   // margin:50px auto;
@@ -64,92 +66,12 @@ export const GET_ANNOTATION = gql`
   ${ANNOTATION_ALL_FRAGMENT}
 `;
 
-export const ADD_TAG_TO_ANNOTATION = gql`
-  mutation AddTagToAnnotation($annotationId: String!, $tagId: String!) {
-    createAnnotationTag(
-      input: {
-        annotationTag: {
-          annotationId: $annotationId
-          tagId: $tagId
-        }
-      }) {
-      annotationByAnnotationId {
-        ...AnnotationAll
-      }
-    }
-  }
-  ${ANNOTATION_ALL_FRAGMENT}
-`
-
-export const CREATE_AND_ADD_TAG_TO_ANNOTATION = gql`
-  mutation CreateTagAndAddToAnnotation(
-    $tagId: String!
-    $tagName: String!
-    $annotationId: String!
-    $accountId: UUID!
-  ) {
-    __typename
-    createTag(
-      input: {
-        tag: {
-          tagId: $tagId
-          tagName: $tagName
-          annotationTagsUsingTagId: { create: { annotationId: $annotationId } }
-          accountId: $accountId
-        }
-      }
-    ) {
-      tag {
-        id
-        tagId
-        tagName
-      }
-      query {
-        annotationByAnnotationId(annotationId: $annotationId) {
-          ...AnnotationAll
-        }
-      }
-    }
-  }
-  ${ANNOTATION_ALL_FRAGMENT}
-`
-
-export const DELETE_ANNOTATION_TAG = gql`
-  mutation DeleteAnnotationTag($annotationId: String!, $tagId: String!) {
-    __typename
-    deleteAnnotationTagByAnnotationIdAndTagId(input: {annotationId: $annotationId, tagId: $tagId}) {
-      tagByTagId {
-        annotationTagsByTagId {
-          totalCount
-        }
-        tagId
-        tagName
-        id
-      }
-      annotationByAnnotationId {
-        ...AnnotationAll
-      }
-    }
-  }
-  ${ANNOTATION_ALL_FRAGMENT}
-`
-
-export const DELETE_TAG = gql`
-  mutation DeleteTag($tagId: String!) {
-    __typename
-    deleteTagByTagId(input: {tagId: $tagId}) {
-      deletedTagId
-    }
-  }
-`
-
 interface AnnotationCardProps {
   id: string
 }
 
 const AnnotationCard: React.FC<AnnotationCardProps>
   = ({ id }) => {
-  
 
   const {
     data,
@@ -165,6 +87,33 @@ const AnnotationCard: React.FC<AnnotationCardProps>
       fetchPolicy: "cache-first",
     },
   );
+
+  const [ isEditing, setIsEditing ] = useState(false);
+  const [ deleteAnnotation ] = useMutation(DeleteAnnotationDocument,
+    {
+      update(cache, { data }) {
+        console.log('delete annotation data', data);
+        const deletedAnnotationId = data?.deleteAnnotationByAnnotationId?.annotation?.annotationId;
+        cache.modify({
+          fields: {
+            allAnnotations(currentAllAnnotations, { readField, storeFieldName }) {
+              let {edges} = currentAllAnnotations;
+              console.log('existingAnnotationEdges:\n', edges);
+              console.log('storeFieldName', storeFieldName);
+              let newEdges =  edges.filter((annotationEdge: any) => {
+                console.log('read field:\n', readField('annotationId', annotationEdge.node))
+                return deletedAnnotationId !== readField('annotationId', annotationEdge.node)
+              });
+              return {
+                ...currentAllAnnotations,
+                totalCount: currentAllAnnotations.totalCount - 1,
+                edges: newEdges
+              }
+            }
+          }
+        })
+      }
+    });
 
   if (loading) return <Loading />;
   if (error || !data) return <p>Error in retrieving annotation data</p>
@@ -191,11 +140,18 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     tags
   } = extractAnnotationAll(annotation);
 
+  const onDelete = () => {
+    console.log('delete meee');
+    const deleteRes = deleteAnnotation({ variables: { annotationId }})
+  }
+
   console.log(`${highlightText} tags:`, tags);
 
   const notOrphanNote = !isOrphanNote(highlightText, noteText);
 
-  const cardTitle = <Text strong={true}>{notOrphanNote ? 'Highlight' : 'Note'}</Text>;
+  const cardTitle = <Text>{notOrphanNote ? 'Highlight' : 'Note'}</Text>;
+  // const cardTitle = <Title level={6}>{notOrphanNote ? 'Highlight' : 'Note'}</Title>;
+
 
   let annotationLocation = notOrphanNote ? stringifyLocation(highlightLocation): stringifyLocation(noteLocation)
   const cardLocation = annotationLocation ?
@@ -213,28 +169,37 @@ const AnnotationCard: React.FC<AnnotationCardProps>
     null;
   // const cardDescription = notOrphanNote ? stringifyLocation(highlightLocation) : stringifyLocation(noteLocation);
 
-  const NoteDivider = notOrphanNote && noteText ?
+  const NoteDivider = ((notOrphanNote && noteText) || (notOrphanNote && isEditing)) ?
     <Divider orientation="left" plain={true}>{`Note`}</Divider>:
     null;
 
-  let quoteText = editedHighlightText ? editedHighlightText : highlightText;
+  let cardQuote = editedHighlightText ? editedHighlightText : highlightText;
+  let cardNote = editedNoteText ? editedNoteText : noteText;
+
+
 
   return (
     <Card
-      // title={cardTitle}
+      title={cardTitle}
       extra={[
-        <EditOutlined key="edit"/>,
+        <Button icon={<EditOutlined />} size="small" shape="circle" type="link"/>,
+        <Button icon={<DeleteOutlined />} onClick={onDelete} size="small" shape="circle" type="link"/>,
       ]}
-      size="default"
+      size="small"
+      bodyStyle={{
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        paddingBottom: '20px'
+      }}
     >
-      {cardTitle}
+      {/* {cardTitle} */}
       {cardLocation}
-      {quoteText &&
+      {cardQuote &&
       <ColoredQuote color={color ? color : undefined}>
-        {quoteText}
+        {cardQuote}
       </ColoredQuote>}
       {NoteDivider}
-      {noteText}
+      {cardNote}
       <AnnotationCardTags annotationId={annotationId} tags={tags}/>
     </Card>
   )

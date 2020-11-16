@@ -1,0 +1,18 @@
+mutation UpdateAnnotation($inputAnnotation: UpdateAnnotationInput! ) {
+  __typename
+  updateAnnotation(input: $inputAnnotation) {
+    annotation {
+      ...AnnotationAll
+    }
+  }
+}
+
+mutation DeleteAnnotation($annotationId: String!) {
+  __typename
+  deleteAnnotationByAnnotationId(input: {annotationId: $annotationId}) {
+    deletedAnnotationId
+    annotation {
+      ...AnnotationAll
+    }
+  }
+}
