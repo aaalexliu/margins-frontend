@@ -21,8 +21,8 @@ function createAnnotationInput(values: any, publicationId: string): CreateAnnota
   }
   console.log(values);
 
-  if (values.location != null) {
-    newAnnotation['highlightLocation'] = JSON.stringify(values.location);
+  if (values.highlightLocation != null) {
+    newAnnotation['highlightLocation'] = JSON.stringify(values.highlightLocation);
   }
   if (values.highlightText != null && values.highlightText != '') {
     newAnnotation['highlightText'] = values.highlightText;
