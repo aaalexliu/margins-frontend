@@ -1,0 +1,60 @@
+query GetAllAuthors {
+  allAuthors {
+    nodes {
+      id
+      authorId
+      fullName
+    }
+  }
+}
+
+mutation AddAuthorToPublication($authorId: String!, $publicationId: String!) {
+  __typename
+  createPublicationAuthor(input: {publicationAuthor: {authorId: $authorId, publicationId: $publicationId}}) {
+    publicationByPublicationId {
+      ...PublicationAuthorAnnotationCount
+    }
+    authorByAuthorId {
+      authorId
+      fullName
+      id
+    }
+  }
+}
+
+mutation CreateAuthorAndAddToPublication(
+  $authorId: String!
+  $fullName: String!
+  $accountId: UUID!
+  $publicationId: String!
+) {
+  __typename
+  createAuthor(
+    input: {
+      author: {
+        authorId: $authorId
+        fullName: $fullName
+        publicationAuthorsUsingAuthorId: { create: { publicationId: $publicationId } }
+        accountId: $accountId
+      }
+    }
+  ) {
+    author {
+      authorId
+      fullName
+      id
+    }
+  }
+}
+
+mutation DeletePublicationAuthor($publicationId: String!, $authorId: String!) {
+  __typename
+  deletePublicationAuthorByPublicationIdAndAuthorId(
+    input: { publicationId: $publicationId, authorId: $authorId }
+  ) {
+    publicationByPublicationId {
+      ...PublicationAuthorAnnotationCount
+    }
+  }
+}
+
