@@ -262,7 +262,7 @@ export function AnnotationCardTags({annotationId, tags}: AnnotationCardTagsProps
   }
   const onSearch = (data: string) => {
     console.log('onSearch:', data);
-    if (tagOptions.filter(option => option.value === data).length > 0) {
+    if (tagOptions.filter(option => option.label === data).length > 0) {
       console.log('option exists, not adding create option');
       return;
     }
