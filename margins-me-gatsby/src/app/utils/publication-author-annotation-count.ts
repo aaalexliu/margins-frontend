@@ -42,10 +42,13 @@ export const extractPublicationAuthorAnnotationCount = (publication: Publication
     .map(author => author.fullName)
     .join(' ');
 
+  const notNullAuthors = authors.filter((author): author is Pick<Author, "id" | "authorId" | "fullName"> => author != null);
+
   return {
     publicationId,
     title,
     annotationCount,
-    authorNames
+    authorNames,
+    authors: notNullAuthors
   }
 }
