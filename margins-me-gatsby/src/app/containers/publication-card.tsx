@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { Card, Descriptions, Button } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
+import { PublicationFormModal } from './publication-form-modal';
 
 import {
   PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT,
@@ -47,6 +48,7 @@ interface PublicationCardProps {
 const PublicationCard: React.FC<PublicationCardProps>
    = ({ publicationId }) => {
 
+  const [ isEditing, setIsEditing ] = useState(false);
   const {
     data,
     loading,
@@ -72,15 +74,17 @@ const PublicationCard: React.FC<PublicationCardProps>
   const {
     title,
     authorNames,
-    annotationCount
+    annotationCount,
+    authors
   } = extractPublicationAuthorAnnotationCount(publication);
 
+  console.log('current authors:', authors);
   return (
     <Card
       title={title}
       extra={[
         <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
-          // onClick={() => setIsEditing(!isEditing)}
+          onClick={() => setIsEditing(!isEditing)}
         />,
         <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
           // onClick={onDelete}
@@ -90,6 +94,17 @@ const PublicationCard: React.FC<PublicationCardProps>
       <PublicationDescription
         authorNames={authorNames}
         annotationCount={annotationCount}
+      />
+      <PublicationFormModal
+        visible={isEditing}
+        setVisible={setIsEditing}
+        initialValues={
+          {
+            publicationId,
+            title,
+            authors
+          }
+        }
       />
     </Card>
   )
