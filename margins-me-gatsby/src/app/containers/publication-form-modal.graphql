@@ -1,9 +1,16 @@
+fragment AuthorAndPublicationCount on Author {
+  id
+  authorId
+  fullName
+  publicationAuthorsByAuthorId {
+        totalCount
+      }
+}
+
 query GetAllAuthors {
   allAuthors {
     nodes {
-      id
-      authorId
-      fullName
+      ...AuthorAndPublicationCount
     }
   }
 }
@@ -15,9 +22,7 @@ mutation AddAuthorToPublication($authorId: String!, $publicationId: String!) {
       ...PublicationAuthorAnnotationCount
     }
     authorByAuthorId {
-      authorId
-      fullName
-      id
+      ...AuthorAndPublicationCount
     }
   }
 }
@@ -40,9 +45,12 @@ mutation CreateAuthorAndAddToPublication(
     }
   ) {
     author {
-      authorId
-      fullName
-      id
+      ...AuthorAndPublicationCount
+    }
+    query {
+      publicationByPublicationId(publicationId: $publicationId) {
+        ...PublicationAuthorAnnotationCount
+      }
     }
   }
 }
@@ -55,6 +63,19 @@ mutation DeletePublicationAuthor($publicationId: String!, $authorId: String!) {
     publicationByPublicationId {
       ...PublicationAuthorAnnotationCount
     }
+    authorByAuthorId {
+      ...AuthorAndPublicationCount
+    }
   }
 }
 
+mutation DeleteAuthor($authorId: String!) {
+  __typename
+  deleteAuthorByAuthorId(input: {authorId: $authorId}) {
+    author {
+      accountId
+      authorId
+      fullName
+    }
+  }
+}

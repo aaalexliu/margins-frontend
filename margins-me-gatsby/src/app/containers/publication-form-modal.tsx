@@ -11,12 +11,13 @@ import {
   Author,
   AddAuthorToPublicationDocument,
   CreateAuthorAndAddToPublicationDocument,
-  DeletePublicationAuthorDocument
+  DeletePublicationAuthorDocument,
+  DeleteAuthorDocument
 } from '../__generated__/graphql-types';
 import Modal from 'antd/lib/modal/Modal';
 import { Loading } from '../components';
 
-const { TextArea } = Input;
+const { TextArea, Search } = Input;
 
 interface PublicationFormModalProps {
   // form: any,
@@ -53,31 +54,18 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
   let authorNodes = authorsData?.allAuthors?.nodes;
   let availableAuthors: LabeledValue[] = [];
   if (authorNodes != null ) {
-    // let otherAuthors = authorNodes.filter(authorNode => {
-    //   if (authorNode == null ) return false;
-    //   let matchedAuthor = currentAuthors.filter(currentAuthor => {
-    //     return currentAuthor.authorId === authorNode.authorId
-    //   }).length > 0;
-    //   return !matchedAuthor
-    // });
-
-    // availableAuthors = otherAuthors
-    //   .flatMap(author => author ? [{label: author.fullName, value: author.authorId}]: []);
     availableAuthors = authorNodes
       .flatMap(author => author ? [{label: author.fullName, value: author.authorId}]: []);
   }
 
   const [form] = Form.useForm();
-  const [ authorInput, setAuthorInput ] = useState('');
-  const [ authorOptions, setAuthorOptions ] = useState<LabeledValue[]>(availableAuthors);
-  console.log('authorOptions', authorOptions);
-
+  const [ addAuthorLoading, setAddAuthorLoading ] = useState(false);
 
   const [ addAuthorToPublication ] = useMutation(AddAuthorToPublicationDocument);
 
   const [ createAndAddAuthor ] = useMutation(CreateAuthorAndAddToPublicationDocument, {
     update(cache, { data }) {
-    console.log('add author data: ', data);
+      console.log('add author data: ', data);
       const createdAuthor = data?.createAuthor?.author;
       const allAuthorsData = cache.readQuery({ query: GetAllAuthorsDocument});
       if (createdAuthor && allAuthorsData?.allAuthors?.nodes) {
@@ -94,66 +82,98 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
   });
 
   const [ deleteAuthorFromPublication ] = useMutation(DeletePublicationAuthorDocument);
-
-  //BREAK IF LOADING
-  console.log('authorsloading', authorsLoading);
-  if(authorsLoading) return <Loading />;
-
-  const currentAuthors: Pick<Author, 'authorId' | 'fullName' | 'id'>[] =
-    initialValues.authors ? initialValues.authors : [];
-
-  const authorSelectDefaultValues: LabeledValue[] = currentAuthors.map(author => {
-    return {
-      label: author.fullName,
-      value: author.authorId,
+  const [ deleteAuthor ] = useMutation(DeleteAuthorDocument, {
+    update(cache, { data }) {
+      console.log('delete author data: ', data);
+      const deletedAuthorId = data?.deleteAuthorByAuthorId?.author?.authorId;
+      cache.modify({
+        fields: {
+          allAuthors(allAuthorsConnection, { readField }) {
+            let { nodes } = allAuthorsConnection;
+            console.log('current author nodes\n', nodes);
+            let newNodes = nodes.filter((authorRef: any) => deletedAuthorId !== readField('authorId', authorRef));
+            return {
+              ...allAuthorsConnection,
+              nodes: newNodes
+            };
+          }
+        },
+      });
     }
   });
 
-  console.log('authorSelectDefaultValues: ', authorSelectDefaultValues);
+  const currentAuthors: Pick<Author, 'authorId' | 'fullName' | 'id'>[] =
+  initialValues.authors ? initialValues.authors : [];
 
+  const [ currentAuthorsValue, setCurrentAuthorsValue ] = useState(currentAuthors.map(author => author.authorId));
+  console.log('current Author Values: ', currentAuthorsValue);
+
+    //BREAK IF LOADING
+  console.log('authorsloading', authorsLoading);
+  if(authorsLoading) return <Loading />;
 
   const onSelect = async (value: any, option: any) => {
     // console.log('onselect value ', value);
     console.log('onSelect option', option);
-    if (option.value.startsWith('CREATE:')) {
-      const createAuthorName = option.value.substring(7);
-      console.log('create author: ', createAuthorName);
-      await createAndAddAuthor({
-        variables: {
-          authorId: generateObjectId(),
-          fullName: createAuthorName,
-          accountId: getAccountId(),
-          publicationId
-        }
-      });
-    } else {
-      const authorId = option.value;
-      await addAuthorToPublication({variables: {authorId, publicationId}});
-      console.log('add author executed');
-    }
-    // setInputValue('');
+    const authorId = option.value;
+    setCurrentAuthorsValue([...currentAuthorsValue, authorId]);
+    await addAuthorToPublication({variables: {authorId, publicationId}});
+    console.log('add author executed');
   }
 
-  const onSearch = (data: string) => {
-    console.log('onSearch:', data);
-    if (authorOptions.filter(option => option.label === data).length > 0) {
-      console.log('option exists, not adding create option');
-      return;
-    }
-
-    setAuthorOptions([...availableAuthors, {label: `Create: ${data}`, value: `CREATE:${data}`}])
+  const onAddAuthor = async(value: any) => {
+    setAddAuthorLoading(true);
+    console.log('add author value:', value);
+    if (value == null) return;
+    const createAuthorName = value;
+    console.log('create author: ', createAuthorName);
+    const authorId = generateObjectId();
+    await createAndAddAuthor({
+      variables: {
+        authorId,
+        fullName: createAuthorName,
+        accountId: getAccountId(),
+        publicationId
+      }
+    });
+    setCurrentAuthorsValue([...currentAuthorsValue, authorId]);
+    setAddAuthorLoading(false);
   }
+
+  // const onSearch = (data: string) => {
+  //   console.log('onSearch:', data);
+  //   if (authorOptions.filter(option => option.label === data).length > 0) {
+  //     console.log('option exists, not adding create option');
+  //     return;
+  //   }
+
+  //   setAuthorOptions([...availableAuthors, {label: `Create: ${data}`, value: `CREATE:${data}`}])
+  // }
 
   const onDeselect = async (value: any, option: any) => {
     console.log('onDeselect:', option);
     const authorId = option.value;
-    const deleteRes = await deleteAuthorFromPublication({
+    setCurrentAuthorsValue(
+      currentAuthorsValue.filter(id => id !== authorId)
+    );
+    const deletePublicationAuthorRes = await deleteAuthorFromPublication({
       variables: {
         authorId,
         publicationId
       }
     });
-    console.log('delete Author from publication', deleteRes);
+    console.log('delete Author from publication', deletePublicationAuthorRes);
+    const deletedAuthor = 
+      deletePublicationAuthorRes.data?.deletePublicationAuthorByPublicationIdAndAuthorId?.authorByAuthorId;
+    if (deletedAuthor && deletedAuthor.publicationAuthorsByAuthorId.totalCount === 0) {
+      console.log(`author ${deletedAuthor.fullName} has no other publications, deleting`);
+      const deleteAuthorRes = await deleteAuthor({
+        variables: {
+          authorId
+        }
+      });
+      console.log('delete author res\n', deleteAuthorRes);
+    }
   }
 
   const onOk = async () => {
@@ -184,44 +204,49 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Author(s)"
+        <Form.Item label="Current Author(s)"
           // rules={[
           // ]}
         >
             <Select
             // loading={authorsLoading}
             mode="multiple"
-            // a somewhat janky fix to make sure that authorOptions are available at first load,
-            // so that default values work. the problem is that authorOptions is at first initiated
-            // with an empty array because useState can't be called after data loads, all useState
-            // hooks must be in the same order after every render. Need this useState because I 
-            // add the create option dynamically with user input, but that isn't set after the user
-            // performs a search, so right now a janky if statement to only load stateful authorOptions
-            // after a search is performed
-            options={authorOptions.length === 0 ? availableAuthors : authorOptions}
+            options={availableAuthors}
             onSelect={onSelect}
             onDeselect={onDeselect}
-            onSearch={onSearch}
             optionFilterProp="label"
-            defaultValue={authorSelectDefaultValues.map(author => author.value)}
-            dropdownRender={menu => (
-              <div>
-                {menu}
-                <Divider style={{ margin: '4px 0' }} />
-                <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
-                  <Input style={{ flex: 'auto' }}
-                  // value={name} onChange={this.onNameChange}
-                  />
-                  <a
-                    style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
-                    // onClick={this.addItem}
-                  >
-                    <PlusOutlined /> Add Author
-                  </a>
-                </div>
-              </div>
-            )}
+            value={currentAuthorsValue}
+            // dropdownRender={menu => (
+            //   <div>
+            //     {menu}
+            //     <Divider style={{ margin: '4px 0' }} />
+            //     <div style={{ display: 'flex', flexWrap: 'nowrap', padding: 8 }}>
+            //       <Input style={{ flex: 'auto' }}
+            //       onFocus={() => setSelectDeleteDisabled(true)}
+            //       onBlur={() => setSelectDeleteDisabled(false)}
+            //       value={addAuthorInput} onChange={(event) => {
+            //         event.stopPropagation();
+            //         event.preventDefault();
+            //         setAddAuthorInput(event.target.value)}
+            //       }
+            //       />
+            //       <a
+            //         style={{ flex: 'none', padding: '8px', display: 'block', cursor: 'pointer' }}
+            //         onClick={onAddAuthor}
+            //       >
+            //         <PlusOutlined /> Add Author
+            //       </a>
+            //     </div>
+            //   </div>
+            // )}
           />
+        </Form.Item>
+        <Form.Item label="Create and Add Author">
+           <Search style={{ flex: 'auto' }}
+            enterButton="Create Author"
+            onSearch={onAddAuthor}
+            loading={addAuthorLoading}
+            />
         </Form.Item>
         {/* <Form.Item >
           <Button type="primary" htmlType="submit">
