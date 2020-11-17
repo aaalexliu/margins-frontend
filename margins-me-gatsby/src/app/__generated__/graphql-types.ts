@@ -36,6 +36,8 @@ export type Account = Node & {
   publicationsByAccountId: PublicationsConnection;
   /** Reads and enables pagination through a set of `Annotation`. */
   annotationsByAccountId: AnnotationsConnection;
+  /** Reads and enables pagination through a set of `Author`. */
+  authorsByAccountId: AuthorsConnection;
   /** Reads and enables pagination through a set of `Tag`. */
   tagsByAccountId: TagsConnection;
   fullName?: Maybe<Scalars['String']>;
@@ -63,6 +65,17 @@ export type AccountAnnotationsByAccountIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationsOrderBy>>;
   condition?: Maybe<AnnotationCondition>;
+};
+
+
+export type AccountAuthorsByAccountIdArgs = {
+  first?: Maybe<Scalars['Int']>;
+  last?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+  before?: Maybe<Scalars['Cursor']>;
+  after?: Maybe<Scalars['Cursor']>;
+  orderBy?: Maybe<Array<AuthorsOrderBy>>;
+  condition?: Maybe<AuthorCondition>;
 };
 
 
@@ -128,6 +141,7 @@ export type AccountInput = {
   lastName?: Maybe<Scalars['String']>;
   publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
   annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
   tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
 };
 
@@ -162,6 +176,28 @@ export type AccountOnAnnotationForAnnotationAccountIdFkeyUsingAccountEmailKeyUpd
 export type AccountOnAnnotationForAnnotationAccountIdFkeyUsingAccountPkeyUpdate = {
   /** An object where the defined keys will be set on the `account` being updated. */
   accountPatch: UpdateAccountOnAnnotationForAnnotationAccountIdFkeyPatch;
+  accountId: Scalars['UUID'];
+};
+
+/** The globally unique `ID` look up for the row to update. */
+export type AccountOnAuthorForAuthorAccountIdFkeyNodeIdUpdate = {
+  /** The globally unique `ID` which identifies a single `author` to be connected. */
+  id: Scalars['ID'];
+  /** An object where the defined keys will be set on the `author` being updated. */
+  authorPatch: AuthorPatch;
+};
+
+/** The fields on `account` to look up the row to update. */
+export type AccountOnAuthorForAuthorAccountIdFkeyUsingAccountEmailKeyUpdate = {
+  /** An object where the defined keys will be set on the `account` being updated. */
+  accountPatch: UpdateAccountOnAuthorForAuthorAccountIdFkeyPatch;
+  email: Scalars['String'];
+};
+
+/** The fields on `account` to look up the row to update. */
+export type AccountOnAuthorForAuthorAccountIdFkeyUsingAccountPkeyUpdate = {
+  /** An object where the defined keys will be set on the `account` being updated. */
+  accountPatch: UpdateAccountOnAuthorForAuthorAccountIdFkeyPatch;
   accountId: Scalars['UUID'];
 };
 
@@ -222,6 +258,7 @@ export type AccountPatch = {
   lastName?: Maybe<Scalars['String']>;
   publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
   annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
   tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
 };
 
@@ -380,6 +417,7 @@ export type AnnotationAccountIdFkeyAccountCreateInput = {
   lastName?: Maybe<Scalars['String']>;
   publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
   annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
   tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
 };
 
@@ -1079,6 +1117,9 @@ export type Author = Node & {
   id: Scalars['ID'];
   authorId: Scalars['String'];
   fullName: Scalars['String'];
+  accountId: Scalars['UUID'];
+  /** Reads a single `Account` that is related to this `Author`. */
+  accountByAccountId?: Maybe<Account>;
   /** Reads and enables pagination through a set of `PublicationAuthor`. */
   publicationAuthorsByAuthorId: PublicationAuthorsConnection;
   /** Reads and enables pagination through a set of `Publication`. */
@@ -1107,6 +1148,86 @@ export type AuthorPublicationsByPublicationAuthorAuthorIdAndPublicationIdArgs = 
   condition?: Maybe<PublicationCondition>;
 };
 
+/** The `account` to be created by this mutation. */
+export type AuthorAccountIdFkeyAccountCreateInput = {
+  email: Scalars['String'];
+  createdAt?: Maybe<Scalars['Datetime']>;
+  updatedAt?: Maybe<Scalars['Datetime']>;
+  status?: Maybe<Scalars['String']>;
+  emailVerified?: Maybe<Scalars['Boolean']>;
+  group?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
+  annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
+  tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
+};
+
+/** The `author` to be created by this mutation. */
+export type AuthorAccountIdFkeyAuthorCreateInput = {
+  authorId: Scalars['String'];
+  fullName: Scalars['String'];
+  accountToAccountId?: Maybe<AuthorAccountIdFkeyInput>;
+  publicationAuthorsUsingAuthorId?: Maybe<PublicationAuthorAuthorIdFkeyInverseInput>;
+};
+
+/** Input for the nested mutation of `account` in the `AuthorInput` mutation. */
+export type AuthorAccountIdFkeyInput = {
+  /** The primary key(s) for `account` for the far side of the relationship. */
+  connectByAccountId?: Maybe<AccountAccountPkeyConnect>;
+  /** The primary key(s) for `account` for the far side of the relationship. */
+  connectByEmail?: Maybe<AccountAccountEmailKeyConnect>;
+  /** The primary key(s) for `account` for the far side of the relationship. */
+  connectById?: Maybe<AccountNodeIdConnect>;
+  /** The primary key(s) for `account` for the far side of the relationship. */
+  deleteByAccountId?: Maybe<AccountAccountPkeyDelete>;
+  /** The primary key(s) for `account` for the far side of the relationship. */
+  deleteByEmail?: Maybe<AccountAccountEmailKeyDelete>;
+  /** The primary key(s) for `account` for the far side of the relationship. */
+  deleteById?: Maybe<AccountNodeIdDelete>;
+  /** The primary key(s) and patch data for `account` for the far side of the relationship. */
+  updateByAccountId?: Maybe<AccountOnAuthorForAuthorAccountIdFkeyUsingAccountPkeyUpdate>;
+  /** The primary key(s) and patch data for `account` for the far side of the relationship. */
+  updateByEmail?: Maybe<AccountOnAuthorForAuthorAccountIdFkeyUsingAccountEmailKeyUpdate>;
+  /** The primary key(s) and patch data for `account` for the far side of the relationship. */
+  updateById?: Maybe<AuthorOnAuthorForAuthorAccountIdFkeyNodeIdUpdate>;
+  /** A `AccountInput` object that will be created and connected to this object. */
+  create?: Maybe<AuthorAccountIdFkeyAccountCreateInput>;
+};
+
+/** Input for the nested mutation of `author` in the `AccountInput` mutation. */
+export type AuthorAccountIdFkeyInverseInput = {
+  /** Flag indicating whether all other `author` records that match this relationship should be removed. */
+  deleteOthers?: Maybe<Scalars['Boolean']>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
+  connectByAuthorId?: Maybe<Array<AuthorAuthorPkeyConnect>>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
+  connectByFullName?: Maybe<Array<AuthorAuthorFullNameKeyConnect>>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
+  connectByAccountIdAndFullName?: Maybe<Array<AuthorNoDuplicateAuthorsPerAccountConnect>>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
+  connectById?: Maybe<Array<AuthorNodeIdConnect>>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
+  deleteByAuthorId?: Maybe<Array<AuthorAuthorPkeyDelete>>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
+  deleteByFullName?: Maybe<Array<AuthorAuthorFullNameKeyDelete>>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
+  deleteByAccountIdAndFullName?: Maybe<Array<AuthorNoDuplicateAuthorsPerAccountDelete>>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
+  deleteById?: Maybe<Array<AuthorNodeIdDelete>>;
+  /** The primary key(s) and patch data for `author` for the far side of the relationship. */
+  updateByAuthorId?: Maybe<Array<AuthorOnAuthorForAuthorAccountIdFkeyUsingAuthorPkeyUpdate>>;
+  /** The primary key(s) and patch data for `author` for the far side of the relationship. */
+  updateByFullName?: Maybe<Array<AuthorOnAuthorForAuthorAccountIdFkeyUsingAuthorFullNameKeyUpdate>>;
+  /** The primary key(s) and patch data for `author` for the far side of the relationship. */
+  updateByAccountIdAndFullName?: Maybe<Array<AuthorOnAuthorForAuthorAccountIdFkeyUsingNoDuplicateAuthorsPerAccountUpdate>>;
+  /** The primary key(s) and patch data for `author` for the far side of the relationship. */
+  updateById?: Maybe<Array<AccountOnAuthorForAuthorAccountIdFkeyNodeIdUpdate>>;
+  /** A `AuthorInput` object that will be created and connected to this object. */
+  create?: Maybe<Array<AuthorAccountIdFkeyAuthorCreateInput>>;
+};
+
 /** The fields on `author` to look up the row to connect. */
 export type AuthorAuthorFullNameKeyConnect = {
   fullName: Scalars['String'];
@@ -1133,12 +1254,16 @@ export type AuthorCondition = {
   authorId?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `fullName` field. */
   fullName?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `accountId` field. */
+  accountId?: Maybe<Scalars['UUID']>;
 };
 
 /** An input for mutations affecting `Author` */
 export type AuthorInput = {
   authorId: Scalars['String'];
   fullName: Scalars['String'];
+  accountId?: Maybe<Scalars['UUID']>;
+  accountToAccountId?: Maybe<AuthorAccountIdFkeyInput>;
   publicationAuthorsUsingAuthorId?: Maybe<PublicationAuthorAuthorIdFkeyInverseInput>;
 };
 
@@ -1152,6 +1277,48 @@ export type AuthorNodeIdConnect = {
 export type AuthorNodeIdDelete = {
   /** The globally unique `ID` which identifies a single `author` to be deleted. */
   id: Scalars['ID'];
+};
+
+/** The fields on `author` to look up the row to connect. */
+export type AuthorNoDuplicateAuthorsPerAccountConnect = {
+  accountId: Scalars['UUID'];
+  fullName: Scalars['String'];
+};
+
+/** The fields on `author` to look up the row to delete. */
+export type AuthorNoDuplicateAuthorsPerAccountDelete = {
+  accountId: Scalars['UUID'];
+  fullName: Scalars['String'];
+};
+
+/** The globally unique `ID` look up for the row to update. */
+export type AuthorOnAuthorForAuthorAccountIdFkeyNodeIdUpdate = {
+  /** The globally unique `ID` which identifies a single `account` to be connected. */
+  id: Scalars['ID'];
+  /** An object where the defined keys will be set on the `account` being updated. */
+  accountPatch: AccountPatch;
+};
+
+/** The fields on `author` to look up the row to update. */
+export type AuthorOnAuthorForAuthorAccountIdFkeyUsingAuthorFullNameKeyUpdate = {
+  /** An object where the defined keys will be set on the `author` being updated. */
+  authorPatch: UpdateAuthorOnAuthorForAuthorAccountIdFkeyPatch;
+  fullName: Scalars['String'];
+};
+
+/** The fields on `author` to look up the row to update. */
+export type AuthorOnAuthorForAuthorAccountIdFkeyUsingAuthorPkeyUpdate = {
+  /** An object where the defined keys will be set on the `author` being updated. */
+  authorPatch: UpdateAuthorOnAuthorForAuthorAccountIdFkeyPatch;
+  authorId: Scalars['String'];
+};
+
+/** The fields on `author` to look up the row to update. */
+export type AuthorOnAuthorForAuthorAccountIdFkeyUsingNoDuplicateAuthorsPerAccountUpdate = {
+  /** An object where the defined keys will be set on the `author` being updated. */
+  authorPatch: UpdateAuthorOnAuthorForAuthorAccountIdFkeyPatch;
+  accountId: Scalars['UUID'];
+  fullName: Scalars['String'];
 };
 
 /** The globally unique `ID` look up for the row to update. */
@@ -1176,10 +1343,20 @@ export type AuthorOnPublicationAuthorForPublicationAuthorAuthorIdFkeyUsingAuthor
   authorId: Scalars['String'];
 };
 
+/** The fields on `author` to look up the row to update. */
+export type AuthorOnPublicationAuthorForPublicationAuthorAuthorIdFkeyUsingNoDuplicateAuthorsPerAccountUpdate = {
+  /** An object where the defined keys will be set on the `author` being updated. */
+  authorPatch: UpdateAuthorOnPublicationAuthorForPublicationAuthorAuthorIdFkeyPatch;
+  accountId: Scalars['UUID'];
+  fullName: Scalars['String'];
+};
+
 /** Represents an update to a `Author`. Fields that are set will be updated. */
 export type AuthorPatch = {
   authorId?: Maybe<Scalars['String']>;
   fullName?: Maybe<Scalars['String']>;
+  accountId?: Maybe<Scalars['UUID']>;
+  accountToAccountId?: Maybe<AuthorAccountIdFkeyInput>;
   publicationAuthorsUsingAuthorId?: Maybe<PublicationAuthorAuthorIdFkeyInverseInput>;
 };
 
@@ -1230,6 +1407,8 @@ export type AuthorsOrderBy =
   | 'AUTHOR_ID_DESC'
   | 'FULL_NAME_ASC'
   | 'FULL_NAME_DESC'
+  | 'ACCOUNT_ID_ASC'
+  | 'ACCOUNT_ID_DESC'
   | 'PRIMARY_KEY_ASC'
   | 'PRIMARY_KEY_DESC';
 
@@ -1544,6 +1723,8 @@ export type CreateAuthorPayload = {
   author?: Maybe<Author>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** Reads a single `Account` that is related to this `Author`. */
+  accountByAccountId?: Maybe<Account>;
   /** An edge for our `Author`. May be used by Relay 1. */
   authorEdge?: Maybe<AuthorsEdge>;
 };
@@ -1876,6 +2057,17 @@ export type DeleteAnnotationTagPayloadAnnotationTagEdgeArgs = {
   orderBy?: Maybe<Array<AnnotationTagsOrderBy>>;
 };
 
+/** All input for the `deleteAuthorByAccountIdAndFullName` mutation. */
+export type DeleteAuthorByAccountIdAndFullNameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  accountId: Scalars['UUID'];
+  fullName: Scalars['String'];
+};
+
 /** All input for the `deleteAuthorByAuthorId` mutation. */
 export type DeleteAuthorByAuthorIdInput = {
   /**
@@ -1919,6 +2111,8 @@ export type DeleteAuthorPayload = {
   deletedAuthorId?: Maybe<Scalars['ID']>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** Reads a single `Account` that is related to this `Author`. */
+  accountByAccountId?: Maybe<Account>;
   /** An edge for our `Author`. May be used by Relay 1. */
   authorEdge?: Maybe<AuthorsEdge>;
 };
@@ -2177,6 +2371,8 @@ export type Mutation = {
   updateAuthorByAuthorId?: Maybe<UpdateAuthorPayload>;
   /** Updates a single `Author` using a unique key and a patch. */
   updateAuthorByFullName?: Maybe<UpdateAuthorPayload>;
+  /** Updates a single `Author` using a unique key and a patch. */
+  updateAuthorByAccountIdAndFullName?: Maybe<UpdateAuthorPayload>;
   /** Updates a single `Book` using its globally unique id and a patch. */
   updateBook?: Maybe<UpdateBookPayload>;
   /** Updates a single `Book` using a unique key and a patch. */
@@ -2221,6 +2417,8 @@ export type Mutation = {
   deleteAuthorByAuthorId?: Maybe<DeleteAuthorPayload>;
   /** Deletes a single `Author` using a unique key. */
   deleteAuthorByFullName?: Maybe<DeleteAuthorPayload>;
+  /** Deletes a single `Author` using a unique key. */
+  deleteAuthorByAccountIdAndFullName?: Maybe<DeleteAuthorPayload>;
   /** Deletes a single `Book` using its globally unique id. */
   deleteBook?: Maybe<DeleteBookPayload>;
   /** Deletes a single `Book` using a unique key. */
@@ -2365,6 +2563,12 @@ export type MutationUpdateAuthorByFullNameArgs = {
 
 
 /** The root mutation type which contains root level fields which mutate data. */
+export type MutationUpdateAuthorByAccountIdAndFullNameArgs = {
+  input: UpdateAuthorByAccountIdAndFullNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
 export type MutationUpdateBookArgs = {
   input: UpdateBookInput;
 };
@@ -2493,6 +2697,12 @@ export type MutationDeleteAuthorByAuthorIdArgs = {
 /** The root mutation type which contains root level fields which mutate data. */
 export type MutationDeleteAuthorByFullNameArgs = {
   input: DeleteAuthorByFullNameInput;
+};
+
+
+/** The root mutation type which contains root level fields which mutate data. */
+export type MutationDeleteAuthorByAccountIdAndFullNameArgs = {
+  input: DeleteAuthorByAccountIdAndFullNameInput;
 };
 
 
@@ -2668,6 +2878,7 @@ export type PublicationAccountIdFkeyAccountCreateInput = {
   lastName?: Maybe<Scalars['String']>;
   publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
   annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
   tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
 };
 
@@ -2782,6 +2993,8 @@ export type PublicationAuthor = Node & {
 /** The `author` to be created by this mutation. */
 export type PublicationAuthorAuthorIdFkeyAuthorCreateInput = {
   fullName: Scalars['String'];
+  accountId?: Maybe<Scalars['UUID']>;
+  accountToAccountId?: Maybe<AuthorAccountIdFkeyInput>;
   publicationAuthorsUsingAuthorId?: Maybe<PublicationAuthorAuthorIdFkeyInverseInput>;
 };
 
@@ -2792,17 +3005,23 @@ export type PublicationAuthorAuthorIdFkeyInput = {
   /** The primary key(s) for `author` for the far side of the relationship. */
   connectByFullName?: Maybe<AuthorAuthorFullNameKeyConnect>;
   /** The primary key(s) for `author` for the far side of the relationship. */
+  connectByAccountIdAndFullName?: Maybe<AuthorNoDuplicateAuthorsPerAccountConnect>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
   connectById?: Maybe<AuthorNodeIdConnect>;
   /** The primary key(s) for `author` for the far side of the relationship. */
   deleteByAuthorId?: Maybe<AuthorAuthorPkeyDelete>;
   /** The primary key(s) for `author` for the far side of the relationship. */
   deleteByFullName?: Maybe<AuthorAuthorFullNameKeyDelete>;
   /** The primary key(s) for `author` for the far side of the relationship. */
+  deleteByAccountIdAndFullName?: Maybe<AuthorNoDuplicateAuthorsPerAccountDelete>;
+  /** The primary key(s) for `author` for the far side of the relationship. */
   deleteById?: Maybe<AuthorNodeIdDelete>;
   /** The primary key(s) and patch data for `author` for the far side of the relationship. */
   updateByAuthorId?: Maybe<AuthorOnPublicationAuthorForPublicationAuthorAuthorIdFkeyUsingAuthorPkeyUpdate>;
   /** The primary key(s) and patch data for `author` for the far side of the relationship. */
   updateByFullName?: Maybe<AuthorOnPublicationAuthorForPublicationAuthorAuthorIdFkeyUsingAuthorFullNameKeyUpdate>;
+  /** The primary key(s) and patch data for `author` for the far side of the relationship. */
+  updateByAccountIdAndFullName?: Maybe<AuthorOnPublicationAuthorForPublicationAuthorAuthorIdFkeyUsingNoDuplicateAuthorsPerAccountUpdate>;
   /** The primary key(s) and patch data for `author` for the far side of the relationship. */
   updateById?: Maybe<PublicationAuthorOnPublicationAuthorForPublicationAuthorAuthorIdFkeyNodeIdUpdate>;
   /** A `AuthorInput` object that will be created and connected to this object. */
@@ -3262,6 +3481,7 @@ export type Query = Node & {
   annotationTagByAnnotationIdAndTagId?: Maybe<AnnotationTag>;
   /** Reads a single `Author` using its globally unique `ID`. */
   author?: Maybe<Author>;
+  authorByAccountIdAndFullName?: Maybe<Author>;
   authorByAuthorId?: Maybe<Author>;
   authorByFullName?: Maybe<Author>;
   /** Reads a single `Book` using its globally unique `ID`. */
@@ -3468,6 +3688,13 @@ export type QueryAuthorArgs = {
 
 
 /** The root query type which gives access points into the data universe. */
+export type QueryAuthorByAccountIdAndFullNameArgs = {
+  accountId: Scalars['UUID'];
+  fullName: Scalars['String'];
+};
+
+
+/** The root query type which gives access points into the data universe. */
 export type QueryAuthorByAuthorIdArgs = {
   authorId: Scalars['String'];
 };
@@ -3601,6 +3828,7 @@ export type TagAccountIdFkeyAccountCreateInput = {
   lastName?: Maybe<Scalars['String']>;
   publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
   annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
   tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
 };
 
@@ -3867,6 +4095,23 @@ export type UpdateAccountOnAnnotationForAnnotationAccountIdFkeyPatch = {
   lastName?: Maybe<Scalars['String']>;
   publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
   annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
+  tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
+};
+
+/** An object where the defined keys will be set on the `account` being updated. */
+export type UpdateAccountOnAuthorForAuthorAccountIdFkeyPatch = {
+  email?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['Datetime']>;
+  updatedAt?: Maybe<Scalars['Datetime']>;
+  status?: Maybe<Scalars['String']>;
+  emailVerified?: Maybe<Scalars['Boolean']>;
+  group?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+  publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
+  annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
   tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
 };
 
@@ -3882,6 +4127,7 @@ export type UpdateAccountOnPublicationForPublicationAccountIdFkeyPatch = {
   lastName?: Maybe<Scalars['String']>;
   publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
   annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
   tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
 };
 
@@ -3897,6 +4143,7 @@ export type UpdateAccountOnTagForTagAccountIdFkeyPatch = {
   lastName?: Maybe<Scalars['String']>;
   publicationsUsingAccountId?: Maybe<PublicationAccountIdFkeyInverseInput>;
   annotationsUsingAccountId?: Maybe<AnnotationAccountIdFkeyInverseInput>;
+  authorsUsingAccountId?: Maybe<AuthorAccountIdFkeyInverseInput>;
   tagsUsingAccountId?: Maybe<TagAccountIdFkeyInverseInput>;
 };
 
@@ -4126,6 +4373,19 @@ export type UpdateAnnotationTagPayloadAnnotationTagEdgeArgs = {
   orderBy?: Maybe<Array<AnnotationTagsOrderBy>>;
 };
 
+/** All input for the `updateAuthorByAccountIdAndFullName` mutation. */
+export type UpdateAuthorByAccountIdAndFullNameInput = {
+  /**
+   * An arbitrary string value with no semantic meaning. Will be included in the
+   * payload verbatim. May be used to track mutations by the client.
+   */
+  clientMutationId?: Maybe<Scalars['String']>;
+  /** An object where the defined keys will be set on the `Author` being updated. */
+  authorPatch: AuthorPatch;
+  accountId: Scalars['UUID'];
+  fullName: Scalars['String'];
+};
+
 /** All input for the `updateAuthorByAuthorId` mutation. */
 export type UpdateAuthorByAuthorIdInput = {
   /**
@@ -4164,8 +4424,18 @@ export type UpdateAuthorInput = {
 };
 
 /** An object where the defined keys will be set on the `author` being updated. */
+export type UpdateAuthorOnAuthorForAuthorAccountIdFkeyPatch = {
+  authorId?: Maybe<Scalars['String']>;
+  fullName?: Maybe<Scalars['String']>;
+  accountToAccountId?: Maybe<AuthorAccountIdFkeyInput>;
+  publicationAuthorsUsingAuthorId?: Maybe<PublicationAuthorAuthorIdFkeyInverseInput>;
+};
+
+/** An object where the defined keys will be set on the `author` being updated. */
 export type UpdateAuthorOnPublicationAuthorForPublicationAuthorAuthorIdFkeyPatch = {
   fullName?: Maybe<Scalars['String']>;
+  accountId?: Maybe<Scalars['UUID']>;
+  accountToAccountId?: Maybe<AuthorAccountIdFkeyInput>;
   publicationAuthorsUsingAuthorId?: Maybe<PublicationAuthorAuthorIdFkeyInverseInput>;
 };
 
@@ -4180,6 +4450,8 @@ export type UpdateAuthorPayload = {
   author?: Maybe<Author>;
   /** Our root query field type. Allows us to run any query from our mutation payload. */
   query?: Maybe<Query>;
+  /** Reads a single `Account` that is related to this `Author`. */
+  accountByAccountId?: Maybe<Account>;
   /** An edge for our `Author`. May be used by Relay 1. */
   authorEdge?: Maybe<AuthorsEdge>;
 };
@@ -4607,6 +4879,46 @@ export type GetPublicationByPublicationIdQueryVariables = Exact<{
 
 export type GetPublicationByPublicationIdQuery = { publicationByPublicationId?: Maybe<PublicationAuthorAnnotationCountFragment> };
 
+export type GetAllAuthorsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllAuthorsQuery = { allAuthors?: Maybe<{ nodes: Array<Maybe<Pick<Author, 'id' | 'authorId' | 'fullName'>>> }> };
+
+export type AddAuthorToPublicationMutationVariables = Exact<{
+  authorId: Scalars['String'];
+  publicationId: Scalars['String'];
+}>;
+
+
+export type AddAuthorToPublicationMutation = (
+  { __typename: 'Mutation' }
+  & { createPublicationAuthor?: Maybe<{ publicationByPublicationId?: Maybe<PublicationAuthorAnnotationCountFragment>, authorByAuthorId?: Maybe<Pick<Author, 'authorId' | 'fullName' | 'id'>> }> }
+);
+
+export type CreateAuthorAndAddToPublicationMutationVariables = Exact<{
+  authorId: Scalars['String'];
+  fullName: Scalars['String'];
+  accountId: Scalars['UUID'];
+  publicationId: Scalars['String'];
+}>;
+
+
+export type CreateAuthorAndAddToPublicationMutation = (
+  { __typename: 'Mutation' }
+  & { createAuthor?: Maybe<{ author?: Maybe<Pick<Author, 'authorId' | 'fullName' | 'id'>> }> }
+);
+
+export type DeletePublicationAuthorMutationVariables = Exact<{
+  publicationId: Scalars['String'];
+  authorId: Scalars['String'];
+}>;
+
+
+export type DeletePublicationAuthorMutation = (
+  { __typename: 'Mutation' }
+  & { deletePublicationAuthorByPublicationIdAndAuthorId?: Maybe<{ publicationByPublicationId?: Maybe<PublicationAuthorAnnotationCountFragment> }> }
+);
+
 export type GetAllAnnotationsForPublicationQueryVariables = Exact<{
   publicationId: Scalars['String'];
   first?: Maybe<Scalars['Int']>;
@@ -4669,6 +4981,10 @@ export const DeleteAnnotationTagDocument: DocumentNode<DeleteAnnotationTagMutati
 export const DeleteTagDocument: DocumentNode<DeleteTagMutation, DeleteTagMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteTag"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"deleteTagByTagId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"tagId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deletedTagId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tag"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tagId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagName"},"arguments":[],"directives":[]}]}}]}}]}}]};
 export const CreateAnnotationDocument: DocumentNode<CreateAnnotationMutation, CreateAnnotationMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAnnotation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"inputAnnotation"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateAnnotationInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createAnnotation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"inputAnnotation"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"annotationEdge"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AnnotationAll"},"directives":[]}]}}]}}]}}]}},...AnnotationAllFragmentDoc.definitions]};
 export const GetPublicationByPublicationIdDocument: DocumentNode<GetPublicationByPublicationIdQuery, GetPublicationByPublicationIdQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPublicationByPublicationId"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
+export const GetAllAuthorsDocument: DocumentNode<GetAllAuthorsQuery, GetAllAuthorsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllAuthors"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAuthors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"authorId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fullName"},"arguments":[],"directives":[]}]}}]}}]}}]};
+export const AddAuthorToPublicationDocument: DocumentNode<AddAuthorToPublicationMutation, AddAuthorToPublicationMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddAuthorToPublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createPublicationAuthor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationAuthor"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}]}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"authorByAuthorId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fullName"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
+export const CreateAuthorAndAddToPublicationDocument: DocumentNode<CreateAuthorAndAddToPublicationMutation, CreateAuthorAndAddToPublicationMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAuthorAndAddToPublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fullName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createAuthor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"author"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"fullName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fullName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"publicationAuthorsUsingAuthorId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"create"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}]}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"accountId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}}}]}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fullName"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]}]}}]}}]}}]};
+export const DeletePublicationAuthorDocument: DocumentNode<DeletePublicationAuthorMutation, DeletePublicationAuthorMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePublicationAuthor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"deletePublicationAuthorByPublicationIdAndAuthorId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
 export const GetAllAnnotationsForPublicationDocument: DocumentNode<GetAllAnnotationsForPublicationQuery, GetAllAnnotationsForPublicationQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllAnnotationsForPublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Cursor"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAnnotations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"condition"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AnnotationAll"},"directives":[]}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"startCursor"},"arguments":[],"directives":[]}]}}]}}]}},...AnnotationAllFragmentDoc.definitions]};
 export const GetAllPublicationsDocument: DocumentNode<GetAllPublicationsQuery, GetAllPublicationsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllPublications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PublicationsOrderBy"}}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Cursor"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allPublications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"startCursor"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
 export const GetAllTagsDocument: DocumentNode<GetAllTagsQuery, GetAllTagsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllTags"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allTags"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tagId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagName"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]}]}}]}}]}}]};
