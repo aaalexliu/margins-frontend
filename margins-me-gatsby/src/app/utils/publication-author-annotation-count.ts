@@ -40,7 +40,7 @@ export const extractPublicationAuthorAnnotationCount = (publication: Publication
   const authorNames = authors
     .filter((node): node is Author => node !== null)
     .map(author => author.fullName)
-    .join(' ');
+    .join(', ');
 
   const notNullAuthors = authors.filter((author): author is Pick<Author, "id" | "authorId" | "fullName"> => author != null);
 

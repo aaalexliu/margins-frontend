@@ -1,9 +1,11 @@
 import React, { Fragment, useState } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
-import { Card, Descriptions, Button } from 'antd';
+import { Card, Descriptions, Button, Typography } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import { PublicationFormModal } from './publication-form-modal';
+import styled from '@emotion/styled';
+import { css } from '@emotion/core';
 
 import {
   PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT,
@@ -12,6 +14,12 @@ import {
 import { GetPublicationByPublicationIdDocument } from '../__generated__/graphql-types';
 
 const { Meta } = Card;
+const { Text } = Typography;
+
+const MarginParagraph = styled.p`
+  margin-left: 5px;
+  margin-right: 5px;
+`
 
 interface PublicationDescriptionProps {
   authorNames: string,
@@ -26,9 +34,10 @@ const PublicationDescription: React.FC<PublicationDescriptionProps> =
         // bordered
         column={{sm: 2, xs: 1 }}
         size="small"
+        colon={false}
       >
-        <Descriptions.Item label="Authors">{authorNames}</Descriptions.Item>
-        <Descriptions.Item label="Annotations">{annotationCount}</Descriptions.Item>
+        <Descriptions.Item label={<Text strong={true}>Authors:</Text>}>{authorNames}</Descriptions.Item>
+        <Descriptions.Item label={<Text strong={true}>Annotations:</Text>}>{annotationCount}</Descriptions.Item>
     </Descriptions>
   )
 }
@@ -42,11 +51,12 @@ export const GET_PUBLICATION_BY_PUBLICATION_ID = gql`
 `;
 
 interface PublicationCardProps {
-  publicationId: string
+  publicationId: string,
+  width: string
 }
 
 const PublicationCard: React.FC<PublicationCardProps>
-   = ({ publicationId }) => {
+   = ({ publicationId, width = 'auto' }) => {
 
   const [ isEditing, setIsEditing ] = useState(false);
   const {
@@ -90,11 +100,23 @@ const PublicationCard: React.FC<PublicationCardProps>
           // onClick={onDelete}
         />,
       ]}
+      css={{
+        width: width
+      }}
     >
-      <PublicationDescription
+      <div css={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start',
+        margin: '0px -5px'
+      }}>
+        <MarginParagraph><Text strong={true}>Authors:</Text> {authorNames}</MarginParagraph>
+        <MarginParagraph><Text strong={true}>Annotations:</Text>{annotationCount}</MarginParagraph>
+      </div>
+      {/* <PublicationDescription
         authorNames={authorNames}
         annotationCount={annotationCount}
-      />
+      /> */}
       <PublicationFormModal
         visible={isEditing}
         setVisible={setIsEditing}
