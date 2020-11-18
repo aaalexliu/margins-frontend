@@ -63,7 +63,7 @@ mutation DeletePublicationAuthor($publicationId: String!, $authorId: String!) {
     publicationByPublicationId {
       ...PublicationAuthorAnnotationCount
     }
-    authorByAuthorId {
+  authorByAuthorId {
       ...AuthorAndPublicationCount
     }
   }
@@ -76,6 +76,15 @@ mutation DeleteAuthor($authorId: String!) {
       accountId
       authorId
       fullName
+    }
+  }
+}
+
+mutation UpdatePublication($inputPublication: UpdatePublicationByPublicationIdInput!) {
+  __typename
+  updatePublicationByPublicationId(input: $inputPublication) {
+    publication {
+      ...PublicationAuthorAnnotationCount
     }
   }
 }

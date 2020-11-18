@@ -12,7 +12,8 @@ import {
   AddAuthorToPublicationDocument,
   CreateAuthorAndAddToPublicationDocument,
   DeletePublicationAuthorDocument,
-  DeleteAuthorDocument
+  DeleteAuthorDocument,
+  UpdatePublicationDocument
 } from '../__generated__/graphql-types';
 import Modal from 'antd/lib/modal/Modal';
 import { Loading } from '../components';
@@ -45,21 +46,11 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
   // });
 
   const { publicationId } = initialValues;
-
-  const {
-    data: authorsData,
-    loading: authorsLoading
-  } = useQuery(GetAllAuthorsDocument);
-
-  let authorNodes = authorsData?.allAuthors?.nodes;
-  let availableAuthors: LabeledValue[] = [];
-  if (authorNodes != null ) {
-    availableAuthors = authorNodes
-      .flatMap(author => author ? [{label: author.fullName, value: author.authorId}]: []);
-  }
-
   const [form] = Form.useForm();
   const [ addAuthorLoading, setAddAuthorLoading ] = useState(false);
+  const [ updatePublicationLoading, setUpdatePublicationLoading ] = useState(false);
+
+  const [ updatePublication ]  = useMutation(UpdatePublicationDocument);
 
   const [ addAuthorToPublication ] = useMutation(AddAuthorToPublicationDocument);
 
@@ -82,6 +73,7 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
   });
 
   const [ deleteAuthorFromPublication ] = useMutation(DeletePublicationAuthorDocument);
+
   const [ deleteAuthor ] = useMutation(DeleteAuthorDocument, {
     update(cache, { data }) {
       console.log('delete author data: ', data);
@@ -101,6 +93,18 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
       });
     }
   });
+
+  const {
+    data: authorsData,
+    loading: authorsLoading
+  } = useQuery(GetAllAuthorsDocument);
+
+  let authorNodes = authorsData?.allAuthors?.nodes;
+  let availableAuthors: LabeledValue[] = [];
+  if (authorNodes != null ) {
+    availableAuthors = authorNodes
+      .flatMap(author => author ? [{label: author.fullName, value: author.authorId}]: []);
+  }
 
   const currentAuthors: Pick<Author, 'authorId' | 'fullName' | 'id'>[] =
   initialValues.authors ? initialValues.authors : [];
@@ -177,9 +181,22 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
   }
 
   const onOk = async () => {
-    setVisible(false);
+    setUpdatePublicationLoading(true);
     const values = await form.validateFields();
-    console.log(values);
+    console.log('edit publication modal values:\n', values);
+    
+    const updateRes = await updatePublication({
+      variables: {
+        inputPublication: {
+          publicationId,
+          publicationPatch: {
+            title: values.title
+          }
+        }
+      }
+    })
+    setVisible(false);
+    setUpdatePublicationLoading(false);
   }
 
   return (
@@ -187,6 +204,7 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
       visible={visible}
       onCancel={() => setVisible(false)}
       onOk={onOk}
+      confirmLoading={updatePublicationLoading}
     >
       <Form
         layout="vertical"
@@ -194,7 +212,7 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
         form={form}
         initialValues={initialValues}
       >
-        <Form.Item label="Title" name="title"
+        <Form.Item label="Title" name="title" required={true}
           rules={[
             {
               type: "string",
