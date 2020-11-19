@@ -317,14 +317,15 @@ export type AccountsEdge = {
 };
 
 /** Methods to use when ordering `Account`. */
-export type AccountsOrderBy = 
-  | 'NATURAL'
-  | 'ACCOUNT_ID_ASC'
-  | 'ACCOUNT_ID_DESC'
-  | 'EMAIL_ASC'
-  | 'EMAIL_DESC'
-  | 'PRIMARY_KEY_ASC'
-  | 'PRIMARY_KEY_DESC';
+export enum AccountsOrderBy {
+  Natural = 'NATURAL',
+  AccountIdAsc = 'ACCOUNT_ID_ASC',
+  AccountIdDesc = 'ACCOUNT_ID_DESC',
+  EmailAsc = 'EMAIL_ASC',
+  EmailDesc = 'EMAIL_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 export type AccountTagAnnotation = {
   accountId?: Maybe<Scalars['UUID']>;
@@ -353,8 +354,9 @@ export type AccountTagAnnotationsEdge = {
 };
 
 /** Methods to use when ordering `AccountTagAnnotation`. */
-export type AccountTagAnnotationsOrderBy = 
-  | 'NATURAL';
+export enum AccountTagAnnotationsOrderBy {
+  Natural = 'NATURAL'
+}
 
 export type Annotation = Node & {
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -821,16 +823,17 @@ export type AnnotationsEdge = {
 };
 
 /** Methods to use when ordering `Annotation`. */
-export type AnnotationsOrderBy = 
-  | 'NATURAL'
-  | 'ANNOTATION_ID_ASC'
-  | 'ANNOTATION_ID_DESC'
-  | 'PUBLICATION_ID_ASC'
-  | 'PUBLICATION_ID_DESC'
-  | 'ACCOUNT_ID_ASC'
-  | 'ACCOUNT_ID_DESC'
-  | 'PRIMARY_KEY_ASC'
-  | 'PRIMARY_KEY_DESC';
+export enum AnnotationsOrderBy {
+  Natural = 'NATURAL',
+  AnnotationIdAsc = 'ANNOTATION_ID_ASC',
+  AnnotationIdDesc = 'ANNOTATION_ID_DESC',
+  PublicationIdAsc = 'PUBLICATION_ID_ASC',
+  PublicationIdDesc = 'PUBLICATION_ID_DESC',
+  AccountIdAsc = 'ACCOUNT_ID_ASC',
+  AccountIdDesc = 'ACCOUNT_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 export type AnnotationTag = Node & {
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -1044,14 +1047,15 @@ export type AnnotationTagsEdge = {
 };
 
 /** Methods to use when ordering `AnnotationTag`. */
-export type AnnotationTagsOrderBy = 
-  | 'NATURAL'
-  | 'ANNOTATION_ID_ASC'
-  | 'ANNOTATION_ID_DESC'
-  | 'TAG_ID_ASC'
-  | 'TAG_ID_DESC'
-  | 'PRIMARY_KEY_ASC'
-  | 'PRIMARY_KEY_DESC';
+export enum AnnotationTagsOrderBy {
+  Natural = 'NATURAL',
+  AnnotationIdAsc = 'ANNOTATION_ID_ASC',
+  AnnotationIdDesc = 'ANNOTATION_ID_DESC',
+  TagIdAsc = 'TAG_ID_ASC',
+  TagIdDesc = 'TAG_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 /** The `annotationTag` to be created by this mutation. */
 export type AnnotationTagTagIdFkeyAnnotationTagCreateInput = {
@@ -1401,16 +1405,17 @@ export type AuthorsEdge = {
 };
 
 /** Methods to use when ordering `Author`. */
-export type AuthorsOrderBy = 
-  | 'NATURAL'
-  | 'AUTHOR_ID_ASC'
-  | 'AUTHOR_ID_DESC'
-  | 'FULL_NAME_ASC'
-  | 'FULL_NAME_DESC'
-  | 'ACCOUNT_ID_ASC'
-  | 'ACCOUNT_ID_DESC'
-  | 'PRIMARY_KEY_ASC'
-  | 'PRIMARY_KEY_DESC';
+export enum AuthorsOrderBy {
+  Natural = 'NATURAL',
+  AuthorIdAsc = 'AUTHOR_ID_ASC',
+  AuthorIdDesc = 'AUTHOR_ID_DESC',
+  FullNameAsc = 'FULL_NAME_ASC',
+  FullNameDesc = 'FULL_NAME_DESC',
+  AccountIdAsc = 'ACCOUNT_ID_ASC',
+  AccountIdDesc = 'ACCOUNT_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 export type Book = Node & {
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
@@ -1590,12 +1595,13 @@ export type BooksEdge = {
 };
 
 /** Methods to use when ordering `Book`. */
-export type BooksOrderBy = 
-  | 'NATURAL'
-  | 'PUBLICATION_ID_ASC'
-  | 'PUBLICATION_ID_DESC'
-  | 'PRIMARY_KEY_ASC'
-  | 'PRIMARY_KEY_DESC';
+export enum BooksOrderBy {
+  Natural = 'NATURAL',
+  PublicationIdAsc = 'PUBLICATION_ID_ASC',
+  PublicationIdDesc = 'PUBLICATION_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 /** All input for the create `Account` mutation. */
 export type CreateAccountInput = {
@@ -3243,14 +3249,15 @@ export type PublicationAuthorsEdge = {
 };
 
 /** Methods to use when ordering `PublicationAuthor`. */
-export type PublicationAuthorsOrderBy = 
-  | 'NATURAL'
-  | 'PUBLICATION_ID_ASC'
-  | 'PUBLICATION_ID_DESC'
-  | 'AUTHOR_ID_ASC'
-  | 'AUTHOR_ID_DESC'
-  | 'PRIMARY_KEY_ASC'
-  | 'PRIMARY_KEY_DESC';
+export enum PublicationAuthorsOrderBy {
+  Natural = 'NATURAL',
+  PublicationIdAsc = 'PUBLICATION_ID_ASC',
+  PublicationIdDesc = 'PUBLICATION_ID_DESC',
+  AuthorIdAsc = 'AUTHOR_ID_ASC',
+  AuthorIdDesc = 'AUTHOR_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 /**
  * A condition to be used against `Publication` object types. All fields are tested
@@ -3438,14 +3445,15 @@ export type PublicationsEdge = {
 };
 
 /** Methods to use when ordering `Publication`. */
-export type PublicationsOrderBy = 
-  | 'NATURAL'
-  | 'PUBLICATION_ID_ASC'
-  | 'PUBLICATION_ID_DESC'
-  | 'ACCOUNT_ID_ASC'
-  | 'ACCOUNT_ID_DESC'
-  | 'PRIMARY_KEY_ASC'
-  | 'PRIMARY_KEY_DESC';
+export enum PublicationsOrderBy {
+  Natural = 'NATURAL',
+  PublicationIdAsc = 'PUBLICATION_ID_ASC',
+  PublicationIdDesc = 'PUBLICATION_ID_DESC',
+  AccountIdAsc = 'ACCOUNT_ID_ASC',
+  AccountIdDesc = 'ACCOUNT_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 /** The root query type which gives access points into the data universe. */
 export type Query = Node & {
@@ -4027,14 +4035,15 @@ export type TagsEdge = {
 };
 
 /** Methods to use when ordering `Tag`. */
-export type TagsOrderBy = 
-  | 'NATURAL'
-  | 'TAG_ID_ASC'
-  | 'TAG_ID_DESC'
-  | 'ACCOUNT_ID_ASC'
-  | 'ACCOUNT_ID_DESC'
-  | 'PRIMARY_KEY_ASC'
-  | 'PRIMARY_KEY_DESC';
+export enum TagsOrderBy {
+  Natural = 'NATURAL',
+  TagIdAsc = 'TAG_ID_ASC',
+  TagIdDesc = 'TAG_ID_DESC',
+  AccountIdAsc = 'ACCOUNT_ID_ASC',
+  AccountIdDesc = 'ACCOUNT_ID_DESC',
+  PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+}
 
 /** The fields on `tag` to look up the row to connect. */
 export type TagTagPkeyConnect = {
@@ -4944,6 +4953,18 @@ export type UpdatePublicationMutation = (
   & { updatePublicationByPublicationId?: Maybe<{ publication?: Maybe<PublicationAuthorAnnotationCountFragment> }> }
 );
 
+export type GetAllTagsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllTagsQuery = { allTags?: Maybe<{ nodes: Array<Maybe<TagAndCountFragment>> }> };
+
+export type GetTagByTagIdQueryVariables = Exact<{
+  tagId: Scalars['String'];
+}>;
+
+
+export type GetTagByTagIdQuery = { tagByTagId?: Maybe<TagAndCountFragment> };
+
 export type GetAllAnnotationsForPublicationQueryVariables = Exact<{
   publicationId: Scalars['String'];
   first?: Maybe<Scalars['Int']>;
@@ -4983,11 +5004,6 @@ export type AnnotationAllFragment = (
     )>> } }
 );
 
-export type GetAllTagsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAllTagsQuery = { allTags?: Maybe<{ nodes: Array<Maybe<Pick<Tag, 'tagId' | 'tagName' | 'id'>>> }> };
-
 export type PublicationAuthorAnnotationCountFragment = (
   { __typename: 'Publication' }
   & Pick<Publication, 'accountId' | 'additionalMeta' | 'createdAt' | 'id' | 'publicationId' | 'title' | 'updatedAt'>
@@ -5013,6 +5029,7 @@ export const CreateAuthorAndAddToPublicationDocument: DocumentNode<CreateAuthorA
 export const DeletePublicationAuthorDocument: DocumentNode<DeletePublicationAuthorMutation, DeletePublicationAuthorMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePublicationAuthor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"deletePublicationAuthorByPublicationIdAndAuthorId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"authorByAuthorId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthorAndPublicationCount"},"directives":[]}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions,...AuthorAndPublicationCountFragmentDoc.definitions]};
 export const DeleteAuthorDocument: DocumentNode<DeleteAuthorMutation, DeleteAuthorMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAuthor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"deleteAuthorByAuthorId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accountId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"authorId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fullName"},"arguments":[],"directives":[]}]}}]}}]}}]};
 export const UpdatePublicationDocument: DocumentNode<UpdatePublicationMutation, UpdatePublicationMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdatePublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"inputPublication"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdatePublicationByPublicationIdInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"updatePublicationByPublicationId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"inputPublication"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publication"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
+export const GetAllTagsDocument: DocumentNode<GetAllTagsQuery, GetAllTagsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllTags"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allTags"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TagAndCount"},"directives":[]}]}}]}}]}},...TagAndCountFragmentDoc.definitions]};
+export const GetTagByTagIdDocument: DocumentNode<GetTagByTagIdQuery, GetTagByTagIdQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTagByTagId"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tagByTagId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"tagId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TagAndCount"},"directives":[]}]}}]}},...TagAndCountFragmentDoc.definitions]};
 export const GetAllAnnotationsForPublicationDocument: DocumentNode<GetAllAnnotationsForPublicationQuery, GetAllAnnotationsForPublicationQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllAnnotationsForPublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Cursor"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAnnotations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"condition"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AnnotationAll"},"directives":[]}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"startCursor"},"arguments":[],"directives":[]}]}}]}}]}},...AnnotationAllFragmentDoc.definitions]};
 export const GetAllPublicationsDocument: DocumentNode<GetAllPublicationsQuery, GetAllPublicationsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllPublications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PublicationsOrderBy"}}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Cursor"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allPublications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"startCursor"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
-export const GetAllTagsDocument: DocumentNode<GetAllTagsQuery, GetAllTagsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllTags"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allTags"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tagId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagName"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]}]}}]}}]}}]};
