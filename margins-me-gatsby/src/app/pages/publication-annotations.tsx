@@ -8,9 +8,8 @@ import styled from '@emotion/styled';
 // import css from '@emotion/core';
 import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
 import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
-import * as GetAllTagsTypes from '../utils/__generated__/GetAllTags';
-import { GET_ALL_TAGS } from '../utils/get-all-tags';
 import { Section, extractAnnotationSections } from '../utils/annotation-sections';
+import { GetAllTagsDocument } from '../__generated__/graphql-types';
 
 const { Content } = Layout;
 const { Text } = Typography;
@@ -94,9 +93,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   let {
     data: tagData,
     error: tagError
-  } = useQuery<
-    GetAllTagsTypes.GetAllTags
-  >(GET_ALL_TAGS);
+  } = useQuery(GetAllTagsDocument);
 
   const {
     data,
