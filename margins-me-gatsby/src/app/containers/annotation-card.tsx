@@ -192,7 +192,7 @@ const AnnotationCard: React.FC<AnnotationCardProps>
         suffix: annotationLocation.suffixLocation
       }}
     >
-      {annotationLocation.fullLocation}asdfadsfasdfsdfsa
+      {annotationLocation.fullLocation}
     </Paragraph>
     :
     null;
