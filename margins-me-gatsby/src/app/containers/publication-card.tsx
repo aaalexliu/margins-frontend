@@ -1,11 +1,12 @@
 import React, { Fragment, useState } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { Card, Descriptions, Button, Typography } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, FileTextOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import { PublicationFormModal } from './publication-form-modal';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
+import { Link } from 'gatsby';
 
 import {
   PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT,
@@ -52,11 +53,10 @@ export const GET_PUBLICATION_BY_PUBLICATION_ID = gql`
 
 interface PublicationCardProps {
   publicationId: string,
-  width: string
 }
 
 const PublicationCard: React.FC<PublicationCardProps>
-   = ({ publicationId, width = 'auto' }) => {
+   = ({ publicationId }) => {
 
   const [ isEditing, setIsEditing ] = useState(false);
   const {
@@ -100,9 +100,9 @@ const PublicationCard: React.FC<PublicationCardProps>
           // onClick={onDelete}
         />,
       ]}
-      css={{
-        width: width
-      }}
+      // css={{
+      //   width: width
+      // }}
     >
       <div css={{
         display: 'flex',
@@ -110,8 +110,11 @@ const PublicationCard: React.FC<PublicationCardProps>
         justifyContent: 'flex-start',
         margin: '0px -5px'
       }}>
-        <MarginParagraph><Text strong={true}>Authors:</Text> {authorNames}</MarginParagraph>
-        <MarginParagraph><Text strong={true}>Annotations:</Text>{annotationCount}</MarginParagraph>
+        <MarginParagraph><Text strong={true}>Authors: </Text>{authorNames}</MarginParagraph>
+        <Link to={`/app/annotations/publication/${publicationId}`}>
+          {/* <MarginParagraph>Annotations: {annotationCount}</MarginParagraph> */}
+          <MarginParagraph><Text strong={true}>Annotations: </Text>View {annotationCount} <FileTextOutlined /></MarginParagraph>
+        </Link>
       </div>
       {/* <PublicationDescription
         authorNames={authorNames}
