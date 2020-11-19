@@ -192,7 +192,7 @@ const AnnotationCard: React.FC<AnnotationCardProps>
         suffix: annotationLocation.suffixLocation
       }}
     >
-      {annotationLocation.fullLocation}
+      {annotationLocation.fullLocation}asdfadsfasdfsdfsa
     </Paragraph>
     :
     null;
@@ -207,7 +207,7 @@ const AnnotationCard: React.FC<AnnotationCardProps>
 
   const displayAnnotation =
   <Fragment>
-    {cardLocation}
+    {/* {cardLocation} */}
       {cardQuote &&
       <ColoredQuote color={color ? color : undefined}>
         {cardQuote}
@@ -219,15 +219,15 @@ const AnnotationCard: React.FC<AnnotationCardProps>
 
   return (
     <Card
-      title={cardTitle}
-      extra={[
-        <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
-          onClick={() => setIsEditing(!isEditing)}
-        />,
-        <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
-          onClick={onDelete}
-        />,
-      ]}
+      // title={cardTitle}
+      // extra={[
+      //   <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
+      //     onClick={() => setIsEditing(!isEditing)}
+      //   />,
+      //   <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
+      //     onClick={onDelete}
+      //   />,
+      // ]}
       size="small"
       bodyStyle={{
         paddingLeft: '20px',
@@ -245,6 +245,31 @@ const AnnotationCard: React.FC<AnnotationCardProps>
         >
           Are you sure you want to delete this annotation?
         </Modal>
+        
+        <div
+          css={{
+            display: 'flex',
+            flexWrap: 'nowrap'
+          }}
+        >
+          <div css={{
+            flexGrow: 1
+          }}>
+          {cardLocation}
+          </div>
+          <div
+            css={{
+              marginLeft: '5px'
+            }}
+          >
+            <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
+              onClick={() => setIsEditing(!isEditing)}
+            />
+            <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
+              onClick={onDelete}
+            />
+          </div>
+        </div>
 
         {isEditing ?
         <Fragment>
