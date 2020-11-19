@@ -17,7 +17,7 @@ const PublicationListItem: React.FC<PublicationListItemProps>
   const {title, annotationCount, authorNames, publicationId} = extractPublicationAuthorAnnotationCount(publication);
 
   return(
-    <Link to={`/app/annotations/${publicationId}`}>
+    <Link to={`/app/annotations/publication/${publicationId}`}>
       <List.Item
         key={title}
         extra={<p>Annotations: {annotationCount}</p>}
