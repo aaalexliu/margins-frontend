@@ -27,21 +27,21 @@ interface PublicationDescriptionProps {
   annotationCount: number
 }
 
-const PublicationDescription: React.FC<PublicationDescriptionProps> =
-  ({authorNames, annotationCount }) => {
-  return (
-    <Descriptions
-        // title="Responsive Descriptions"
-        // bordered
-        column={{sm: 2, xs: 1 }}
-        size="small"
-        colon={false}
-      >
-        <Descriptions.Item label={<Text strong={true}>Authors:</Text>}>{authorNames}</Descriptions.Item>
-        <Descriptions.Item label={<Text strong={true}>Annotations:</Text>}>{annotationCount}</Descriptions.Item>
-    </Descriptions>
-  )
-}
+// const PublicationDescription: React.FC<PublicationDescriptionProps> =
+//   ({authorNames, annotationCount }) => {
+//   return (
+//     <Descriptions
+//         // title="Responsive Descriptions"
+//         // bordered
+//         column={{sm: 2, xs: 1 }}
+//         size="small"
+//         colon={false}
+//       >
+//         <Descriptions.Item label={<Text strong={true}>Authors:</Text>}>{authorNames}</Descriptions.Item>
+//         <Descriptions.Item label={<Text strong={true}>Annotations:</Text>}>{annotationCount}</Descriptions.Item>
+//     </Descriptions>
+//   )
+// }
 
 export const GET_PUBLICATION_BY_PUBLICATION_ID = gql`
   query GetPublicationByPublicationId($publicationId: String!) {
