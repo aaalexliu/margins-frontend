@@ -1,0 +1,25 @@
+
+
+fragment TagAndCount on Tag {
+  annotationTagsByTagId {
+    totalCount
+  }
+  tagId
+  tagName
+  id
+}
+
+
+query GetAllTags {
+  allTags {
+    nodes {
+      ...TagAndCount
+    }
+  }
+}
+
+query GetTagByTagId($tagId: String!) {
+  tagByTagId(tagId: $tagId) {
+    ...TagAndCount
+  }
+}
