@@ -1,14 +1,31 @@
 import React, { Fragment } from 'react';
 import { useQuery, gql } from '@apollo/client';
 import { RouteComponentProps } from '@reach/router';
-import * as GetAllPublicationTypes from './__generated__/GetAllPublications';
-import { PublicationsOrderBy } from '../__generated__/globalTypes';
 
+import {
+  PublicationsOrderBy,
+  GetAllPublicationsDocument,
+  PublicationAuthorAnnotationCountFragment
+} from '../__generated__/graphql-types';
 import { Typography, List } from 'antd';
 import { PublicationListItem, Loading } from '../components';
-import { PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT } from '../utils/publication-author-annotation-count';
+import { PublicationCard } from '../containers';
+import { css } from '@emotion/core';
+import styled from '@emotion/styled';
 
 const { Title } = Typography;
+
+// const CenteredFlex = styled.div`
+//   display: flex;
+//   width: 100%;
+//   flex-wrap: wrap;
+//   justify-content: center;
+//   align-items: stretch;
+//   &::after {
+//     content: "";
+//     flex: auto;
+//   }
+// `;
 
 export const GET_ALL_PUBLICATIONS = gql`
   query GetAllPublications($orderBy: [PublicationsOrderBy!], $first: Int, $afterCursor: Cursor) {
@@ -28,7 +45,6 @@ export const GET_ALL_PUBLICATIONS = gql`
       }
     }
   }
-  ${PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT}
 `;
 
 const Publications: React.FC<RouteComponentProps> = () => {
@@ -46,15 +62,12 @@ const Publications: React.FC<RouteComponentProps> = () => {
     loading,
     error,
     fetchMore
-  } = useQuery<
-    GetAllPublicationTypes.GetAllPublications,
-    GetAllPublicationTypes.GetAllPublicationsVariables
-  >(
-    GET_ALL_PUBLICATIONS,
+  } = useQuery(
+    GetAllPublicationsDocument,
     {
       variables: {
         first: 10,
-        orderBy: [PublicationsOrderBy.PUBLICATION_ID_DESC]
+        orderBy: [PublicationsOrderBy.PublicationIdDesc]
       }
     }
   );
@@ -66,15 +79,42 @@ const Publications: React.FC<RouteComponentProps> = () => {
 
   const publications = nodes ? 
     nodes.filter(
-      (node): node is GetAllPublicationTypes.GetAllPublications_allPublications_edges_node => node !== null
+      (node): node is PublicationAuthorAnnotationCountFragment => node !== null
     )
     :
-    undefined;
+    [];
 
   return(
     <Fragment>
       <Title level={1}>Publications</Title>
-      {
+        <div
+          css={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'flex-start',
+            alignItems: 'stretch',
+          }}
+        >
+          { publications ? 
+              publications.map(publication => {
+                return (
+                  <div
+                    css={{
+                      width: '280px',
+                      margin: '2px',
+                    }}
+                    key={publication.publicationId}
+                  >
+                    <PublicationCard
+                      publicationId={publication.publicationId}
+                    />
+                  </div>
+                )
+              })
+              : <p>No Publications</p>
+          }
+        </div>
+      {/* {
         publications ?
           <List
             // className="demo-loadmore-list"
@@ -86,7 +126,7 @@ const Publications: React.FC<RouteComponentProps> = () => {
           />
           :
           <p>No Publications</p>
-      }
+      } */}
     </Fragment>
   );
 }
