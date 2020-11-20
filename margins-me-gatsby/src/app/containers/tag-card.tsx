@@ -55,6 +55,7 @@ export const TagCard: React.FC<TagCardProps>
       // css={{
       //   width: width
       // }}
+      size="small"
     >
       <div css={{
         display: 'flex',
