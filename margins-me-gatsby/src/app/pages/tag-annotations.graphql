@@ -1,0 +1,26 @@
+fragment AnnotationAndPublication on Annotation {
+  ...AnnotationAll
+  publicationByPublicationId {
+    ...PublicationAuthorAnnotationCount
+  }
+}
+
+query GetAllAnnotationsForTag($tagId: String!, $first: Int, $after: Cursor) {
+  allAnnotationTags(condition: {tagId: $tagId}, first: $first, after: $after) {
+    edges {
+      cursor
+      node {
+        annotationByAnnotationId {
+          ...AnnotationAndPublication
+        }
+      }
+    }
+    totalCount
+    pageInfo {
+      endCursor
+      hasNextPage
+      startCursor
+      hasPreviousPage
+    }
+  }
+}
