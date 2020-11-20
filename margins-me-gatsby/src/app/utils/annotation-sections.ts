@@ -15,7 +15,7 @@ export function extractAnnotationSections(
 
   let lastSection = '';
   let sectionCount = 0;
-  const sections: Section<HTMLLIElement>[] = [];
+  const sections: Section<HTMLDivElement>[] = [];
   const annotationsAndSections = annotations.flatMap(annotation => {
     const { highlightLocation, noteLocation } = extractAnnotationAll(annotation);
     const location = highlightLocation ? highlightLocation : noteLocation;
@@ -27,8 +27,8 @@ export function extractAnnotationSections(
       lastSection = location.section;
       sectionCount++;
       // console.log(lastSection);
-      const ref = React.createRef<HTMLLIElement>();
-      const section: Section<HTMLLIElement>= {
+      const ref = React.createRef<HTMLDivElement>();
+      const section: Section<HTMLDivElement>= {
         sectionId: `section-${sectionCount}-${lastSection}`,
         name: lastSection,
         ref};
