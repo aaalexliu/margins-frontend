@@ -20,7 +20,7 @@ isBrowser && Amplify.configure({
 // type AuthCallback = (err: any, res?: any) => any;
 
 export const getAccountFromSession = async () => {
-  if(!isBrowser) return null;
+  if(!isBrowser) return { error: 'not browser'};
   let user;
   try {
     user = await Auth.currentSession();
@@ -39,7 +39,9 @@ export const getAccountFromSession = async () => {
       };
     } else {
       console.log('no current user');
-      return null;
+      return {
+        error: 'no current user'
+      };
     }
   } catch (error) {
     return {
