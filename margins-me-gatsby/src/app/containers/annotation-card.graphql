@@ -16,3 +16,17 @@ mutation DeleteAnnotation($annotationId: String!) {
     }
   }
 }
+
+fragment AnnotationAndPublication on Annotation {
+  ...AnnotationAll
+  publicationByPublicationId {
+    ...PublicationAuthorAnnotationCount
+  }
+}
+
+query GetAnnotationAndPublication($id: ID!) {
+  __typename
+  annotation(id: $id) {
+    ...AnnotationAndPublication
+  }
+}

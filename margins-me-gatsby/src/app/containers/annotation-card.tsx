@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
 import { generateObjectId } from '../utils/object-id';
+import { Link } from 'gatsby';
 import { getAccountId } from '../utils/account-id';
 import { Card, Divider, Typography, Input, Button, Modal, Form } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -9,14 +10,16 @@ import {
   ANNOTATION_ALL_FRAGMENT,
   extractAnnotationAll
 } from '../utils/annotation-all'
+import { extractPublicationAuthorAnnotationCount } from '../utils/publication-author-annotation-count';
 
 import {
   GetAnnotationDocument,
   DeleteAnnotationDocument,
-  UpdateAnnotationDocument
+  UpdateAnnotationDocument,
+  GetAnnotationAndPublicationDocument
 } from '../__generated__/graphql-types';
 import styled from '@emotion/styled';
-import { AnnotationCardTags } from './annotation-tags';
+import { AnnotationTags } from './annotation-tags';
 
 const { Meta } = Card;
 const { Title, Paragraph, Text } = Typography;
@@ -67,12 +70,12 @@ export const GET_ANNOTATION = gql`
   ${ANNOTATION_ALL_FRAGMENT}
 `;
 
-interface AnnotationCardProps {
+interface AnnotationContentProps {
   id: string
 }
 
-const AnnotationCard: React.FC<AnnotationCardProps>
-  = ({ id }) => {
+export const AnnotationContent: React.FC<AnnotationContentProps>
+  = ({ id })  => {
 
   const {
     data,
@@ -214,8 +217,85 @@ const AnnotationCard: React.FC<AnnotationCardProps>
       </ColoredQuote>}
       {NoteDivider}
       {cardNote}
-      <AnnotationCardTags annotationId={annotationId} tags={tags}/>
+      <AnnotationTags annotationId={annotationId} tags={tags}/>
   </Fragment>;
+
+  return (
+  <Fragment>
+    <Modal
+      visible={confirmDelete}
+      title="Confirm Delete"
+      okText="Delete"
+      okButtonProps={{danger: true}}
+      onOk={() => deleteAnnotation({ variables: { annotationId }})}
+      onCancel={() => setConfirmDelete(false)}
+      >
+        Are you sure you want to delete this annotation?
+    </Modal>
+      
+    <div
+      css={{
+        display: 'flex',
+        flexWrap: 'nowrap'
+      }}
+    >
+      <div css={{
+        flexGrow: 1
+      }}>
+      {cardLocation}
+      </div>
+      <div
+        css={{
+          marginLeft: '5px'
+        }}
+      >
+        <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
+          onClick={() => setIsEditing(!isEditing)}
+        />
+        <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
+          onClick={onDelete}
+        />
+      </div>
+    </div>
+
+    {isEditing ?
+    <Fragment>
+      <AnnotationForm form={form}
+        initialValues={{
+          ...annotation,
+          highlightLocation
+        }}
+      />
+      <div css={{
+        display: 'flex',
+        justifyContent: 'flex-end'
+      }}>
+        <Button type="primary"
+          onClick={onSubmitEdit}
+          loading={updateLoading}
+        >Submit</Button>
+        <Button
+          onClick={() => setIsEditing(false)}
+          css={{
+            marginLeft: '5px'
+          }}
+          disabled={updateLoading}
+        >
+          Cancel</Button>
+      </div>
+    </Fragment>
+      : displayAnnotation
+    }
+  </Fragment>
+  )
+}
+
+interface AnnotationCardProps {
+  id: string
+}
+
+const AnnotationCard: React.FC<AnnotationCardProps>
+  = ({ id }) => {
 
   return (
     <Card
@@ -235,70 +315,61 @@ const AnnotationCard: React.FC<AnnotationCardProps>
         paddingBottom: '20px'
       }}
     >
-      <Modal
-        visible={confirmDelete}
-        title="Confirm Delete"
-        okText="Delete"
-        okButtonProps={{danger: true}}
-        onOk={() => deleteAnnotation({ variables: { annotationId }})}
-        onCancel={() => setConfirmDelete(false)}
-        >
-          Are you sure you want to delete this annotation?
-        </Modal>
-        
-        <div
-          css={{
-            display: 'flex',
-            flexWrap: 'nowrap'
-          }}
-        >
-          <div css={{
-            flexGrow: 1
-          }}>
-          {cardLocation}
-          </div>
-          <div
-            css={{
-              marginLeft: '5px'
-            }}
-          >
-            <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
-              onClick={() => setIsEditing(!isEditing)}
-            />
-            <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
-              onClick={onDelete}
-            />
-          </div>
-        </div>
+      <AnnotationContent id={id}/>
+    </Card>
+  )
+}
 
-        {isEditing ?
-        <Fragment>
-          <AnnotationForm form={form}
-            initialValues={{
-              ...annotation,
-              highlightLocation
-            }}
-          />
-          <div css={{
-            display: 'flex',
-            justifyContent: 'flex-end'
-          }}>
-            <Button type="primary"
-              onClick={onSubmitEdit}
-              loading={updateLoading}
-            >Submit</Button>
-            <Button
-              onClick={() => setIsEditing(false)}
-              css={{
-                marginLeft: '5px'
-              }}
-              disabled={updateLoading}
-            >
-              Cancel</Button>
-          </div>
-        </Fragment>
-          : displayAnnotation
-        }
+export const AnnotationAndPublicationCard: React.FC<AnnotationCardProps> 
+  = ({ id }) => {
+
+  const { data, loading, error } = useQuery(GetAnnotationAndPublicationDocument, 
+    {
+      variables: {
+        id
+      }
+    });
+
+  if (loading) return <Loading />;
+
+  const annotation = data?.annotation;
+  if (error || !annotation) return <p>Error in retrieving annotation data</p>
+  
+  const annotationPublication = annotation.publicationByPublicationId;
+  let publicationTitle = null;
+  if (annotationPublication) {
+    const {
+      publicationId,
+      title,
+      authorNames,
+      authors
+    } = extractPublicationAuthorAnnotationCount(annotationPublication);
+    publicationTitle =
+    <div>
+      <Link to={`/app/annotations/publication/${publicationId}`}>
+          <strong>{title}</strong>
+        </Link>
+        <br />
+        <Text type="secondary">
+          By: {authorNames}
+        </Text>
+        <Divider css={{
+          margin: '5px 0px 10px'
+        }}/>
+    </div>
+  }
+
+  return (
+    <Card
+      size="small"
+      bodyStyle={{
+        paddingLeft: '20px',
+        paddingRight: '20px',
+        paddingBottom: '20px'
+      }}
+    >
+      {publicationTitle}
+      <AnnotationContent id={annotation.id}/>
     </Card>
   )
 }
