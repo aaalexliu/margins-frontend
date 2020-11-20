@@ -10,9 +10,10 @@ import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotati
 import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
 import { Section, extractAnnotationSections } from '../utils/annotation-sections';
 import { GetAllTagsDocument } from '../__generated__/graphql-types';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const { Content } = Layout;
-const { Text } = Typography;
+const { Text, Paragraph } = Typography;
 
 const PaddedListItem = styled.li`
   padding-top: 10px;
@@ -29,7 +30,7 @@ const H3NoMargins = styled.h3`
 `;
 
 interface SectionCardProps {
-  section: Section<HTMLLIElement>,
+  section: Section<HTMLDivElement>,
   sectionStack: string[],
   setSectionStack: React.Dispatch<React.SetStateAction<string[]>>
 }
@@ -132,39 +133,53 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   const annotationsAndSectionsList = annotationsAndSections.map(item => {
     if("sectionId" in item)  {
       return (
-      <PaddedListItem key={item.sectionId} ref={item.ref}>
+      <div
+        key={item.sectionId}
+        ref={item.ref}
+        css={{
+          marginBottom: '10px',
+          width: '100%'
+        }}
+      >
         <SectionCard section={item} sectionStack={sectionStack} setSectionStack={setSectionStack}/>
-      </PaddedListItem>
+      </div>
       )
     } else {
       return(
-      <PaddedListItem key={item.annotationId}>
+      <div
+        key={item.annotationId}
+        css={{
+          marginBottom: '10px',
+          width: '100%'
+        }}
+      >
         <AnnotationCard id={item.id} />
-      </PaddedListItem>
+      </div>
       )
     }
   });
 
   const hasMore = data.allAnnotations?.pageInfo.hasNextPage;
+  const endCursor = data.allAnnotations?.pageInfo.endCursor;
   
-  const fetch50More = 
-    <Button
-      type="primary"
-      onClick={async () => {
-        setIsLoadingMore(true);
-        await fetchMore({
-          variables: {
-            afterCursor: annotationEdges.slice(-1)[0].cursor,
-            first: 50
-          },
-        });
-        setIsLoadingMore(false);
-      }}
-      loading={loadingMore}
-      disabled={!hasMore}
-    >
-      50
-    </Button>;
+  // const fetch50More = 
+  //   <Button
+  //     type="primary"
+  //     onClick={async () => {
+  //       setIsLoadingMore(true);
+  //       await fetchMore({
+  //         variables: {
+  //           afterCursor: annotationEdges.slice(-1)[0].cursor,
+  //           first: 50
+  //         },
+  //       });
+  //       setIsLoadingMore(false);
+  //     }}
+  //     loading={loadingMore}
+  //     disabled={!hasMore}
+  //   >
+  //     50
+  //   </Button>;
   
   const fetchAll = 
   <Button
@@ -173,7 +188,8 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
     setIsLoadingMore(true);
     await fetchMore({
       variables: {
-        afterCursor: annotationEdges.slice(-1)[0].cursor,
+        // afterCursor: annotationEdges.slice(-1)[0].cursor,
+        afterCursor: endCursor,
         first: totalCount ? totalCount - annotations.length : 100
       },
     });
@@ -183,7 +199,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   disabled={!hasMore}
 >
   {/* {totalCount ? totalCount - annotations.length : ''} */}
-  All
+  Load All
 </Button>;
 
 
@@ -218,7 +234,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
           />
 
           <div>
-            <Text type="secondary">Load Next </Text> {fetch50More} {fetchAll}
+            {fetchAll}
           </div>
           <Statistic
             title="Loaded Annotations"
@@ -228,10 +244,46 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
 
           </div>
         </Card>
-        <UnstyledList>
-        {annotationsAndSectionsList ? annotationsAndSectionsList :
-          <p>No Annotations Found</p>}
-        </UnstyledList>
+        <div
+          css={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+            '& div:first-child': {
+              width: '100%'
+            }
+          }}
+        >
+          <InfiniteScroll
+            dataLength={annotations.length}
+            hasMore={!!hasMore}
+            next={() => {
+              fetchMore({
+                variables: {
+                  after: endCursor,
+                  first: 50
+                }
+              })
+            }}
+            loader={<Loading />}
+            endMessage={
+              <Paragraph css={{
+                textAlign: 'center',
+                width: '100%'
+              }}
+              strong={true}>
+                Loaded All
+              </Paragraph>
+            }
+            css={{
+              width: '100%'
+            }}
+          >
+          {annotationsAndSectionsList ? annotationsAndSectionsList :
+            <p>No Annotations Found</p>}
+          </InfiniteScroll>
+        </div>
       </Content>
       </Layout>
     </Layout>
