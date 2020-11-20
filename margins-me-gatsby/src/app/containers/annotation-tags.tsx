@@ -18,17 +18,6 @@ import {
   DeleteAnnotationTagDocument
 } from '../__generated__/graphql-types';
 
-export const TAG_AND_COUNT_FRAGMENT = gql`
-  fragment TagAndCount on Tag {
-    annotationTagsByTagId {
-      totalCount
-    }
-    tagId
-    tagName
-    id
-  }
-`
-
 export const ADD_TAG_TO_ANNOTATION = gql`
   mutation AddTagToAnnotation($annotationId: String!, $tagId: String!) {
     createAnnotationTag(
@@ -161,12 +150,12 @@ export function AnnotationTag({annotationId, tag}: AnnotationTagProps) {
     )
 }
 
-interface AnnotationCardTagsProps {
+interface AnnotationTagsProps {
   annotationId: string,
   tags: TagInput[]
 }
 
-export function AnnotationCardTags({annotationId, tags}: AnnotationCardTagsProps) {
+export function AnnotationTags({annotationId, tags}: AnnotationTagsProps) {
   // console.log('current tags\n', tags);
   const { data: allTagsData, loading: allTagsLoading } = useQuery(
     GetAllTagsDocument,
