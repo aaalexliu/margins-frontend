@@ -4,8 +4,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { LabeledValue } from 'antd/lib/select';
 import { Rule } from 'antd/lib/form';
 import { useQuery, useMutation } from '@apollo/client';
-import { generateObjectId } from '../utils/object-id';
-import { getAccountId } from '../utils/account-id';
+import { generateObjectId, getAccountId } from '../utils';
 import {
   GetAllAuthorsDocument,
   Author,

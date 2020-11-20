@@ -1,8 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
-import { generateObjectId } from '../utils/object-id';
 import { Link } from 'gatsby';
-import { getAccountId } from '../utils/account-id';
 import { Card, Divider, Typography, Input, Button, Modal, Form } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Loading, AnnotationForm } from '../components';
@@ -10,7 +8,7 @@ import {
   extractAnnotationAll,
   extractPublicationAuthorAnnotationCount
 } from '../graphql/fragments';
-
+import { generateObjectId, getAccountId } from '../utils';
 import {
   GetAnnotationDocument,
   DeleteAnnotationDocument,

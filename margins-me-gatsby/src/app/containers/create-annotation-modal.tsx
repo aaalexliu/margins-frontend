@@ -7,8 +7,7 @@ import {
   CreateAnnotationInput
 } from '../__generated__/graphql-types'; 
 import { gql, useMutation } from '@apollo/client';
-import { generateObjectId } from '../utils/object-id';
-import { getAccountId } from '../utils/account-id';
+import { generateObjectId, getAccountId } from '../utils';
 
 interface CreateAnnotationModalProps {
   publicationId: string;

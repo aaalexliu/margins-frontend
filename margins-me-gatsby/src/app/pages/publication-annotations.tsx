@@ -6,7 +6,7 @@ import { Loading, SectionsSidebar } from '../components';
 import { Layout, Typography, Card, Affix, Form, Button, Statistic, Modal } from 'antd';
 import styled from '@emotion/styled';
 // import css from '@emotion/core';
-import { Section, extractAnnotationSections } from '../utils/annotation-sections';
+import { Section, extractAnnotationSections } from '../utils/';
 import {
   GetAllTagsDocument,
   GetAllAnnotationsForPublicationDocument,

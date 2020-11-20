@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
-import { generateObjectId } from '../utils/object-id';
-import { getAccountId } from '../utils/account-id';
+import { generateObjectId, getAccountId } from '../utils';
 import { Card, Divider, Typography, Tag, Select, Button } from 'antd';
 import { EditOutlined, SyncOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
