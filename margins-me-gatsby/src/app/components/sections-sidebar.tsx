@@ -22,7 +22,7 @@ interface SectionsSidebarProps<T>{
   sectionStack: string[]
 }
 
-const SectionsSidebar: React.FC<SectionsSidebarProps<HTMLLIElement>>
+const SectionsSidebar: React.FC<SectionsSidebarProps<HTMLDivElement>>
   =({ sections, sectionStack }) => {
   
   const [ siderCollapsed, setSiderCollapsed ] = useState(false);
