@@ -12,6 +12,7 @@ export const cache: InMemoryCache = new InMemoryCache({
         },
         allPublications: relayStylePagination(),
         allAnnotations: relayStylePagination(['condition']),
+        allAnnotationTags: relayStylePagination(['condition']),
         annotation(_, { args, toReference }) {
           if (args && typeof args.id === 'string') {
             return toReference({
