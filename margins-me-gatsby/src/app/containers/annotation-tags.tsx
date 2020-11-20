@@ -6,9 +6,8 @@ import { Card, Divider, Typography, Tag, Select, Button } from 'antd';
 import { EditOutlined, SyncOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import {
-  ANNOTATION_ALL_FRAGMENT,
   extractAnnotationAll
-} from '../utils/annotation-all'
+} from '../graphql/fragments'
 import {
   GetAllTagsDocument,
   AddTagToAnnotationDocument,
@@ -32,7 +31,6 @@ export const ADD_TAG_TO_ANNOTATION = gql`
       }
     }
   }
-  ${ANNOTATION_ALL_FRAGMENT}
 `
 
 export const CREATE_AND_ADD_TAG_TO_ANNOTATION = gql`
@@ -63,7 +61,6 @@ export const CREATE_AND_ADD_TAG_TO_ANNOTATION = gql`
       }
     }
   }
-  ${ANNOTATION_ALL_FRAGMENT}
 `
 
 export const DELETE_ANNOTATION_TAG = gql`
@@ -78,7 +75,6 @@ export const DELETE_ANNOTATION_TAG = gql`
       }
     }
   }
-  ${ANNOTATION_ALL_FRAGMENT}
 `
 
 export const DELETE_TAG = gql`

@@ -1,7 +1,11 @@
 import React, {useState} from 'react';
 import { Modal, Form } from 'antd';
 import { AnnotationForm } from '../components';
-import { CreateAnnotationDocument, GetAllAnnotationsForPublicationDocument, CreateAnnotationInput } from '../__generated__/graphql-types'; 
+import {
+  CreateAnnotationDocument,
+  GetAllAnnotationsForPublicationDocument,
+  CreateAnnotationInput
+} from '../__generated__/graphql-types'; 
 import { gql, useMutation } from '@apollo/client';
 import { generateObjectId } from '../utils/object-id';
 import { getAccountId } from '../utils/account-id';

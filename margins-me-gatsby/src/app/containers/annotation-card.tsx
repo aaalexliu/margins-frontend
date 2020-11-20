@@ -7,10 +7,9 @@ import { Card, Divider, Typography, Input, Button, Modal, Form } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Loading, AnnotationForm } from '../components';
 import {
-  ANNOTATION_ALL_FRAGMENT,
-  extractAnnotationAll
-} from '../utils/annotation-all'
-import { extractPublicationAuthorAnnotationCount } from '../utils/publication-author-annotation-count';
+  extractAnnotationAll,
+  extractPublicationAuthorAnnotationCount
+} from '../graphql/fragments';
 
 import {
   GetAnnotationDocument,
@@ -67,7 +66,6 @@ export const GET_ANNOTATION = gql`
       ...AnnotationAll
     }
   }
-  ${ANNOTATION_ALL_FRAGMENT}
 `;
 
 interface AnnotationContentProps {

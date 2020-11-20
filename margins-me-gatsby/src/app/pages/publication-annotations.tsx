@@ -6,24 +6,16 @@ import { Loading, SectionsSidebar } from '../components';
 import { Layout, Typography, Card, Affix, Form, Button, Statistic, Modal } from 'antd';
 import styled from '@emotion/styled';
 // import css from '@emotion/core';
-import { ANNOTATION_ALL_FRAGMENT, extractAnnotationAll } from '../utils/annotation-all';
-import * as GetAllAnnotationsForPublicationTypes from './__generated__/GetAllAnnotationsForPublication';
 import { Section, extractAnnotationSections } from '../utils/annotation-sections';
-import { GetAllTagsDocument } from '../__generated__/graphql-types';
+import {
+  GetAllTagsDocument,
+  GetAllAnnotationsForPublicationDocument,
+  AnnotationAllFragment
+} from '../__generated__/graphql-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const { Content } = Layout;
 const { Text, Paragraph } = Typography;
-
-const PaddedListItem = styled.li`
-  padding-top: 10px;
-`;
-
-const UnstyledList = styled.ul`
-  list-style: none;
-  outline: none;
-  padding: 0;
-`;
 
 const H3NoMargins = styled.h3`
   margin: 0;
@@ -78,7 +70,6 @@ export const GET_ALL_ANNOTATIONS_FOR_PUBLICATION = gql`
       }
     }
   }
-  ${ANNOTATION_ALL_FRAGMENT}
 `;
 
 const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
@@ -101,11 +92,8 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
     loading,
     error,
     fetchMore
-  } = useQuery<
-    GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication,
-    GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublicationVariables
-  >(
-    GET_ALL_ANNOTATIONS_FOR_PUBLICATION,
+  } = useQuery(
+    GetAllAnnotationsForPublicationDocument,
     {
       variables: {
         publicationId,
@@ -122,7 +110,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
   if ( annotationEdges === undefined ) return <p>No annotations exist</p>;
 
   const annotations = annotationEdges.map(edge => edge.node).filter(
-    (node): node is GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication_allAnnotations_edges_node => node !== null)
+    (node): node is AnnotationAllFragment => node !== null)
 
   // if (annotations == null) return 
 

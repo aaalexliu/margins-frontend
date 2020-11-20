@@ -5,8 +5,6 @@ import { PublicationCard, AnnotationContent, AnnotationAndPublicationCard } from
 import { Loading, SectionsSidebar } from '../components';
 import { Layout, Typography, Card, Affix, Form, Button, Statistic, Modal, Divider } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import styled from '@emotion/styled';
-// import css from '@emotion/core';
 
 import {
   GetAllAnnotationsForTagDocument,
@@ -122,10 +120,6 @@ const TagAnnotations: React.FC<RouteComponentProps> = () => {
                     width: '100%'
                   }}
                   key={annotation.id}
-                  onScroll={(event) => {
-                    console.log('SCROLLED');
-                    console.log(event)
-                  }}
                 >
                   <AnnotationAndPublicationCard id={annotation.id}/>
                 </div>

@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-// import * as AnnotationAllTypes from './__generated__/AnnotationAll';
 import { AnnotationAllFragment, Tag } from '../../__generated__/graphql-types';
 
 export const ANNOTATION_ALL_FRAGMENT = gql`

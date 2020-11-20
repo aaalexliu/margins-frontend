@@ -9,9 +9,8 @@ import { css } from '@emotion/core';
 import { Link } from 'gatsby';
 
 import {
-  PUBLICATION_AUTHOR_ANNOTATION_COUNT_FRAGMENT,
   extractPublicationAuthorAnnotationCount
-} from '../utils/publication-author-annotation-count';
+} from '../graphql/fragments';
 import { GetPublicationByPublicationIdDocument } from '../__generated__/graphql-types';
 
 const { Meta } = Card;

@@ -4,11 +4,11 @@ import { Link } from 'gatsby';
 
 // import * as LaunchTileTypes from '../pages/__generated__/LaunchTile';
 
-import { extractPublicationAuthorAnnotationCount } from '../utils/publication-author-annotation-count';
-import * as PublicationAuthorAnnotationCountTypes from '../utils/__generated__/PublicationAuthorAnnotationCount';
+import { extractPublicationAuthorAnnotationCount } from '../graphql/fragments';
+import { PublicationAuthorAnnotationCountFragment } from '../__generated__/graphql-types';
 
 interface PublicationListItemProps {
-  publication: PublicationAuthorAnnotationCountTypes.PublicationAuthorAnnotationCount;
+  publication: PublicationAuthorAnnotationCountFragment
 }
 
 const PublicationListItem: React.FC<PublicationListItemProps>
