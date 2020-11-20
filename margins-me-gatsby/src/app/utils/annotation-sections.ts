@@ -1,6 +1,8 @@
 import React from 'react';
-import { extractAnnotationAll } from './annotation-all';
-import * as AnnotationAllTypes from './__generated__/AnnotationAll';
+import {
+  extractAnnotationAll
+} from '../graphql/fragments/';
+import { AnnotationAllFragment } from '../__generated__/graphql-types';
 
 export interface Section<T> {
   sectionId: string,
@@ -9,7 +11,7 @@ export interface Section<T> {
 }
 
 export function extractAnnotationSections(
-  annotations: AnnotationAllTypes.AnnotationAll[]
+  annotations: AnnotationAllFragment[]
   // annotations:GetAllAnnotationsForPublicationTypes.GetAllAnnotationsForPublication_allAnnotations_edges_node[]
   ) {
 
