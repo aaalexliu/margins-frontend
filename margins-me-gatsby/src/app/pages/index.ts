@@ -5,3 +5,4 @@ export { default as Publications } from './publications';
 export { default as PublicationAnnotations } from './publication-annotations';
 export { default as Tags } from './tags';
 export { default as TagAnnotations } from './tag-annotations';
+export { default as Authors } from './authors';

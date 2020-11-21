@@ -6,7 +6,8 @@ import {
   Publications,
   PublicationAnnotations,
   Tags,
-  TagAnnotations
+  TagAnnotations,
+  Authors
 } from '../app/pages';
 import { Home } from '../app/pages';
 import { Router, Redirect } from "@reach/router";
@@ -46,6 +47,7 @@ const App =  () => {
         <PublicationAnnotations path='/annotations/publication/:publicationId' />
         <Tags path='/tags' />
         <TagAnnotations path='/annotations/tag/:tagId' />
+        <Authors path='/authors'/>
         <NotFound default={true}/>
       </Router>
     </PageLayout>

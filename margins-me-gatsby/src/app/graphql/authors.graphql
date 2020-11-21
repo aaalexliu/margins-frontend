@@ -14,3 +14,33 @@ query GetAllAuthors {
     }
   }
 }
+
+fragment AuthorAndChildPublications on Author {
+  id
+  authorId
+  fullName
+  publicationAuthorsByAuthorId {
+    nodes {
+      publicationByPublicationId {
+        id
+        title
+        publicationId
+      }
+    }
+    totalCount
+  }
+}
+
+query GetAllAuthorsAndChildPublications {
+  allAuthors {
+    nodes {
+      ...AuthorAndChildPublications
+    }
+  }
+}
+
+query GetAuthorAndChildPublications($id: ID!) {
+  author(id: $id) {
+    ...AuthorAndChildPublications
+  }
+}
