@@ -87,7 +87,7 @@ export const AuthorCard: React.FC<AuthorCardProps>
               return (
               <Fragment>
                 <Link key={publication.publicationId}
-                  to={`app/annotations/publication/${publication.publicationId}`}
+                  to={`/app/annotations/publication/${publication.publicationId}`}
                 >
                   {publication.title}
                 </Link>
