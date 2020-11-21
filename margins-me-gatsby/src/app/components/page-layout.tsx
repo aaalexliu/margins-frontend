@@ -19,17 +19,29 @@ export default function PageLayout (props: any) {
   const { pathname } = location;
   return (
     <Layout className="layout">
-      <Header>
+      <Header
+        css={{
+          display: 'flex'
+        }}
+      >
         <Menu theme="dark" mode="horizontal" selectedKeys={[pathname]}>
-            <Menu.Item key = "/">
-              <Link to="/">Home</Link>
-            </Menu.Item>
-            <Menu.Item key="/login">
-              <LoginOrLogout />
+            <Menu.Item key = "/app">
+              <Link to="/app">Home</Link>
             </Menu.Item>
         </Menu>
+        <div
+          css={{
+            marginLeft: 'auto'
+          }}
+        >
+          <Menu theme="dark" mode="horizontal" >
+            <Menu.Item key="/login">
+              <LoginOrLogout />
+            </Menu.Item>  
+          </Menu>
+        </div>
       </Header>
-      <Content style={{padding: '24px'}}>
+      <Content css={{padding: '24px'}}>
         {props.children}
       </Content>
       <Footer>

@@ -1,0 +1,14 @@
+query GetHomePageCounts {
+  allAnnotations {
+    totalCount
+  }
+  allTags {
+    totalCount
+  }
+  allAuthors {
+    totalCount
+  }
+  allPublications {
+    totalCount
+  }
+}
