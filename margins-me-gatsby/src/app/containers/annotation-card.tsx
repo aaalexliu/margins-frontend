@@ -134,7 +134,6 @@ export const AnnotationContent: React.FC<AnnotationContentProps>
     color,
     createdAt,
     editedHighlightText,
-    editedNoteText,
     extraEdits,
     highlightLocation,
     highlightText,
@@ -191,7 +190,7 @@ export const AnnotationContent: React.FC<AnnotationContentProps>
         suffix: annotationLocation.suffixLocation
       }}
     >
-      {annotationLocation.fullLocation}
+     {annotationLocation.fullLocation}
     </Paragraph>
     :
     null;
@@ -202,7 +201,7 @@ export const AnnotationContent: React.FC<AnnotationContentProps>
     null;
 
   let cardQuote = editedHighlightText ? editedHighlightText : highlightText;
-  let cardNote = editedNoteText ? editedNoteText : noteText;
+  let cardNote = noteText;
 
   const displayAnnotation =
   <Fragment>

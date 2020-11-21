@@ -9,7 +9,6 @@ export const ANNOTATION_ALL_FRAGMENT = gql`
     color
     createdAt
     editedHighlightText
-    editedNoteText
     extraEdits
     highlightLocation
     highlightText
