@@ -18,6 +18,7 @@ export type Scalars = {
   JSON: any;
   /** The day, does not include a time. */
   Date: any;
+  FullText: any;
 };
 
 export type Account = Node & {
@@ -54,6 +55,7 @@ export type AccountPublicationsByAccountIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<PublicationsOrderBy>>;
   condition?: Maybe<PublicationCondition>;
+  filter?: Maybe<PublicationFilter>;
 };
 
 
@@ -65,6 +67,7 @@ export type AccountAnnotationsByAccountIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationsOrderBy>>;
   condition?: Maybe<AnnotationCondition>;
+  filter?: Maybe<AnnotationFilter>;
 };
 
 
@@ -76,6 +79,7 @@ export type AccountAuthorsByAccountIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AuthorsOrderBy>>;
   condition?: Maybe<AuthorCondition>;
+  filter?: Maybe<AuthorFilter>;
 };
 
 
@@ -87,6 +91,7 @@ export type AccountTagsByAccountIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<TagsOrderBy>>;
   condition?: Maybe<TagCondition>;
+  filter?: Maybe<TagFilter>;
 };
 
 
@@ -98,6 +103,7 @@ export type AccountPublicationsByAnnotationAccountIdAndPublicationIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<PublicationsOrderBy>>;
   condition?: Maybe<PublicationCondition>;
+  filter?: Maybe<PublicationFilter>;
 };
 
 /** The fields on `account` to look up the row to connect. */
@@ -126,6 +132,22 @@ export type AccountCondition = {
   accountId?: Maybe<Scalars['UUID']>;
   /** Checks for equality with the object’s `email` field. */
   email?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against `Account` object types. All fields are combined with a logical ‘and.’ */
+export type AccountFilter = {
+  /** Filter by the object’s `accountId` field. */
+  accountId?: Maybe<UuidFilter>;
+  /** Filter by the object’s `email` field. */
+  email?: Maybe<StringFilter>;
+  /** Filter by the object’s `fullName` field. */
+  fullName?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<AccountFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<AccountFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<AccountFilter>;
 };
 
 /** An input for mutations affecting `Account` */
@@ -294,6 +316,7 @@ export type AccountPublicationsByAnnotationAccountIdAndPublicationIdManyToManyEd
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationsOrderBy>>;
   condition?: Maybe<AnnotationCondition>;
+  filter?: Maybe<AnnotationFilter>;
 };
 
 /** A connection to a list of `Account` values. */
@@ -373,8 +396,8 @@ export type Annotation = Node & {
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   /** Reads a single `Publication` that is related to this `Annotation`. */
   publicationByPublicationId?: Maybe<Publication>;
   /** Reads a single `Account` that is related to this `Annotation`. */
@@ -383,6 +406,8 @@ export type Annotation = Node & {
   annotationTagsByAnnotationId: AnnotationTagsConnection;
   /** Reads and enables pagination through a set of `Tag`. */
   tagsByAnnotationTagAnnotationIdAndTagId: AnnotationTagsByAnnotationTagAnnotationIdAndTagIdManyToManyConnection;
+  /** Full-text search ranking when filtered by `tsv`. */
+  tsvRank?: Maybe<Scalars['Float']>;
 };
 
 
@@ -394,6 +419,7 @@ export type AnnotationAnnotationTagsByAnnotationIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationTagsOrderBy>>;
   condition?: Maybe<AnnotationTagCondition>;
+  filter?: Maybe<AnnotationTagFilter>;
 };
 
 
@@ -405,6 +431,7 @@ export type AnnotationTagsByAnnotationTagAnnotationIdAndTagIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<TagsOrderBy>>;
   condition?: Maybe<TagCondition>;
+  filter?: Maybe<TagFilter>;
 };
 
 /** The `account` to be created by this mutation. */
@@ -436,8 +463,8 @@ export type AnnotationAccountIdFkeyAnnotationCreateInput = {
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   publicationToPublicationId?: Maybe<AnnotationPublicationIdFkeyInput>;
   accountToAccountId?: Maybe<AnnotationAccountIdFkeyInput>;
   annotationTagsUsingAnnotationId?: Maybe<AnnotationTagAnnotationIdFkeyInverseInput>;
@@ -520,6 +547,26 @@ export type AnnotationCondition = {
   publicationId?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `accountId` field. */
   accountId?: Maybe<Scalars['UUID']>;
+  /** Checks for equality with the object’s `tsv` field. */
+  tsv?: Maybe<Scalars['FullText']>;
+};
+
+/** A filter to be used against `Annotation` object types. All fields are combined with a logical ‘and.’ */
+export type AnnotationFilter = {
+  /** Filter by the object’s `annotationId` field. */
+  annotationId?: Maybe<StringFilter>;
+  /** Filter by the object’s `publicationId` field. */
+  publicationId?: Maybe<StringFilter>;
+  /** Filter by the object’s `accountId` field. */
+  accountId?: Maybe<UuidFilter>;
+  /** Filter by the object’s `tsv` field. */
+  tsv?: Maybe<FullTextFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<AnnotationFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<AnnotationFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<AnnotationFilter>;
 };
 
 /** An input for mutations affecting `Annotation` */
@@ -536,8 +583,8 @@ export type AnnotationInput = {
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   publicationToPublicationId?: Maybe<AnnotationPublicationIdFkeyInput>;
   accountToAccountId?: Maybe<AnnotationAccountIdFkeyInput>;
   annotationTagsUsingAnnotationId?: Maybe<AnnotationTagAnnotationIdFkeyInverseInput>;
@@ -706,8 +753,8 @@ export type AnnotationPatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   publicationToPublicationId?: Maybe<AnnotationPublicationIdFkeyInput>;
   accountToAccountId?: Maybe<AnnotationAccountIdFkeyInput>;
   annotationTagsUsingAnnotationId?: Maybe<AnnotationTagAnnotationIdFkeyInverseInput>;
@@ -726,8 +773,8 @@ export type AnnotationPublicationIdFkeyAnnotationCreateInput = {
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   publicationToPublicationId?: Maybe<AnnotationPublicationIdFkeyInput>;
   accountToAccountId?: Maybe<AnnotationAccountIdFkeyInput>;
   annotationTagsUsingAnnotationId?: Maybe<AnnotationTagAnnotationIdFkeyInverseInput>;
@@ -831,8 +878,12 @@ export enum AnnotationsOrderBy {
   PublicationIdDesc = 'PUBLICATION_ID_DESC',
   AccountIdAsc = 'ACCOUNT_ID_ASC',
   AccountIdDesc = 'ACCOUNT_ID_DESC',
+  TsvAsc = 'TSV_ASC',
+  TsvDesc = 'TSV_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
-  PrimaryKeyDesc = 'PRIMARY_KEY_DESC'
+  PrimaryKeyDesc = 'PRIMARY_KEY_DESC',
+  TsvRankAsc = 'TSV_RANK_ASC',
+  TsvRankDesc = 'TSV_RANK_DESC'
 }
 
 export type AnnotationTag = Node & {
@@ -859,8 +910,8 @@ export type AnnotationTagAnnotationIdFkeyAnnotationCreateInput = {
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   publicationToPublicationId?: Maybe<AnnotationPublicationIdFkeyInput>;
   accountToAccountId?: Maybe<AnnotationAccountIdFkeyInput>;
   annotationTagsUsingAnnotationId?: Maybe<AnnotationTagAnnotationIdFkeyInverseInput>;
@@ -944,6 +995,20 @@ export type AnnotationTagCondition = {
   annotationId?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `tagId` field. */
   tagId?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against `AnnotationTag` object types. All fields are combined with a logical ‘and.’ */
+export type AnnotationTagFilter = {
+  /** Filter by the object’s `annotationId` field. */
+  annotationId?: Maybe<StringFilter>;
+  /** Filter by the object’s `tagId` field. */
+  tagId?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<AnnotationTagFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<AnnotationTagFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<AnnotationTagFilter>;
 };
 
 /** An input for mutations affecting `AnnotationTag` */
@@ -1139,6 +1204,7 @@ export type AuthorPublicationAuthorsByAuthorIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<PublicationAuthorsOrderBy>>;
   condition?: Maybe<PublicationAuthorCondition>;
+  filter?: Maybe<PublicationAuthorFilter>;
 };
 
 
@@ -1150,6 +1216,7 @@ export type AuthorPublicationsByPublicationAuthorAuthorIdAndPublicationIdArgs = 
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<PublicationsOrderBy>>;
   condition?: Maybe<PublicationCondition>;
+  filter?: Maybe<PublicationFilter>;
 };
 
 /** The `account` to be created by this mutation. */
@@ -1260,6 +1327,22 @@ export type AuthorCondition = {
   fullName?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `accountId` field. */
   accountId?: Maybe<Scalars['UUID']>;
+};
+
+/** A filter to be used against `Author` object types. All fields are combined with a logical ‘and.’ */
+export type AuthorFilter = {
+  /** Filter by the object’s `authorId` field. */
+  authorId?: Maybe<StringFilter>;
+  /** Filter by the object’s `fullName` field. */
+  fullName?: Maybe<StringFilter>;
+  /** Filter by the object’s `accountId` field. */
+  accountId?: Maybe<UuidFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<AuthorFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<AuthorFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<AuthorFilter>;
 };
 
 /** An input for mutations affecting `Author` */
@@ -1447,6 +1530,18 @@ export type BookBookPkeyDelete = {
 export type BookCondition = {
   /** Checks for equality with the object’s `publicationId` field. */
   publicationId?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against `Book` object types. All fields are combined with a logical ‘and.’ */
+export type BookFilter = {
+  /** Filter by the object’s `publicationId` field. */
+  publicationId?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<BookFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<BookFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<BookFilter>;
 };
 
 /** An input for mutations affecting `Book` */
@@ -2335,6 +2430,13 @@ export type DeleteTagPayloadTagEdgeArgs = {
 };
 
 
+/** A filter to be used against FullText fields. All fields are combined with a logical ‘and.’ */
+export type FullTextFilter = {
+  /** Performs a full text search on the field. */
+  matches?: Maybe<Scalars['String']>;
+};
+
+
 /** The root mutation type which contains root level fields which mutate data. */
 export type Mutation = {
   /** Creates a single `Account`. */
@@ -2826,6 +2928,7 @@ export type PublicationBooksByPublicationIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<BooksOrderBy>>;
   condition?: Maybe<BookCondition>;
+  filter?: Maybe<BookFilter>;
 };
 
 
@@ -2837,6 +2940,7 @@ export type PublicationAnnotationsByPublicationIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationsOrderBy>>;
   condition?: Maybe<AnnotationCondition>;
+  filter?: Maybe<AnnotationFilter>;
 };
 
 
@@ -2848,6 +2952,7 @@ export type PublicationPublicationAuthorsByPublicationIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<PublicationAuthorsOrderBy>>;
   condition?: Maybe<PublicationAuthorCondition>;
+  filter?: Maybe<PublicationAuthorFilter>;
 };
 
 
@@ -2859,6 +2964,7 @@ export type PublicationAccountsByAnnotationPublicationIdAndAccountIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AccountsOrderBy>>;
   condition?: Maybe<AccountCondition>;
+  filter?: Maybe<AccountFilter>;
 };
 
 
@@ -2870,6 +2976,7 @@ export type PublicationAuthorsByPublicationAuthorPublicationIdAndAuthorIdArgs = 
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AuthorsOrderBy>>;
   condition?: Maybe<AuthorCondition>;
+  filter?: Maybe<AuthorFilter>;
 };
 
 /** The `account` to be created by this mutation. */
@@ -2983,6 +3090,7 @@ export type PublicationAccountsByAnnotationPublicationIdAndAccountIdManyToManyEd
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationsOrderBy>>;
   condition?: Maybe<AnnotationCondition>;
+  filter?: Maybe<AnnotationFilter>;
 };
 
 export type PublicationAuthor = Node & {
@@ -3070,6 +3178,20 @@ export type PublicationAuthorCondition = {
   publicationId?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `authorId` field. */
   authorId?: Maybe<Scalars['String']>;
+};
+
+/** A filter to be used against `PublicationAuthor` object types. All fields are combined with a logical ‘and.’ */
+export type PublicationAuthorFilter = {
+  /** Filter by the object’s `publicationId` field. */
+  publicationId?: Maybe<StringFilter>;
+  /** Filter by the object’s `authorId` field. */
+  authorId?: Maybe<StringFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PublicationAuthorFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PublicationAuthorFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PublicationAuthorFilter>;
 };
 
 /** An input for mutations affecting `PublicationAuthor` */
@@ -3268,6 +3390,20 @@ export type PublicationCondition = {
   publicationId?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `accountId` field. */
   accountId?: Maybe<Scalars['UUID']>;
+};
+
+/** A filter to be used against `Publication` object types. All fields are combined with a logical ‘and.’ */
+export type PublicationFilter = {
+  /** Filter by the object’s `publicationId` field. */
+  publicationId?: Maybe<StringFilter>;
+  /** Filter by the object’s `accountId` field. */
+  accountId?: Maybe<UuidFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<PublicationFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<PublicationFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<PublicationFilter>;
 };
 
 /** An input for mutations affecting `Publication` */
@@ -3559,6 +3695,7 @@ export type QueryAllAccountsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AccountsOrderBy>>;
   condition?: Maybe<AccountCondition>;
+  filter?: Maybe<AccountFilter>;
 };
 
 
@@ -3571,6 +3708,7 @@ export type QueryAllAnnotationTagsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationTagsOrderBy>>;
   condition?: Maybe<AnnotationTagCondition>;
+  filter?: Maybe<AnnotationTagFilter>;
 };
 
 
@@ -3583,6 +3721,7 @@ export type QueryAllAnnotationsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationsOrderBy>>;
   condition?: Maybe<AnnotationCondition>;
+  filter?: Maybe<AnnotationFilter>;
 };
 
 
@@ -3595,6 +3734,7 @@ export type QueryAllAuthorsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AuthorsOrderBy>>;
   condition?: Maybe<AuthorCondition>;
+  filter?: Maybe<AuthorFilter>;
 };
 
 
@@ -3607,6 +3747,7 @@ export type QueryAllBooksArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<BooksOrderBy>>;
   condition?: Maybe<BookCondition>;
+  filter?: Maybe<BookFilter>;
 };
 
 
@@ -3619,6 +3760,7 @@ export type QueryAllPublicationAuthorsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<PublicationAuthorsOrderBy>>;
   condition?: Maybe<PublicationAuthorCondition>;
+  filter?: Maybe<PublicationAuthorFilter>;
 };
 
 
@@ -3631,6 +3773,7 @@ export type QueryAllPublicationsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<PublicationsOrderBy>>;
   condition?: Maybe<PublicationCondition>;
+  filter?: Maybe<PublicationFilter>;
 };
 
 
@@ -3643,6 +3786,7 @@ export type QueryAllTagsArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<TagsOrderBy>>;
   condition?: Maybe<TagCondition>;
+  filter?: Maybe<TagFilter>;
 };
 
 
@@ -3788,6 +3932,82 @@ export type QueryTagByTagIdArgs = {
   tagId: Scalars['String'];
 };
 
+/** A filter to be used against String fields. All fields are combined with a logical ‘and.’ */
+export type StringFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['String']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['String']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['String']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['String']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['String']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['String']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['String']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['String']>;
+  /** Contains the specified string (case-sensitive). */
+  includes?: Maybe<Scalars['String']>;
+  /** Does not contain the specified string (case-sensitive). */
+  notIncludes?: Maybe<Scalars['String']>;
+  /** Contains the specified string (case-insensitive). */
+  includesInsensitive?: Maybe<Scalars['String']>;
+  /** Does not contain the specified string (case-insensitive). */
+  notIncludesInsensitive?: Maybe<Scalars['String']>;
+  /** Starts with the specified string (case-sensitive). */
+  startsWith?: Maybe<Scalars['String']>;
+  /** Does not start with the specified string (case-sensitive). */
+  notStartsWith?: Maybe<Scalars['String']>;
+  /** Starts with the specified string (case-insensitive). */
+  startsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Does not start with the specified string (case-insensitive). */
+  notStartsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Ends with the specified string (case-sensitive). */
+  endsWith?: Maybe<Scalars['String']>;
+  /** Does not end with the specified string (case-sensitive). */
+  notEndsWith?: Maybe<Scalars['String']>;
+  /** Ends with the specified string (case-insensitive). */
+  endsWithInsensitive?: Maybe<Scalars['String']>;
+  /** Does not end with the specified string (case-insensitive). */
+  notEndsWithInsensitive?: Maybe<Scalars['String']>;
+  /**
+   * Matches the specified pattern (case-sensitive). An underscore (_) matches any
+   * single character; a percent sign (%) matches any sequence of zero or more characters.
+   */
+  like?: Maybe<Scalars['String']>;
+  /**
+   * Does not match the specified pattern (case-sensitive). An underscore (_)
+   * matches any single character; a percent sign (%) matches any sequence of zero
+   * or more characters.
+   */
+  notLike?: Maybe<Scalars['String']>;
+  /**
+   * Matches the specified pattern (case-insensitive). An underscore (_) matches
+   * any single character; a percent sign (%) matches any sequence of zero or more characters.
+   */
+  likeInsensitive?: Maybe<Scalars['String']>;
+  /**
+   * Does not match the specified pattern (case-insensitive). An underscore (_)
+   * matches any single character; a percent sign (%) matches any sequence of zero
+   * or more characters.
+   */
+  notLikeInsensitive?: Maybe<Scalars['String']>;
+  /** Matches the specified pattern using the SQL standard's definition of a regular expression. */
+  similarTo?: Maybe<Scalars['String']>;
+  /** Does not match the specified pattern using the SQL standard's definition of a regular expression. */
+  notSimilarTo?: Maybe<Scalars['String']>;
+};
+
 export type Tag = Node & {
   /** A globally unique identifier. Can be used in various places throughout the system to identify this single value. */
   id: Scalars['ID'];
@@ -3811,6 +4031,7 @@ export type TagAnnotationTagsByTagIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationTagsOrderBy>>;
   condition?: Maybe<AnnotationTagCondition>;
+  filter?: Maybe<AnnotationTagFilter>;
 };
 
 
@@ -3822,6 +4043,7 @@ export type TagAnnotationsByAnnotationTagTagIdAndAnnotationIdArgs = {
   after?: Maybe<Scalars['Cursor']>;
   orderBy?: Maybe<Array<AnnotationsOrderBy>>;
   condition?: Maybe<AnnotationCondition>;
+  filter?: Maybe<AnnotationFilter>;
 };
 
 /** The `account` to be created by this mutation. */
@@ -3922,8 +4144,26 @@ export type TagAnnotationsByAnnotationTagTagIdAndAnnotationIdManyToManyEdge = {
 export type TagCondition = {
   /** Checks for equality with the object’s `tagId` field. */
   tagId?: Maybe<Scalars['String']>;
+  /** Checks for equality with the object’s `tagName` field. */
+  tagName?: Maybe<Scalars['String']>;
   /** Checks for equality with the object’s `accountId` field. */
   accountId?: Maybe<Scalars['UUID']>;
+};
+
+/** A filter to be used against `Tag` object types. All fields are combined with a logical ‘and.’ */
+export type TagFilter = {
+  /** Filter by the object’s `tagId` field. */
+  tagId?: Maybe<StringFilter>;
+  /** Filter by the object’s `tagName` field. */
+  tagName?: Maybe<StringFilter>;
+  /** Filter by the object’s `accountId` field. */
+  accountId?: Maybe<UuidFilter>;
+  /** Checks for all expressions in this list. */
+  and?: Maybe<Array<TagFilter>>;
+  /** Checks for any expressions in this list. */
+  or?: Maybe<Array<TagFilter>>;
+  /** Negates the expression. */
+  not?: Maybe<TagFilter>;
 };
 
 /** An input for mutations affecting `Tag` */
@@ -4039,6 +4279,8 @@ export enum TagsOrderBy {
   Natural = 'NATURAL',
   TagIdAsc = 'TAG_ID_ASC',
   TagIdDesc = 'TAG_ID_DESC',
+  TagNameAsc = 'TAG_NAME_ASC',
+  TagNameDesc = 'TAG_NAME_DESC',
   AccountIdAsc = 'ACCOUNT_ID_ASC',
   AccountIdDesc = 'ACCOUNT_ID_DESC',
   PrimaryKeyAsc = 'PRIMARY_KEY_ASC',
@@ -4245,8 +4487,8 @@ export type UpdateAnnotationOnAnnotationForAnnotationAccountIdFkeyPatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   publicationToPublicationId?: Maybe<AnnotationPublicationIdFkeyInput>;
   accountToAccountId?: Maybe<AnnotationAccountIdFkeyInput>;
   annotationTagsUsingAnnotationId?: Maybe<AnnotationTagAnnotationIdFkeyInverseInput>;
@@ -4265,8 +4507,8 @@ export type UpdateAnnotationOnAnnotationForAnnotationPublicationIdFkeyPatch = {
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   publicationToPublicationId?: Maybe<AnnotationPublicationIdFkeyInput>;
   accountToAccountId?: Maybe<AnnotationAccountIdFkeyInput>;
   annotationTagsUsingAnnotationId?: Maybe<AnnotationTagAnnotationIdFkeyInverseInput>;
@@ -4285,8 +4527,8 @@ export type UpdateAnnotationOnAnnotationTagForAnnotationTagAnnotationIdFkeyPatch
   createdAt?: Maybe<Scalars['Datetime']>;
   updatedAt?: Maybe<Scalars['Datetime']>;
   editedHighlightText?: Maybe<Scalars['String']>;
-  editedNoteText?: Maybe<Scalars['String']>;
   extraEdits?: Maybe<Scalars['JSON']>;
+  tsv?: Maybe<Scalars['FullText']>;
   publicationToPublicationId?: Maybe<AnnotationPublicationIdFkeyInput>;
   accountToAccountId?: Maybe<AnnotationAccountIdFkeyInput>;
   annotationTagsUsingAnnotationId?: Maybe<AnnotationTagAnnotationIdFkeyInverseInput>;
@@ -4788,6 +5030,32 @@ export type UpdateTagPayloadTagEdgeArgs = {
 };
 
 
+/** A filter to be used against UUID fields. All fields are combined with a logical ‘and.’ */
+export type UuidFilter = {
+  /** Is null (if `true` is specified) or is not null (if `false` is specified). */
+  isNull?: Maybe<Scalars['Boolean']>;
+  /** Equal to the specified value. */
+  equalTo?: Maybe<Scalars['UUID']>;
+  /** Not equal to the specified value. */
+  notEqualTo?: Maybe<Scalars['UUID']>;
+  /** Not equal to the specified value, treating null like an ordinary value. */
+  distinctFrom?: Maybe<Scalars['UUID']>;
+  /** Equal to the specified value, treating null like an ordinary value. */
+  notDistinctFrom?: Maybe<Scalars['UUID']>;
+  /** Included in the specified list. */
+  in?: Maybe<Array<Scalars['UUID']>>;
+  /** Not included in the specified list. */
+  notIn?: Maybe<Array<Scalars['UUID']>>;
+  /** Less than the specified value. */
+  lessThan?: Maybe<Scalars['UUID']>;
+  /** Less than or equal to the specified value. */
+  lessThanOrEqualTo?: Maybe<Scalars['UUID']>;
+  /** Greater than the specified value. */
+  greaterThan?: Maybe<Scalars['UUID']>;
+  /** Greater than or equal to the specified value. */
+  greaterThanOrEqualTo?: Maybe<Scalars['UUID']>;
+};
+
 export type UpdateAnnotationMutationVariables = Exact<{
   inputAnnotation: UpdateAnnotationInput;
 }>;
@@ -4898,16 +5166,6 @@ export type GetPublicationByPublicationIdQueryVariables = Exact<{
 
 export type GetPublicationByPublicationIdQuery = { publicationByPublicationId?: Maybe<PublicationAuthorAnnotationCountFragment> };
 
-export type AuthorAndPublicationCountFragment = (
-  Pick<Author, 'id' | 'authorId' | 'fullName'>
-  & { publicationAuthorsByAuthorId: Pick<PublicationAuthorsConnection, 'totalCount'> }
-);
-
-export type GetAllAuthorsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetAllAuthorsQuery = { allAuthors?: Maybe<{ nodes: Array<Maybe<AuthorAndPublicationCountFragment>> }> };
-
 export type AddAuthorToPublicationMutationVariables = Exact<{
   authorId: Scalars['String'];
   publicationId: Scalars['String'];
@@ -4963,6 +5221,31 @@ export type UpdatePublicationMutation = (
   & { updatePublicationByPublicationId?: Maybe<{ publication?: Maybe<PublicationAuthorAnnotationCountFragment> }> }
 );
 
+export type AuthorAndPublicationCountFragment = (
+  Pick<Author, 'id' | 'authorId' | 'fullName'>
+  & { publicationAuthorsByAuthorId: Pick<PublicationAuthorsConnection, 'totalCount'> }
+);
+
+export type GetAllAuthorsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllAuthorsQuery = { allAuthors?: Maybe<{ nodes: Array<Maybe<AuthorAndPublicationCountFragment>> }> };
+
+export type AnnotationAllFragment = (
+  { __typename: 'Annotation' }
+  & Pick<Annotation, 'id' | 'annotationId' | 'color' | 'createdAt' | 'editedHighlightText' | 'extraEdits' | 'highlightLocation' | 'highlightText' | 'noteLocation' | 'noteText' | 'publicationId' | 'recordedAt' | 'updatedAt'>
+  & { tagsByAnnotationTagAnnotationIdAndTagId: { nodes: Array<Maybe<(
+      { __typename: 'Tag' }
+      & Pick<Tag, 'id' | 'tagId' | 'tagName'>
+    )>> } }
+);
+
+export type PublicationAuthorAnnotationCountFragment = (
+  { __typename: 'Publication' }
+  & Pick<Publication, 'accountId' | 'additionalMeta' | 'createdAt' | 'id' | 'publicationId' | 'title' | 'updatedAt'>
+  & { annotationsByPublicationId: Pick<AnnotationsConnection, 'totalCount'>, authorsByPublicationAuthorPublicationIdAndAuthorId: { nodes: Array<Maybe<Pick<Author, 'authorId' | 'fullName'>>> } }
+);
+
 export type TagAndCountFragment = (
   Pick<Tag, 'tagId' | 'tagName' | 'id'>
   & { annotationTagsByTagId: Pick<AnnotationTagsConnection, 'totalCount'> }
@@ -4979,6 +5262,11 @@ export type GetTagByTagIdQueryVariables = Exact<{
 
 
 export type GetTagByTagIdQuery = { tagByTagId?: Maybe<TagAndCountFragment> };
+
+export type GetHomePageCountsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetHomePageCountsQuery = { allAnnotations?: Maybe<Pick<AnnotationsConnection, 'totalCount'>>, allTags?: Maybe<Pick<TagsConnection, 'totalCount'>>, allAuthors?: Maybe<Pick<AuthorsConnection, 'totalCount'>>, allPublications?: Maybe<Pick<PublicationsConnection, 'totalCount'>> };
 
 export type GetAllAnnotationsForPublicationQueryVariables = Exact<{
   publicationId: Scalars['String'];
@@ -5025,22 +5313,7 @@ export type GetAllAnnotationsForTagQuery = { allAnnotationTags?: Maybe<(
     )>, pageInfo: Pick<PageInfo, 'endCursor' | 'hasNextPage' | 'startCursor' | 'hasPreviousPage'> }
   )> };
 
-export type AnnotationAllFragment = (
-  { __typename: 'Annotation' }
-  & Pick<Annotation, 'id' | 'annotationId' | 'color' | 'createdAt' | 'editedHighlightText' | 'editedNoteText' | 'extraEdits' | 'highlightLocation' | 'highlightText' | 'noteLocation' | 'noteText' | 'publicationId' | 'recordedAt' | 'updatedAt'>
-  & { tagsByAnnotationTagAnnotationIdAndTagId: { nodes: Array<Maybe<(
-      { __typename: 'Tag' }
-      & Pick<Tag, 'id' | 'tagId' | 'tagName'>
-    )>> } }
-);
-
-export type PublicationAuthorAnnotationCountFragment = (
-  { __typename: 'Publication' }
-  & Pick<Publication, 'accountId' | 'additionalMeta' | 'createdAt' | 'id' | 'publicationId' | 'title' | 'updatedAt'>
-  & { annotationsByPublicationId: Pick<AnnotationsConnection, 'totalCount'>, authorsByPublicationAuthorPublicationIdAndAuthorId: { nodes: Array<Maybe<Pick<Author, 'authorId' | 'fullName'>>> } }
-);
-
-export const AnnotationAllFragmentDoc: DocumentNode<AnnotationAllFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AnnotationAll"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Annotation"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"annotationId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"color"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createdAt"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"editedHighlightText"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"editedNoteText"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"extraEdits"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"highlightLocation"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"highlightText"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"noteLocation"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"noteText"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"publicationId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"recordedAt"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagsByAnnotationTagAnnotationIdAndTagId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagName"},"arguments":[],"directives":[]}]}}]}}]}}]};
+export const AnnotationAllFragmentDoc: DocumentNode<AnnotationAllFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AnnotationAll"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Annotation"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"annotationId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"color"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createdAt"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"editedHighlightText"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"extraEdits"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"highlightLocation"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"highlightText"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"noteLocation"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"noteText"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"publicationId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"recordedAt"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagsByAnnotationTagAnnotationIdAndTagId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagName"},"arguments":[],"directives":[]}]}}]}}]}}]};
 export const PublicationAuthorAnnotationCountFragmentDoc: DocumentNode<PublicationAuthorAnnotationCountFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Publication"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"accountId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"additionalMeta"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createdAt"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"publicationId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"title"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"annotationsByPublicationId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"authorsByPublicationAuthorPublicationIdAndAuthorId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"authorId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fullName"},"arguments":[],"directives":[]}]}}]}}]}}]};
 export const AnnotationAndPublicationFragmentDoc: DocumentNode<AnnotationAndPublicationFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AnnotationAndPublication"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Annotation"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AnnotationAll"},"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}},...AnnotationAllFragmentDoc.definitions,...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
 export const AuthorAndPublicationCountFragmentDoc: DocumentNode<AuthorAndPublicationCountFragment, unknown> = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AuthorAndPublicationCount"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Author"}},"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"authorId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fullName"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"publicationAuthorsByAuthorId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]}]}}]}}]};
@@ -5055,14 +5328,15 @@ export const DeleteAnnotationTagDocument: DocumentNode<DeleteAnnotationTagMutati
 export const DeleteTagDocument: DocumentNode<DeleteTagMutation, DeleteTagMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteTag"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"deleteTagByTagId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"tagId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deletedTagId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tag"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tagId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"tagName"},"arguments":[],"directives":[]}]}}]}}]}}]};
 export const CreateAnnotationDocument: DocumentNode<CreateAnnotationMutation, CreateAnnotationMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAnnotation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"inputAnnotation"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateAnnotationInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createAnnotation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"inputAnnotation"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"annotationEdge"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AnnotationAll"},"directives":[]}]}}]}}]}}]}},...AnnotationAllFragmentDoc.definitions]};
 export const GetPublicationByPublicationIdDocument: DocumentNode<GetPublicationByPublicationIdQuery, GetPublicationByPublicationIdQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPublicationByPublicationId"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
-export const GetAllAuthorsDocument: DocumentNode<GetAllAuthorsQuery, GetAllAuthorsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllAuthors"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAuthors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthorAndPublicationCount"},"directives":[]}]}}]}}]}},...AuthorAndPublicationCountFragmentDoc.definitions]};
 export const AddAuthorToPublicationDocument: DocumentNode<AddAuthorToPublicationMutation, AddAuthorToPublicationMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddAuthorToPublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createPublicationAuthor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationAuthor"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}]}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"authorByAuthorId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthorAndPublicationCount"},"directives":[]}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions,...AuthorAndPublicationCountFragmentDoc.definitions]};
 export const CreateAuthorAndAddToPublicationDocument: DocumentNode<CreateAuthorAndAddToPublicationMutation, CreateAuthorAndAddToPublicationMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateAuthorAndAddToPublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fullName"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"createAuthor"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"author"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"fullName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fullName"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"publicationAuthorsUsingAuthorId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"create"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}]}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"accountId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"accountId"}}}]}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthorAndPublicationCount"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"query"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}}]}}]}},...AuthorAndPublicationCountFragmentDoc.definitions,...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
 export const DeletePublicationAuthorDocument: DocumentNode<DeletePublicationAuthorMutation, DeletePublicationAuthorMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePublicationAuthor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"deletePublicationAuthorByPublicationIdAndAuthorId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publicationByPublicationId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"authorByAuthorId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthorAndPublicationCount"},"directives":[]}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions,...AuthorAndPublicationCountFragmentDoc.definitions]};
 export const DeleteAuthorDocument: DocumentNode<DeleteAuthorMutation, DeleteAuthorMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteAuthor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"deleteAuthorByAuthorId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"authorId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"authorId"}}}]}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"author"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"accountId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"authorId"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"fullName"},"arguments":[],"directives":[]}]}}]}}]}}]};
 export const UpdatePublicationDocument: DocumentNode<UpdatePublicationMutation, UpdatePublicationMutationVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdatePublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"inputPublication"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdatePublicationByPublicationIdInput"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"updatePublicationByPublicationId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"inputPublication"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"publication"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
+export const GetAllAuthorsDocument: DocumentNode<GetAllAuthorsQuery, GetAllAuthorsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllAuthors"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAuthors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AuthorAndPublicationCount"},"directives":[]}]}}]}}]}},...AuthorAndPublicationCountFragmentDoc.definitions]};
 export const GetAllTagsDocument: DocumentNode<GetAllTagsQuery, GetAllTagsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllTags"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allTags"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TagAndCount"},"directives":[]}]}}]}}]}},...TagAndCountFragmentDoc.definitions]};
 export const GetTagByTagIdDocument: DocumentNode<GetTagByTagIdQuery, GetTagByTagIdQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTagByTagId"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tagByTagId"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"tagId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"TagAndCount"},"directives":[]}]}}]}},...TagAndCountFragmentDoc.definitions]};
+export const GetHomePageCountsDocument: DocumentNode<GetHomePageCountsQuery, GetHomePageCountsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHomePageCounts"},"variableDefinitions":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAnnotations"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"allTags"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"allAuthors"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"allPublications"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]}]}}]}}]};
 export const GetAllAnnotationsForPublicationDocument: DocumentNode<GetAllAnnotationsForPublicationQuery, GetAllAnnotationsForPublicationQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllAnnotationsForPublication"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Cursor"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAnnotations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"condition"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"publicationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"publicationId"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AnnotationAll"},"directives":[]}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"startCursor"},"arguments":[],"directives":[]}]}}]}}]}},...AnnotationAllFragmentDoc.definitions]};
 export const GetAllPublicationsDocument: DocumentNode<GetAllPublicationsQuery, GetAllPublicationsQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllPublications"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PublicationsOrderBy"}}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Cursor"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allPublications"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"orderBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"orderBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterCursor"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"startCursor"},"arguments":[],"directives":[]}]}},{"kind":"Field","name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PublicationAuthorAnnotationCount"},"directives":[]}]}}]}}]}}]}},...PublicationAuthorAnnotationCountFragmentDoc.definitions]};
 export const GetAllAnnotationsForTagDocument: DocumentNode<GetAllAnnotationsForTagQuery, GetAllAnnotationsForTagQueryVariables> = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAllAnnotationsForTag"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"directives":[]},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Cursor"}},"directives":[]}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allAnnotationTags"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"condition"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"tagId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tagId"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"node"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"annotationByAnnotationId"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"AnnotationAndPublication"},"directives":[]}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"arguments":[],"directives":[],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"endCursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"startCursor"},"arguments":[],"directives":[]},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"},"arguments":[],"directives":[]}]}}]}}]}},...AnnotationAndPublicationFragmentDoc.definitions]};

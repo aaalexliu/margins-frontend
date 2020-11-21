@@ -1,0 +1,16 @@
+fragment AuthorAndPublicationCount on Author {
+  id
+  authorId
+  fullName
+  publicationAuthorsByAuthorId {
+    totalCount
+  }
+}
+
+query GetAllAuthors {
+  allAuthors {
+    nodes {
+      ...AuthorAndPublicationCount
+    }
+  }
+}

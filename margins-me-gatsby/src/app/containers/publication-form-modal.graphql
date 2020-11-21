@@ -1,20 +1,3 @@
-fragment AuthorAndPublicationCount on Author {
-  id
-  authorId
-  fullName
-  publicationAuthorsByAuthorId {
-        totalCount
-      }
-}
-
-query GetAllAuthors {
-  allAuthors {
-    nodes {
-      ...AuthorAndPublicationCount
-    }
-  }
-}
-
 mutation AddAuthorToPublication($authorId: String!, $publicationId: String!) {
   __typename
   createPublicationAuthor(input: {publicationAuthor: {authorId: $authorId, publicationId: $publicationId}}) {
