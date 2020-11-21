@@ -241,7 +241,8 @@ export const AnnotationContent: React.FC<AnnotationContentProps>
       </div>
       <div
         css={{
-          marginLeft: '5px'
+          marginLeft: '5px',
+          display: 'flex'
         }}
       >
         <Button key="Edit" icon={<EditOutlined />} size="small" shape="circle" type="link"
