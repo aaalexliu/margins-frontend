@@ -78,7 +78,8 @@ const Authors: React.FC<RouteComponentProps> = () => {
         <AutoComplete
           css={{
             width: '50%',
-            minWidth: '250px'
+            minWidth: '250px',
+            maxWidth: '500px'
           }}
           onChange={onChange}
           options={displayedAuthors?.map(author => {
