@@ -48,7 +48,7 @@ const Authors: React.FC<RouteComponentProps> = () => {
       (node): node is AuthorAndChildPublicationsFragment => node !== null
     )
     :
-    null;
+    [];
   
   let displayedAuthors = filteredAuthors.length > 0 ? filteredAuthors : authors;
 
