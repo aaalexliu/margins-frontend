@@ -8,11 +8,13 @@ import {
   extractAnnotationAll
 } from '../graphql/fragments'
 import {
+  useDeleteTag
+} from '../graphql';
+import {
   GetAllTagsDocument,
   AddTagToAnnotationDocument,
   CreateTagAndAddToAnnotationDocument,
   TagInput,
-  DeleteTagDocument,
   DeleteAnnotationTagDocument
 } from '../__generated__/graphql-types';
 
@@ -76,19 +78,6 @@ export const DELETE_ANNOTATION_TAG = gql`
   }
 `
 
-export const DELETE_TAG = gql`
-  mutation DeleteTag($tagId: String!) {
-    __typename
-    deleteTagByTagId(input: {tagId: $tagId}) {
-      deletedTagId
-      tag {
-        tagId
-        tagName
-      }
-    }
-  }
-`
-
 interface AnnotationTagProps {
   annotationId: string,
   tag: TagInput
@@ -98,26 +87,7 @@ export function AnnotationTag({annotationId, tag}: AnnotationTagProps) {
   const [deleteAnnotationTag, { error: deleteError, loading: deleteLoading }] =
   useMutation(DeleteAnnotationTagDocument);
 
-  const [deleteTag] = useMutation(DeleteTagDocument,
-  {
-    update(cache, { data }) {
-      console.log('delete tag data: ', data);
-      const deletedTagId = data?.deleteTagByTagId?.tag?.tagId;
-      cache.modify({
-        fields: {
-          allTags(allTagsConnection, { readField }) {
-            let { nodes } = allTagsConnection;
-            console.log('current tag nodes\n', nodes);
-            let newNodes = nodes.filter((tagRef: any) => deletedTagId !== readField('tagId', tagRef));
-            return {
-              ...allTagsConnection,
-              nodes: newNodes
-            };
-          },
-        },
-      });
-    }
-  });
+  const [ deleteTag ] = useDeleteTag();
 
   const onCloseHandler = async () => {
     const { data } = await deleteAnnotationTag({variables: {

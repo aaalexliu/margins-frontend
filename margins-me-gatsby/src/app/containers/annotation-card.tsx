@@ -38,7 +38,7 @@ function isOrphanNote(highlightText: any, noteText: any): boolean {
 function stringifyLocation(location: any) {
   if (location === undefined ) return null;
   const locationArr: string[] = [];
-  console.log(location);
+  // console.log(location);
   if (location.section !== undefined) locationArr.push(location.section);
   if (location.chapter !== undefined) locationArr.push(location.chapter);
   if (location.page !== undefined) locationArr.push(`Page: ${location.page}`);
@@ -172,7 +172,7 @@ export const AnnotationContent: React.FC<AnnotationContentProps>
     }
   }
 
-  console.log(`${highlightText} tags:`, tags);
+  // console.log(`${highlightText} tags:`, tags);
 
   const notOrphanNote = !isOrphanNote(highlightText, noteText);
 
