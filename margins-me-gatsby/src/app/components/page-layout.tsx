@@ -10,9 +10,10 @@ import { Layout, Menu, Button, Input } from 'antd';
 import { useLocation } from "@reach/router"
 import { Link, navigate } from 'gatsby';
 import { LoginOrLogout } from '../../components';
+import { BookOutlined, TagOutlined, ContactsOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer } = Layout;
-
+const { SubMenu } = Menu;
 const { Search } = Input;
 
 export default function PageLayout (props: any) {
@@ -35,19 +36,23 @@ export default function PageLayout (props: any) {
           }}
           selectedKeys={[pathname]}
           >
-          <Menu.Item key = "/app">
+          <Menu.Item key="/app">
             <Link to="/app">Home</Link>
           </Menu.Item>
-          {/* </Menu> */}
-          {/* <div
-            css={{
-              marginLeft: 'auto'
-            }}
-          > */}
-            <Menu.Item key="/login">
-              <LoginOrLogout />
+          <SubMenu title="Browse">
+            <Menu.Item key="/app/publications">
+              <Link to="/app/publications"><BookOutlined/> Publications</Link>
             </Menu.Item>
-          {/* </div> */}
+            <Menu.Item key="/app/tags">
+              <Link to="/app/tags"><TagOutlined/>Tags</Link>
+            </Menu.Item>
+            <Menu.Item key="/app/authors">
+              <Link to="/app/authors"><ContactsOutlined />Authors</Link>
+            </Menu.Item>
+          </SubMenu>
+          <Menu.Item key="/login">
+            <LoginOrLogout />
+          </Menu.Item>
         </Menu>
         <Search
           size='middle'
