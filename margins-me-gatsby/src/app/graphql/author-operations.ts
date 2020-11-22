@@ -4,6 +4,10 @@ import {
 } from '../__generated__/graphql-types';
 
 
+// ok current cache bug is that deleting an author means that
+// cached publications still have the deled author, should probably
+// figure out a way to either invalidate publication that the author
+// is attached to, or surgically remove in cache.
 export function useDeleteAuthor() {
   const [ deleteAuthor ] = useMutation(DeleteAuthorByAuthorIdDocument, {
     update(cache, { data }) {

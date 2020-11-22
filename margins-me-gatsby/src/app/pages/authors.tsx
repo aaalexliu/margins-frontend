@@ -58,7 +58,7 @@ const Authors: React.FC<RouteComponentProps> = () => {
     let regex = new RegExp(value, 'i');
     setFilteredAuthors(authors?.filter(author => {
       return regex.test(author.fullName);
-    }))
+    }));
   }
 
   return(

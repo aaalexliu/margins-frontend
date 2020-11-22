@@ -31,6 +31,19 @@ fragment AuthorAndChildPublications on Author {
   }
 }
 
+fragment DeletedAuthorAndUpdatedPublications on Author {
+  id
+  authorId
+  fullName
+  publicationAuthorsByAuthorId {
+    nodes {
+      publicationByPublicationId {
+        ...PublicationAuthorAnnotationCount
+      }
+    }
+  }
+}
+
 query GetAllAuthorsAndChildPublications {
   allAuthors {
     nodes {
@@ -45,13 +58,21 @@ query GetAuthorAndChildPublications($id: ID!) {
   }
 }
 
+mutation UpdateAuthorByAuthorId($authorId: String!, $authorPatch: AuthorPatch!) {
+  __typename
+  updateAuthorByAuthorId(input: {authorPatch: $authorPatch, authorId: $authorId}) {
+    author {
+      ...AuthorAndChildPublications
+    }
+  }
+}
+
+
 mutation DeleteAuthorByAuthorId($authorId: String!) {
   __typename
   deleteAuthorByAuthorId(input: {authorId: $authorId}) {
     author {
-      accountId
-      authorId
-      fullName
+      ...AuthorAndChildPublications
     }
   }
 }
