@@ -121,6 +121,34 @@ export const logout = async () => {
   }
 }
 
+export const forgotPassword = async (username: string) => {
+  try {
+    await Auth.forgotPassword(username);
+    return {
+      success: 'success'
+    }
+}  catch(error) {
+    console.log('error with resetting password');
+    return {
+      error
+    }
+  }
+}
+
+export const forgotPasswordSubmit = async (username: string, code: string, newPassword: string) => {
+  try {
+    const res = await Auth.forgotPasswordSubmit(username, code, newPassword);
+    return {
+      success: 'success'
+    }
+  } catch(error) {
+    console.log('error with forgot password submit');
+    return {
+      error
+    }
+  }
+}
+
 // Sample code from gatsby auh0 example
 // import auth0js from 'auth0-js';
 
