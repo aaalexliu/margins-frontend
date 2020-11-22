@@ -39,9 +39,10 @@ const Home: React.FC<RouteComponentProps> = () => {
         <Title level={3} >Welcome to Margins Me</Title>
         <Title level={5} type='secondary'
           css={{
-            marginTop: '0px'
+            marginTop: '0px !important'
           }}
         >{currentAccountVar().email}</Title>
+        <br />
         <List
           header={<h3>Browse {loading ? '' : `Your ${data?.allAnnotations?.totalCount} Annotations`}</h3>}
           css={{
