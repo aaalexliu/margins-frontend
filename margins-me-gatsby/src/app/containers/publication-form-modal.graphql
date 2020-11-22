@@ -52,17 +52,6 @@ mutation DeletePublicationAuthor($publicationId: String!, $authorId: String!) {
   }
 }
 
-mutation DeleteAuthor($authorId: String!) {
-  __typename
-  deleteAuthorByAuthorId(input: {authorId: $authorId}) {
-    author {
-      accountId
-      authorId
-      fullName
-    }
-  }
-}
-
 mutation UpdatePublication($inputPublication: UpdatePublicationByPublicationIdInput!) {
   __typename
   updatePublicationByPublicationId(input: $inputPublication) {
