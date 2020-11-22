@@ -5,15 +5,19 @@
  * See: https://www.gatsbyjs.com/docs/use-static-query/
  */
 
-import React from "react"
-import { Layout, Menu, Button } from 'antd';
+import React, { useState } from "react"
+import { Layout, Menu, Button, Input } from 'antd';
 import { useLocation } from "@reach/router"
-import { Link } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import { LoginOrLogout } from '../../components';
 
 const { Header, Content, Footer } = Layout;
 
+const { Search } = Input;
+
 export default function PageLayout (props: any) {
+  const [ searchWidth, setSearchWidth ] = useState('150px');
+  const [ searchValue, setSearchValue ] = useState('');
 
   const location = useLocation();
   const { pathname } = location;
@@ -21,25 +25,50 @@ export default function PageLayout (props: any) {
     <Layout className="layout">
       <Header
         css={{
-          display: 'flex'
+          display: 'flex',
+          alignItems: 'center'
         }}
       >
-        <Menu theme="dark" mode="horizontal" selectedKeys={[pathname]}>
-            <Menu.Item key = "/app">
-              <Link to="/app">Home</Link>
-            </Menu.Item>
-        </Menu>
-        <div
+        <Menu theme="dark" mode="horizontal"
           css={{
-            marginLeft: 'auto'
+            flexGrow: 1
           }}
-        >
-          <Menu theme="dark" mode="horizontal" >
+          selectedKeys={[pathname]}
+          >
+          <Menu.Item key = "/app">
+            <Link to="/app">Home</Link>
+          </Menu.Item>
+          {/* </Menu> */}
+          {/* <div
+            css={{
+              marginLeft: 'auto'
+            }}
+          > */}
             <Menu.Item key="/login">
               <LoginOrLogout />
-            </Menu.Item>  
-          </Menu>
-        </div>
+            </Menu.Item>
+          {/* </div> */}
+        </Menu>
+        <Search
+          size='middle'
+          placeholder='Annotations'
+          css={{
+            marginRight: '0px',
+            width: searchWidth,
+            webkitTransition: 'width 500ms ease',
+            MozTransition: 'width 500ms ease',
+            transition: 'width 500ms ease'
+          }}
+          onFocus={() => setSearchWidth('300px')}
+          onBlur={() => setSearchWidth('150px')}
+          enterButton={true}
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          onSearch={(value: string) => {
+            setSearchValue('');
+            navigate(`/app/search?query=${value}`);
+          }}
+        />
       </Header>
       <Content css={{padding: '24px'}}>
         {props.children}
