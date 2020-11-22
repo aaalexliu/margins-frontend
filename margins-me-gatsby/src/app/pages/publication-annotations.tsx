@@ -238,9 +238,13 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
             flexDirection: 'column',
             alignItems: 'center',
             width: '100%',
-            '& div:first-of-type': {
+            // this is for infinite scroll component outer div, which doesn't expand to 100% sometimes
+            '& div.infinite-scroll-component__outerdiv': {
               width: '100%'
             }
+            // '& div:first-of-type': {
+            //   width: '100%'
+            // }
           }}
         >
           <InfiniteScroll

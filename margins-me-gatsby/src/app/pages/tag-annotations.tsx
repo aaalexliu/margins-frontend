@@ -87,6 +87,9 @@ const TagAnnotations: React.FC<RouteComponentProps> = () => {
           flexDirection: 'column',
           alignItems: 'center',
           // width: '100%'
+          '& div.infinite-scroll-component__outerdiv': {
+            width: '100%'
+          }
         }}>
 
           <InfiniteScroll
