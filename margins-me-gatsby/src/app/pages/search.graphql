@@ -1,0 +1,36 @@
+fragment AnnotationAndTsv on Annotation {
+  ...AnnotationAll
+  tsv
+  tsvRank
+}
+
+# accountId not really necessary because of RLS but since you use condition
+# for relaystyle pagination need to include one or else you get this apollo error:
+# Missing field 'condition' while computing key fields
+
+# weird bugs with pagination. using cursor based pagination returns null data with after cursor
+# however offset based pagination doesn't work because the field has relayStylePagination.
+# right now probably just best to limit results to 50 or 100, and write a custom function
+# or fix the plugin
+query SearchAnnotations($matches: String!, $accountId: UUID!, $first: Int) {
+  allAnnotations(
+    orderBy: TSV_RANK_DESC
+    filter: { tsv: { matches: $matches } }
+    condition: { accountId: $accountId }
+    first: $first
+  ){
+    edges {
+      cursor
+      node {
+        ...AnnotationAndTsv
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+      hasPreviousPage
+      startCursor
+    }
+    totalCount
+  }
+}
