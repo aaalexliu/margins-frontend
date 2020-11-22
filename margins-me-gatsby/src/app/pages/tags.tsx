@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
-import { useQuery, gql } from '@apollo/client';
+import React, { Fragment, useState } from 'react';
+import { useQuery } from '@apollo/client';
 import { RouteComponentProps } from '@reach/router';
 
-import { Typography, List } from 'antd';
+import { Typography, AutoComplete } from 'antd';
 import { PublicationListItem, Loading } from '../components';
 import { TagCard } from '../containers';
 import { css } from '@emotion/core';
@@ -33,7 +33,9 @@ const Tags: React.FC<RouteComponentProps> = () => {
     loading,
     error,
     fetchMore
-  } = useQuery(GetAllTagsDocument)
+  } = useQuery(GetAllTagsDocument);
+
+  const [ filteredTags, setFilteredTags ] = useState<TagAndCountFragment[]>([]);
 
   if (loading) return <Loading />;
   if (error || !data) return <p>ERROR</p>;
@@ -45,11 +47,49 @@ const Tags: React.FC<RouteComponentProps> = () => {
       (node): node is TagAndCountFragment => node !== null
     )
     :
-    undefined;
+    [];
+
+  let displayedTags = filteredTags.length > 0 ? filteredTags : tags;
+
+  const onChange = (value: string) => {
+    console.log('author search:', value);
+    if (!tags) return;
+    let regex = new RegExp(value, 'i');
+    setFilteredTags(tags?.filter(tag => {
+      return regex.test(tag.tagName);
+    }));
+  }
 
   return(
-    <Fragment>
+    <div
+      css={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+    >
       <Title level={1}>Tags</Title>
+      <Title level={5} type="secondary"
+          css={{
+            marginTop: '0px !important'
+          }}
+        >Filter Tags</Title>
+        <AutoComplete
+          css={{
+            width: '50%',
+            minWidth: '250px',
+            maxWidth: '500px'
+          }}
+          onChange={onChange}
+          options={displayedTags?.map(tag => {
+            return {
+              label: tag.tagName,
+              value: tag.tagName
+            }
+          })}
+          defaultActiveFirstOption={true}
+        />
+        <br/>
         <div
           css={{
             display: 'flex',
@@ -58,8 +98,8 @@ const Tags: React.FC<RouteComponentProps> = () => {
             alignItems: 'stretch',
           }}
         >
-          { tags ? 
-              tags.map(tag => {
+          { displayedTags ? 
+              displayedTags.map(tag => {
                 return (
                   <div
                     css={{
@@ -77,20 +117,7 @@ const Tags: React.FC<RouteComponentProps> = () => {
               : <p>No Tags</p>
           }
         </div>
-      {/* {
-        tag ?
-          <List
-            // className="demo-loadmore-list"
-            loading={loading}
-            itemLayout="horizontal"
-            // loadMore={loadMore}
-            dataSource={tag}
-            renderItem={publication => <PublicationListItem publication={publication}/>}
-          />
-          :
-          <p>No Tags</p>
-      } */}
-    </Fragment>
+    </div>
   );
 }
 
