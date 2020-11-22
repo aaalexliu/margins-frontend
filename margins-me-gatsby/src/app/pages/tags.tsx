@@ -103,7 +103,7 @@ const Tags: React.FC<RouteComponentProps> = () => {
                 return (
                   <div
                     css={{
-                      width: '225px',
+                      width: '280px',
                       margin: '2px',
                     }}
                     key={tag.tagId}
