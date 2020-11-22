@@ -29,10 +29,11 @@ const CURRENT_EMAIL = gql`
 
 const ConfirmSignup = () => {
 
-  const { data } = useQuery(CURRENT_EMAIL);
   const [isLoading, setIsLoading] = useState(false);
 
-  const email = data.currentAccount.email;
+  // const { data } = useQuery(CURRENT_EMAIL);
+  // const email = data.currentAccount.email;
+  const email = currentAccountVar().email;
 
   const onFinish = async (values: any) => {
     console.log('success: ', values);
@@ -47,7 +48,7 @@ const ConfirmSignup = () => {
       console.log(account);
       //clear passwordVar after confirming and signing in
       passwordVar('');
-      navigate('/');
+      navigate('/app');
     } else {
       console.log(signupConfirmResponse.error);
       setIsLoading(false);
