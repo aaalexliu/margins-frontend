@@ -23,3 +23,23 @@ query GetTagByTagId($tagId: String!) {
     ...TagAndCount
   }
 }
+
+mutation UpdateTagByTagId($tagId: String!, $tagPatch: TagPatch!) {
+  __typename
+  updateTagByTagId(input: {tagPatch: $tagPatch, tagId: $tagId}) {
+    tag {
+      ...TagAndCount
+    }
+  }
+}
+
+mutation DeleteTagByTagId($tagId: String!) {
+    __typename
+    deleteTagByTagId(input: {tagId: $tagId}) {
+      deletedTagId
+      tag {
+        tagId
+        tagName
+      }
+    }
+  }
