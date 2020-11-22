@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { message } from 'antd';
 import { PageLayout } from '../app/components';
 import {
   LoadingPage,
@@ -20,6 +21,7 @@ import { currentAccountVar } from '../apollo/cache';
 const App =  () => {
   
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     (async () => {
       const accountResponse = await getAccountFromSession();
@@ -35,9 +37,11 @@ const App =  () => {
       }
       else {
         navigate('/login');
+        message.warning('Please Log In!', 5);
       }
     })()
-  })
+  });
+
   return (
     isLoading ? 
     <LoadingPage /> :

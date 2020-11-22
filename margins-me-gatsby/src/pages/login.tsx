@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 
-import { Form, Input, Button, Checkbox } from 'antd';
+import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import PageLayout from '../components/page-layout';
@@ -34,7 +34,9 @@ const Login = () => {
   const [form] = Form.useForm();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [wrongPassword, setWrongPassword] = useState("");
+  const [passwordStatus, setPasswordStatus] = useState<
+    "" | "error" | "success" | "warning" | "validating" | undefined
+  >("");
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -55,7 +57,7 @@ const Login = () => {
         sub
       })
       
-      navigate('/');
+      navigate('/app');
     } else {
       const { error } = loginResponse;
       console.log('error logging in:', error);
@@ -72,7 +74,8 @@ const Login = () => {
           break;
         case 'NotAuthorizedException':
           setIsLoading(false);
-          setWrongPassword('Wrong Password');
+          setPasswordStatus('error');
+          message.error('Wrong Password');
           return true;
         case 'PasswordResetRequiredException':
           return true;
@@ -101,11 +104,18 @@ const Login = () => {
       <Form.Item
         name="password"
         rules={[{ required: true, message: 'Please input your Password!' }]}
+        hasFeedback={true}
+        validateStatus={passwordStatus}
       >
-        <Input
+        <Input.Password
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="Password"
+          onChange={() => {
+            if (passwordStatus === 'error') {
+              setPasswordStatus('');
+            }
+          }}
         />
       </Form.Item>
       <Form.Item>
@@ -119,7 +129,7 @@ const Login = () => {
       </Form.Item>
 
       <Form.Item
-        help={wrongPassword}
+        // help={passwordStatus}
       >
         <Button type="primary" loading={isLoading} htmlType="submit" className="login-form-button">
           Log in
