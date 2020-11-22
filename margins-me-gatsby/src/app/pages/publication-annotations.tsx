@@ -238,7 +238,7 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
             flexDirection: 'column',
             alignItems: 'center',
             width: '100%',
-            '& div:first-child': {
+            '& div:first-of-type': {
               width: '100%'
             }
           }}
