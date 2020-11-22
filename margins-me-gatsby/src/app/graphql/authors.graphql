@@ -44,3 +44,14 @@ query GetAuthorAndChildPublications($id: ID!) {
     ...AuthorAndChildPublications
   }
 }
+
+mutation DeleteAuthorByAuthorId($authorId: String!) {
+  __typename
+  deleteAuthorByAuthorId(input: {authorId: $authorId}) {
+    author {
+      accountId
+      authorId
+      fullName
+    }
+  }
+}

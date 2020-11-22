@@ -5,6 +5,7 @@ import { LabeledValue } from 'antd/lib/select';
 import { Rule } from 'antd/lib/form';
 import { useQuery, useMutation } from '@apollo/client';
 import { generateObjectId, getAccountId } from '../utils';
+import { useDeleteAuthor } from '../graphql';
 import {
   GetAllAuthorsDocument,
   Author,
@@ -72,26 +73,7 @@ export const PublicationFormModal: React.FC<PublicationFormModalProps> =
   });
 
   const [ deleteAuthorFromPublication ] = useMutation(DeletePublicationAuthorDocument);
-
-  const [ deleteAuthor ] = useMutation(DeleteAuthorDocument, {
-    update(cache, { data }) {
-      console.log('delete author data: ', data);
-      const deletedAuthorId = data?.deleteAuthorByAuthorId?.author?.authorId;
-      cache.modify({
-        fields: {
-          allAuthors(allAuthorsConnection, { readField }) {
-            let { nodes } = allAuthorsConnection;
-            console.log('current author nodes\n', nodes);
-            let newNodes = nodes.filter((authorRef: any) => deletedAuthorId !== readField('authorId', authorRef));
-            return {
-              ...allAuthorsConnection,
-              nodes: newNodes
-            };
-          }
-        },
-      });
-    }
-  });
+  const [ deleteAuthor ] = useDeleteAuthor();
 
   const {
     data: authorsData,
