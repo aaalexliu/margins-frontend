@@ -121,7 +121,13 @@ const Login = () => {
           // }}
         />
       </Form.Item>
-      <Link to="/forgot-password">Forgot Password?</Link>
+      <div
+        css={{
+          marginBottom: '10px'
+        }}
+      >
+        <Link to="/forgot-password">Forgot Password?</Link>
+      </div>
 
       {/* <Form.Item>
         <Form.Item name="remember" valuePropName="checked" noStyle>

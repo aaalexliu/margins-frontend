@@ -15,31 +15,31 @@ import { PageLayout } from '../components';
 const CenteredSignup = styled.div`
   margin: 0 auto;
   width: 75%;
-  max-width: 500px;
+  max-width: 350px;
 `;
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
-};
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
+// const formItemLayout = {
+//   labelCol: {
+//     xs: { span: 24 },
+//     sm: { span: 8 },
+//   },
+//   wrapperCol: {
+//     xs: { span: 24 },
+//     sm: { span: 16 },
+//   },
+// };
+// const tailFormItemLayout = {
+//   wrapperCol: {
+//     xs: {
+//       span: 24,
+//       offset: 0,
+//     },
+//     sm: {
+//       span: 16,
+//       offset: 8,
+//     },
+//   },
+// };
 
 const Signup = () => {
   const [form] = Form.useForm();
@@ -81,7 +81,8 @@ const Signup = () => {
   <PageLayout>
     <CenteredSignup>
       <Form
-        {...formItemLayout}
+        // {...formItemLayout}
+        layout='vertical'
         form={form}
         name="register"
         onFinish={onFinish}
@@ -112,7 +113,9 @@ const Signup = () => {
           rules={[
             {
               required: true,
-              message: 'Please input your password!',
+              type: 'string',
+              min: 8,
+              message: 'Password must have a minimum of 8 characters'
             },
           ]}
           hasFeedback
@@ -143,8 +146,17 @@ const Signup = () => {
           <Input.Password />
         </Form.Item>
 
-        <Form.Item {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" loading={isLoading}>
+        <Form.Item
+          // {...tailFormItemLayout}
+        >
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={isLoading}
+            css={{
+              width: '100%'
+            }}
+            >
             Register
           </Button>
         </Form.Item>
