@@ -74,12 +74,14 @@ const Login = () => {
           break;
         case 'NotAuthorizedException':
           setIsLoading(false);
-          setPasswordStatus('error');
-          message.error('Wrong Password');
-          return true;
-        case 'PasswordResetRequiredException':
-          return true;
+          // setPasswordStatus('error');
+          message.error('Wrong Username or Password');
+          break;
+        // case 'PasswordResetRequiredException':
+        //   message.error(error.message)
+        //   return true;
         default:
+          message.error(error.message);
             return false;
       }
     }
@@ -104,21 +106,24 @@ const Login = () => {
       <Form.Item
         name="password"
         rules={[{ required: true, message: 'Please input your Password!' }]}
-        hasFeedback={true}
-        validateStatus={passwordStatus}
+        // hasFeedback={true}
+        // validateStatus={passwordStatus}
       >
         <Input.Password
           prefix={<LockOutlined className="site-form-item-icon" />}
           type="password"
           placeholder="Password"
-          onChange={() => {
-            if (passwordStatus === 'error') {
-              setPasswordStatus('');
-            }
-          }}
+          name="password"
+          // onChange={() => {
+          //   if (passwordStatus === 'error') {
+          //     setPasswordStatus('');
+          //   }
+          // }}
         />
       </Form.Item>
-      <Form.Item>
+      <Link to="/forgot-password">Forgot Password?</Link>
+
+      {/* <Form.Item>
         <Form.Item name="remember" valuePropName="checked" noStyle>
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
@@ -126,7 +131,7 @@ const Login = () => {
         <a className="login-form-forgot" href="">
           Forgot password
         </a>
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item
         // help={passwordStatus}
