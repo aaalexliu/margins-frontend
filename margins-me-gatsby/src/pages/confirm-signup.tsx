@@ -5,7 +5,6 @@ import { PageLayout } from '../components';
 
 import { confirmSignup } from '../amplify/auth';
 import { currentAccountVar, passwordVar } from '../apollo/cache';
-import { useQuery, gql } from '@apollo/client';
 
 import styled from '@emotion/styled';
 
@@ -19,20 +18,10 @@ const CenteredDiv = styled.div`
   }
 `;
 
-const CURRENT_EMAIL = gql`
-  query getCurrentEmail {
-    currentAccount @client {
-      email
-    }
-  }
-`;
-
 const ConfirmSignup = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  // const { data } = useQuery(CURRENT_EMAIL);
-  // const email = data.currentAccount.email;
   const email = currentAccountVar().email;
 
   const onFinish = async (values: any) => {
