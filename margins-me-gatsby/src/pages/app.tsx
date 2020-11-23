@@ -9,7 +9,8 @@ import {
   Tags,
   TagAnnotations,
   Authors,
-  Search
+  Search,
+  Account
 } from '../app/pages';
 import { Home } from '../app/pages';
 import { Router, Redirect } from "@reach/router";
@@ -54,6 +55,7 @@ const App =  () => {
         <TagAnnotations path='/annotations/tag/:tagId' />
         <Authors path='/authors'/>
         <Search path='/search' />
+        <Account path='/account' />
         <NotFound default={true}/>
       </Router>
     </PageLayout>
