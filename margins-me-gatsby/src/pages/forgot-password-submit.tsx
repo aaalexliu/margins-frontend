@@ -5,10 +5,12 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import PageLayout from '../components/page-layout';
 
-import { navigate, Link } from 'gatsby';
+import { navigate } from 'gatsby';
 
 import { currentAccountVar, passwordVar } from '../apollo/cache';
 import { forgotPasswordSubmit } from '../amplify/auth';
+import { parse } from 'query-string';
+import { useLocation } from '@reach/router';
 
 const CenteredDiv = styled.div`
   margin: 0 auto;
@@ -32,15 +34,23 @@ const ForgetPasswordSubmit = () => {
 
   const [form] = Form.useForm();
 
+  const location = useLocation();
+  let { email } = parse(location.search);
+  console.log('url email', email);
+
+  if (Array.isArray(email)) email = email[0];
+  email;
+
   const [isLoading, setIsLoading] = useState(false);
 
   const onFinish = async (values: any) => {
     console.log('success: ', values);
+    if (typeof email !== 'string') return;
     setIsLoading(true);
     const forgotPasswordRes = await forgotPasswordSubmit(
-      values.email,
-      values.password,
-      values.code
+      email,
+      values.code,
+      values.password
     );
     setIsLoading(false);
     if (forgotPasswordRes.success) {
@@ -48,6 +58,7 @@ const ForgetPasswordSubmit = () => {
       navigate('/login');
     }
     console.log('error in submit', forgotPasswordRes.error);
+    message.error(forgotPasswordRes.error.message);
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -123,8 +134,14 @@ const ForgetPasswordSubmit = () => {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item>
-          <Button type="primary" loading={isLoading} htmlType="submit" className="verify-button">
+        <Form.Item
+        >
+          <Button type="primary"
+            loading={isLoading}
+            htmlType="submit"
+            className="verify-button"
+            disabled={!email}
+          >
             Submit
           </Button>
         </Form.Item>

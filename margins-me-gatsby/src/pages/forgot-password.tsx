@@ -28,7 +28,7 @@ const CenteredDiv = styled.div`
   }
 `;
 
-const ResetPassword = () => {
+const ForgotPassword = () => {
 
   const [form] = Form.useForm();
 
@@ -42,9 +42,10 @@ const ResetPassword = () => {
     console.log('Success:', values);
     const { email } = values;
     setIsLoading(true);
-    await forgotPassword(values.email);
+    const forgotPasswordRes = await forgotPassword(values.email);
+    console.log('forgot password response', forgotPasswordRes);
     setIsLoading(false);
-    navigate('')
+    navigate(`/forgot-password-submit?email=${encodeURIComponent(email)}`);
   }
 
   return (
@@ -59,7 +60,7 @@ const ResetPassword = () => {
       layout="vertical"
     >
       <Form.Item
-        label="Email"
+        // label="Email"
         name="email"
         rules={[{ required: true, message: 'Please input your Email!' }]}
       >
@@ -77,4 +78,4 @@ const ResetPassword = () => {
   );
 }
 
-export default ResetPassword;
+export default ForgotPassword;
