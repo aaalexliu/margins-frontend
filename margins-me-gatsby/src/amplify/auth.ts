@@ -123,9 +123,10 @@ export const logout = async () => {
 
 export const forgotPassword = async (username: string) => {
   try {
-    await Auth.forgotPassword(username);
+    const response = await Auth.forgotPassword(username);
     return {
-      success: 'success'
+      success: 'success',
+      response
     }
 }  catch(error) {
     console.log('error with resetting password');
@@ -139,7 +140,8 @@ export const forgotPasswordSubmit = async (username: string, code: string, newPa
   try {
     const res = await Auth.forgotPasswordSubmit(username, code, newPassword);
     return {
-      success: 'success'
+      success: 'success',
+      response: res
     }
   } catch(error) {
     console.log('error with forgot password submit');
