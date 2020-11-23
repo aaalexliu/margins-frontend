@@ -151,6 +151,21 @@ export const forgotPasswordSubmit = async (username: string, code: string, newPa
   }
 }
 
+export const changePassword = async (oldPassword: string, newPassword: string) => {
+  try {
+    const user = await Auth.currentAuthenticatedUser();
+    const response = await Auth.changePassword(user, oldPassword, newPassword);
+    return {
+      success: 'success',
+      response
+    }
+  } catch (error) {
+    return {
+      error
+    }
+  }
+}
+
 // Sample code from gatsby auh0 example
 // import auth0js from 'auth0-js';
 

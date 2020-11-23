@@ -6,11 +6,12 @@
  */
 
 import React, { useState } from "react"
-import { Layout, Menu, Button, Input } from 'antd';
+import { Layout, Menu, Button, Input, Avatar } from 'antd';
 import { useLocation } from "@reach/router"
 import { Link, navigate } from 'gatsby';
-import { LoginOrLogout } from '../../components';
-import { BookOutlined, TagOutlined, ContactsOutlined } from '@ant-design/icons';
+import { LogoutButton } from '../containers';
+import { currentAccountVar } from '../../apollo/cache';
+import { BookOutlined, TagOutlined, ContactsOutlined, UserOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer } = Layout;
 const { SubMenu } = Menu;
@@ -19,9 +20,10 @@ const { Search } = Input;
 export default function PageLayout (props: any) {
   const [ searchWidth, setSearchWidth ] = useState('150px');
   const [ searchValue, setSearchValue ] = useState('');
-
   const location = useLocation();
   const { pathname } = location;
+
+  const email = currentAccountVar().email;
   return (
     <Layout className="layout">
       <Header
@@ -50,9 +52,20 @@ export default function PageLayout (props: any) {
               <Link to="/app/authors"><ContactsOutlined />Authors</Link>
             </Menu.Item>
           </SubMenu>
-          <Menu.Item key="/login">
-            <LoginOrLogout />
-          </Menu.Item>
+          <SubMenu
+            icon={
+              <Avatar icon={email ? null : <UserOutlined />}>
+                {email ? email[0].toLocaleUpperCase() : null}
+              </Avatar>
+            }
+          >
+            <Menu.Item key="/app/account">
+              <Link to="/app/account">Account Settings</Link>
+            </Menu.Item>
+            <Menu.Item>
+              <LogoutButton />
+            </Menu.Item>
+          </SubMenu>
         </Menu>
         <Search
           size='middle'
