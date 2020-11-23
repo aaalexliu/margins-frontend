@@ -7,3 +7,4 @@ export { default as Tags } from './tags';
 export { default as TagAnnotations } from './tag-annotations';
 export { default as Authors } from './authors';
 export { default as Search } from './search';
+export { default as Account } from './account';
