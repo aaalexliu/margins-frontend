@@ -9,7 +9,7 @@ import { cache, currentAccountVar } from './cache';
 import { typeDefs } from './client-schema';
 
 const httpLink = createHttpLink({
-  uri: 'http://ec2-34-232-69-157.compute-1.amazonaws.com:8080/graphql',
+  uri: 'https://api.margins.me/graphql',
   fetch,
 });
 

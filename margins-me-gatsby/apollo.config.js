@@ -1,10 +1,13 @@
+// ok right now this file is pretty useless since you're
+// not using apollo cli
+
 require('dotenv').config();
 // console.log(`Bearer ${process.env.GRAPHQL_JWT}`);
 module.exports = {
   client: {
     service: {
       name: 'margins-me-endpoint',
-      url: 'http://ec2-34-232-69-157.compute-1.amazonaws.com:8080/graphql',
+      url: 'https://api.margins.me/graphql',
       // optional headers
       headers: {
         authorization: `Bearer ${process.env.GRAPHQL_JWT}`
