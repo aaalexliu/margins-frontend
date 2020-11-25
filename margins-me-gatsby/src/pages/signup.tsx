@@ -120,7 +120,7 @@ const Signup = () => {
           ]}
           hasFeedback
         >
-          <Input.Password />
+          <Input.Password  placeholder="At least 8 characters"/>
         </Form.Item>
 
         <Form.Item

@@ -10,6 +10,7 @@ import { Layout, Menu, Button } from 'antd';
 import { useLocation } from "@reach/router"
 import { Link } from 'gatsby';
 import { LoginOrLogout } from '../components';
+import { useStaticQuery, graphql } from "gatsby"
 import './layout.less';
 
 const { Header, Content, Footer } = Layout;
@@ -18,23 +19,68 @@ export default function PageLayout (props: any) {
 
   const location = useLocation();
   const { pathname } = location;
+
+  const data = useStaticQuery(graphql`
+     query SiteTitleQuery {
+       site {
+         siteMetadata {
+           title
+         }
+       }
+     }
+  `);
+
+  const siteTitle = data.site.siteMetadata?.title || `No Title`
+
   return (
     <Layout className="layout">
       <Header>
-        <Menu theme="dark" mode="horizontal" selectedKeys={[pathname]}>
-            <Menu.Item key = "/">
-              <Link to="/">Home</Link>
-            </Menu.Item>
-            <Menu.Item key="/login">
-              <LoginOrLogout />
-            </Menu.Item>
-        </Menu>
+        <div>
+          <h1 style={{ margin: 0 }}>
+            <Link
+              to="/"
+              style={{
+                color: `white`,
+                textDecoration: `none`,
+              }}
+            >
+              {siteTitle}
+            </Link>
+          </h1>
+        </div>
       </Header>
-      <Content style={{padding: '24px'}}>
+      <Content
+        css={{
+          padding: '0 1rem',
+        }}
+      >
         {props.children}
       </Content>
       <Footer>
-        Margins Me ©2020
+          <div
+          style={{
+            display: "grid",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 240px))",
+            padding: "1rem 2rem",
+            fontSize: ".85rem",
+          }}
+        >
+          <div style={{ color: 'lightblue', fontWeight: 700 }}>
+            <a
+              style={{ textDecoration: "none" }}
+              href="https://github.com/gillkyle/gatsby-starter-landing-page"
+            >
+              Contact Us
+            </a>
+          </div>
+          <div style={{ color: 'grey' }}>
+            © {new Date().getFullYear()}
+            {` `}
+            {siteTitle}
+          </div>
+        </div>
       </Footer>
     </Layout>
   );

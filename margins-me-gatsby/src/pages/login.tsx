@@ -11,23 +11,23 @@ import { navigate, Link } from 'gatsby';
 import { currentAccountVar, passwordVar } from '../apollo/cache';
 import { login } from '../amplify/auth';
 
-const CenteredDiv = styled.div`
-  margin: 0 auto;
-  width: 50%;
+// const CenteredDiv = styled.div`
+//   margin: 0 auto;
+//   width: 50%;
 
-  .login-form {
-    max-width: 300px;
-  }
-  .login-form-forgot {
-    float: right;
-  }
-  .ant-col-rtl .login-form-forgot {
-    float: left;
-  }
-  .login-form-button {
-    width: 100%;
-  }
-`;
+//   .login-form {
+//     max-width: 300px;
+//   }
+//   .login-form-forgot {
+//     float: right;
+//   }
+//   .ant-col-rtl .login-form-forgot {
+//     float: left;
+//   }
+//   .login-form-button {
+//     width: 100%;
+//   }
+// `;
 
 const Login = () => {
 
@@ -89,13 +89,23 @@ const Login = () => {
 
   return (
 <PageLayout>
-  <CenteredDiv>
+  <div
+    css={{
+      display: 'flex',
+      justifyContent: 'center',
+      width: '100%',
+    }}
+  >
     <Form
       name="normal-login"
       className="login-form"
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
+      css={{
+        width: '50%',
+        maxWidth: '300px'
+      }}
     >
       <Form.Item
         name="username"
@@ -142,13 +152,17 @@ const Login = () => {
       <Form.Item
         // help={passwordStatus}
       >
-        <Button type="primary" loading={isLoading} htmlType="submit" className="login-form-button">
+        <Button
+          css={{
+            width: '100%'
+          }}
+        type="primary" loading={isLoading} htmlType="submit" className="login-form-button">
           Log in
         </Button>
         Or <Link to="/signup">sign up now!</Link>
       </Form.Item>
     </Form>
-  </CenteredDiv>
+  </div>
 </PageLayout>
   );
 }
