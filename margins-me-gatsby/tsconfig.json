@@ -11,7 +11,10 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "noUnusedLocals": false,
-    "allowJs": true
+    "allowJs": true,
+    "typeRoots": [
+      "custom-typings"
+    ]
   },
   "exclude": ["node_modules", "public", ".cache"]
 }
