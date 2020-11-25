@@ -7,6 +7,7 @@ import {
   GetAllPublicationsDocument,
   PublicationAuthorAnnotationCountFragment
 } from '../__generated__/graphql-types';
+import { getAccountId } from '../utils';
 import { Typography, AutoComplete } from 'antd';
 import { PublicationListItem, Loading } from '../components';
 import { PublicationCard } from '../containers';
@@ -28,8 +29,18 @@ const { Title } = Typography;
 // `;
 
 export const GET_ALL_PUBLICATIONS = gql`
-  query GetAllPublications($orderBy: [PublicationsOrderBy!], $first: Int, $afterCursor: Cursor) {
-    allPublications(orderBy: $orderBy, first: $first, after: $afterCursor) {
+  query GetAllPublications(
+    $accountId: UUID!
+    $orderBy: [PublicationsOrderBy!]
+    $first: Int
+    $afterCursor: Cursor
+  ) {
+    allPublications(
+      condition: { accountId: $accountId }
+      orderBy: $orderBy
+      first: $first
+      after: $afterCursor
+    ) {
       totalCount
       pageInfo {
         endCursor
@@ -67,6 +78,7 @@ const Publications: React.FC<RouteComponentProps> = () => {
     {
       variables: {
         // first: 10,
+        accountId: getAccountId(),
         orderBy: [PublicationsOrderBy.PublicationIdDesc]
       }
     }

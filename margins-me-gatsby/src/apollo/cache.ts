@@ -10,7 +10,7 @@ export const cache: InMemoryCache = new InMemoryCache({
             return currentAccountVar();
           }
         },
-        allPublications: relayStylePagination(),
+        allPublications: relayStylePagination(['condition']),
         allAnnotations: relayStylePagination(['condition']),
         allAnnotationTags: relayStylePagination(['condition']),
         annotation(_, { args, toReference }) {
