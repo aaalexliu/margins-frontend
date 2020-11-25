@@ -10,6 +10,7 @@ import { Layout, Menu, Button } from 'antd';
 import { useLocation } from "@reach/router"
 import { Link } from 'gatsby';
 import { LoginOrLogout } from '../components';
+import { blue } from '@ant-design/colors';
 import { useStaticQuery, graphql } from "gatsby"
 import './layout.less';
 
@@ -33,15 +34,24 @@ export default function PageLayout (props: any) {
   const siteTitle = data.site.siteMetadata?.title || `No Title`
 
   return (
-    <Layout className="layout">
-      <Header>
+    <Layout
+      css={{
+        backgroundColor: 'transparent'
+      }}
+    >
+      <Header
+        css={{
+          color: 'black',
+          backgroundColor: 'transparent'
+        }}
+      >
         <div>
-          <h1 style={{ margin: 0 }}>
+          <h1 css={{ margin: 0 }}>
             <Link
               to="/"
-              style={{
-                color: `white`,
+              css={{
                 textDecoration: `none`,
+                color: 'black'
               }}
             >
               {siteTitle}
@@ -52,13 +62,14 @@ export default function PageLayout (props: any) {
       <Content
         css={{
           padding: '0 1rem',
+          backgroundColor: 'transparent'
         }}
       >
         {props.children}
       </Content>
       <Footer>
           <div
-          style={{
+          css={{
             display: "grid",
             alignItems: "center",
             justifyContent: "space-between",
@@ -67,15 +78,15 @@ export default function PageLayout (props: any) {
             fontSize: ".85rem",
           }}
         >
-          <div style={{ color: 'lightblue', fontWeight: 700 }}>
+          <div css={{ color: blue.primary, fontWeight: 700 }}>
             <a
-              style={{ textDecoration: "none" }}
+              css={{ textDecoration: "none" }}
               href="https://github.com/gillkyle/gatsby-starter-landing-page"
             >
               Contact Us
             </a>
           </div>
-          <div style={{ color: 'grey' }}>
+          <div css={{ color: 'grey' }}>
             © {new Date().getFullYear()}
             {` `}
             {siteTitle}
@@ -108,14 +119,14 @@ export default function PageLayout (props: any) {
 //     <>
 //       <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
 //       <div
-//         style={{
+//         css={{
 //           margin: `0 auto`,
 //           maxWidth: 960,
 //           padding: `0 1.0875rem 1.45rem`,
 //         }}
 //       >
 //         <main>{children}</main>
-//         <footer style={{
+//         <footer css={{
 //           marginTop: `2rem`
 //         }}>
 //           © {new Date().getFullYear()}, Built with
