@@ -2,10 +2,14 @@ import React from "react"
 import PropTypes from "prop-types"
 
 // import Button from "../components/button"
-import { Button } from 'antd';
+import { Button, Typography } from 'antd';
 import headerImage from "../images/header.png";
 import MockupContent from "./image"
-import mockupFrame from "../images/mockup-frame.png"
+// import mockupFrame from "../images/mockup-frame.png"
+import MockupBrowser from '../images/mockup-browser.inline.svg';
+import { navigate } from 'gatsby'
+
+const { Title, Paragraph, Text } = Typography;
 
 const Hero: React.FC = () => (
   <div
@@ -27,26 +31,45 @@ const Hero: React.FC = () => (
         opacity: 0.5,
       }}
     />
-    <h1 css={{ textAlign: "center" }}>Landing Page Starter</h1>
+    <Title level={1}css={{ textAlign: "center" }}>
+      Home For Your Margins
+    </Title>
     <p css={{ textAlign: "center", maxWidth: 440 }}>
-      This landing page looks great on all devices and is minimal in design. Add
-      what you want and deploy.
+      One place to store, organize, and edit all your marginalia. Record the life of your mind.
     </p>
-    <Button>Get Early Access</Button>
-    <div css={{ margin: 60, width: `250px`, position: "relative" }}>
-      <div css={{ clipPath: "inset(2% 5% round 2% 5%)" }}>
-        <MockupContent />
-      </div>
-      <div
-        css={{
-          position: "absolute",
-          width: "250px",
-          top: 0,
-        }}
-      >
-        <img
+    <Button
+      onClick={() => {navigate('/signup')}}
+      type="primary"
+    >Sign Up</Button>
+    <div css={{
+      margin: 60,
+      minWidth: `400px`,
+      width: '50%',
+      position: "relative",
+      }}>
+        <MockupBrowser
+          css={{
+            position: "absolute",
+            width: "100% !important",
+            height: "100% !important",
+            top: 0,
+            zIndex: -1
+          }}
+          />
+        {/* <img
           src={mockupFrame}
           alt="outlines of shapes and confetti in the background "
+        /> */}
+      <div
+        css={{
+          // clipPath: "inset(2% 5% round 2% 5%)",
+          margin: '8% 3.5% 2.25% 3.5%'
+        }}
+      >
+        <MockupContent
+          css={{
+            width: '100%',
+          }}
         />
       </div>
     </div>

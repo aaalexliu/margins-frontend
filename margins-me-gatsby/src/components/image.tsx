@@ -20,9 +20,9 @@ const Image: React.FC= () => {
   // abandoning but keeping for now
     const data = useStaticQuery(graphql`
       query {
-        file(relativePath: { eq: "mockup-content.png" }) {
+        file(relativePath: { eq: "mockup-content-main.png" }) {
           childImageSharp {
-            fluid(maxWidth: 300) {
+            fluid(maxWidth: 600) {
               ...GatsbyImageSharpFluid
             }
           }
