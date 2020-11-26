@@ -24,10 +24,18 @@ module.exports = {
         background_color: `#663399`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
+        icon: `src/images/margins-me-logo.inline.svg`, // This path is relative to the root of the site.
       },      
     },
     //ABOVE IS ALL FROM DEFAULT GATSBY STARTER, DON'T WANT TO BREAK ANYTHING FOR NOW
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /\.inline\.svg$/
+        }
+      }
+    },
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

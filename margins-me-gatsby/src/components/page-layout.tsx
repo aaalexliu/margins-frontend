@@ -11,7 +11,8 @@ import { useLocation } from "@reach/router"
 import { Link } from 'gatsby';
 import { LoginOrLogout } from '../components';
 import { blue } from '@ant-design/colors';
-import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql } from "gatsby";
+import Logo from '../images/margins-me-logo.inline.svg';
 import './layout.less';
 
 const { Header, Content, Footer } = Layout;
@@ -45,7 +46,18 @@ export default function PageLayout (props: any) {
           backgroundColor: 'transparent'
         }}
       >
-        <div>
+        <div
+          css={{
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <Logo css={{
+              height: '3em',
+              width: '3em',
+              margin: '0 5px'
+            }}
+          />
           <h1 css={{ margin: 0 }}>
             <Link
               to="/"
