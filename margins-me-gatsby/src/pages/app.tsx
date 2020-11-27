@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import { message } from 'antd';
+import { SEO } from '../components';
 import { PageLayout } from '../app/components';
 import {
   LoadingPage,
@@ -47,6 +48,9 @@ const App =  () => {
     isLoading ? 
     <LoadingPage /> :
     <PageLayout>
+      <SEO
+        title='App'
+      />
       <Router basepath='/app'>
         <Home path='/'/>
         <Publications path='/publications' />
