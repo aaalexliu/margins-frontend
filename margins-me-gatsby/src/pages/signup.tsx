@@ -10,7 +10,7 @@ import styled from '@emotion/styled';
 
 import { signup } from "../amplify/auth";
 import { currentAccountVar, passwordVar } from '../apollo/cache';
-import { PageLayout } from '../components';
+import { AuthPageLayout } from '../components';
 
 const CenteredSignup = styled.div`
   margin: 0 auto;
@@ -78,8 +78,7 @@ const Signup = () => {
   };
 
   return (
-  <PageLayout>
-    <CenteredSignup>
+  <AuthPageLayout>
       <Form
         // {...formItemLayout}
         layout='vertical'
@@ -161,8 +160,7 @@ const Signup = () => {
           </Button>
         </Form.Item>
       </Form>
-    </CenteredSignup>
-  </PageLayout>
+  </AuthPageLayout>
   );
 };
 

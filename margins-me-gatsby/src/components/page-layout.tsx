@@ -17,7 +17,7 @@ import './layout.less';
 
 const { Header, Content, Footer } = Layout;
 
-export default function PageLayout (props: any) {
+export const PageLayout: React.FC = (props) => {
 
   const location = useLocation();
   const { pathname } = location;
@@ -108,6 +108,34 @@ export default function PageLayout (props: any) {
     </Layout>
   );
 }
+
+export const AuthPageLayout: React.FC = (props) => {
+  return (
+    <PageLayout>
+      <div
+        css={{
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%'
+        }}
+      >
+        <div
+          css={{
+            width: '50%',
+            minWidth: '300px',
+            maxWidth: '350px',
+            marginTop: '50px'
+          }}
+        >
+          {props.children}
+        </div>
+      </div>
+    </PageLayout>
+  )
+
+}
+
+export default PageLayout;
 
 // SAMPLE GATSBY CODE
 // import PropTypes from "prop-types"

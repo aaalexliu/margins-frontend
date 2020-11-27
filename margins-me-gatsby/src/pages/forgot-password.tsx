@@ -3,30 +3,12 @@ import React, { Fragment, useState } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
-import PageLayout from '../components/page-layout';
+import { AuthPageLayout } from '../components/page-layout';
 
 import { navigate, Link } from 'gatsby';
 
 import { currentAccountVar, passwordVar } from '../apollo/cache';
 import { forgotPassword } from '../amplify/auth';
-
-const CenteredDiv = styled.div`
-  margin: 0 auto;
-  width: 50%;
-
-  .login-form {
-    max-width: 300px;
-  }
-  .login-form-forgot {
-    float: right;
-  }
-  .ant-col-rtl .login-form-forgot {
-    float: left;
-  }
-  .login-form-button {
-    width: 100%;
-  }
-`;
 
 const ForgotPassword = () => {
 
@@ -49,8 +31,7 @@ const ForgotPassword = () => {
   }
 
   return (
-<PageLayout>
-  <CenteredDiv>
+  <AuthPageLayout>
     <Form
       name="forget-password"
       className="forgot-password"
@@ -68,13 +49,16 @@ const ForgotPassword = () => {
       </Form.Item>
       <Form.Item
       >
-        <Button type="primary" loading={isLoading} htmlType="submit" className="login-form-button">
+        <Button type="primary" loading={isLoading} htmlType="submit" className="login-form-button"
+          css={{
+            width: '100%'
+          }}
+        >
           Reset Password
         </Button>
       </Form.Item>
     </Form>
-  </CenteredDiv>
-</PageLayout>
+  </AuthPageLayout>
   );
 }
 

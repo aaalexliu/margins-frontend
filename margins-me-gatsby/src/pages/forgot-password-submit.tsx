@@ -3,7 +3,7 @@ import React, { Fragment, useState } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
-import PageLayout from '../components/page-layout';
+import { AuthPageLayout } from '../components';
 
 import { navigate } from 'gatsby';
 
@@ -11,24 +11,6 @@ import { currentAccountVar, passwordVar } from '../apollo/cache';
 import { forgotPasswordSubmit } from '../amplify/auth';
 import { parse } from 'query-string';
 import { useLocation } from '@reach/router';
-
-const CenteredDiv = styled.div`
-  margin: 0 auto;
-  width: 50%;
-
-  .login-form {
-    max-width: 300px;
-  }
-  .login-form-forgot {
-    float: right;
-  }
-  .ant-col-rtl .login-form-forgot {
-    float: left;
-  }
-  .login-form-button {
-    width: 100%;
-  }
-`;
 
 const ForgetPasswordSubmit = () => {
 
@@ -66,8 +48,7 @@ const ForgetPasswordSubmit = () => {
   }
 
   return (
-  <PageLayout>
-    <CenteredDiv>
+  <AuthPageLayout>
       <Form
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -141,13 +122,16 @@ const ForgetPasswordSubmit = () => {
             htmlType="submit"
             className="verify-button"
             disabled={!email}
+            css={{
+              width: '100%'
+            }}
           >
             Submit
           </Button>
         </Form.Item>
       </Form>
-    </CenteredDiv>
-  </PageLayout>
+
+  </AuthPageLayout>
   );
 }
 

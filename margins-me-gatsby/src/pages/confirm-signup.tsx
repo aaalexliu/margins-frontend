@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { navigate } from '@reach/router';
 import { Form, Input, Button } from 'antd';
-import { PageLayout } from '../components';
+import { AuthPageLayout } from '../components';
 
 import { confirmSignup } from '../amplify/auth';
 import { currentAccountVar, passwordVar } from '../apollo/cache';
@@ -49,45 +49,47 @@ const ConfirmSignup = () => {
   }
 
   return (
-  <PageLayout>
-    <CenteredDiv>
-      <Form
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
-        <Form.Item
-          name="code"
-          rules={[
-            {
-              required: true,
-              type: "string",
-              min: 6,
-              max: 6,
-              message: 'Must be 6 digits'
-            },
-            {
-              validator: (_, value) => {
-                if (isNaN(value)) {
-                  return Promise.reject('Only digits are allowed');
-                }
-                return Promise.resolve();
+  <AuthPageLayout>
+    <Form
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+    >
+      <Form.Item
+        name="code"
+        rules={[
+          {
+            required: true,
+            type: "string",
+            min: 6,
+            max: 6,
+            message: 'Must be 6 digits'
+          },
+          {
+            validator: (_, value) => {
+              if (isNaN(value)) {
+                return Promise.reject('Only digits are allowed');
               }
+              return Promise.resolve();
             }
-          ]}
+          }
+        ]}
+      >
+        <Input
+          placeholder="6-digit verification code"
+          type="string"
+        />
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" loading={isLoading} htmlType="submit"
+          css={{
+            width: '100%'
+          }}
         >
-          <Input
-            placeholder="6-digit verification code"
-            type="string"
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" loading={isLoading} htmlType="submit" className="verify-button">
-            Verify
-          </Button>
-        </Form.Item>
-      </Form>
-    </CenteredDiv>
-  </PageLayout>
+          Verify
+        </Button>
+      </Form.Item>
+    </Form>
+  </AuthPageLayout>
   );
 };
 

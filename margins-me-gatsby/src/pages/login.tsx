@@ -3,7 +3,7 @@ import React, { Fragment, useState } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
-import PageLayout from '../components/page-layout';
+import { AuthPageLayout } from '../components';
 
 import { gql, useQuery } from '@apollo/client';
 import { navigate, Link } from 'gatsby';
@@ -88,28 +88,17 @@ const Login = () => {
   };
 
   return (
-<PageLayout>
-  <div
-    css={{
-      display: 'flex',
-      justifyContent: 'center',
-      width: '100%',
-    }}
-  >
+  <AuthPageLayout>
     <Form
       name="normal-login"
       className="login-form"
       initialValues={{ remember: true }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
-      css={{
-        width: '50%',
-        maxWidth: '300px'
-      }}
     >
       <Form.Item
         name="username"
-        rules={[{ required: true, message: 'Please input your Username!' }]}
+        rules={[{ required: true, message: 'Please input your Username or Email!' }]}
       >
         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
       </Form.Item>
@@ -162,8 +151,7 @@ const Login = () => {
         Or <Link to="/signup">sign up now!</Link>
       </Form.Item>
     </Form>
-  </div>
-</PageLayout>
+  </AuthPageLayout>
   );
 }
 
