@@ -192,18 +192,35 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
 
 
   return (
-    <Layout>
+  <div
+    css={{
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center'
+    }}
+  >
+    <Layout
+      css={{
+        maxWidth: '1000px'
+      }}
+    >
       <SectionsSidebar sections={sections} sectionStack={sectionStack}/>
-      <Layout>
+      {/* <Layout> */}
       <Content>
         <PublicationCard publicationId={publicationId} />
-        <Card>
+        <Card
+          size='small'
+          css={{
+            marginBottom: '10px'
+          }}
+        >
           <div
             css={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              width: '100%'
+              width: '100%',
+              padding: '0 10px'
               // marginLeft: 'auto'
             }}
           >
@@ -277,8 +294,9 @@ const PublicationAnnotations: React.FC<RouteComponentProps> = () => {
           </InfiniteScroll>
         </div>
       </Content>
-      </Layout>
+    {/* </Layout> */}
     </Layout>
+  </div>
   )
 }
 
