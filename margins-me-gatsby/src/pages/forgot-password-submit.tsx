@@ -55,7 +55,6 @@ const ForgetPasswordSubmit = () => {
         layout="vertical"
       >
         <Form.Item
-          label="Verification Code"
           name="code"
           rules={[
             {
@@ -82,7 +81,6 @@ const ForgetPasswordSubmit = () => {
         </Form.Item>
         <Form.Item
           name="password"
-          label="New Password"
           rules={[
             {
               required: true,
@@ -91,29 +89,10 @@ const ForgetPasswordSubmit = () => {
           ]}
           hasFeedback
         >
-          <Input.Password />
-        </Form.Item>
-        <Form.Item
-          name="confirm"
-          label="Confirm Password"
-          dependencies={['password']}
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: 'Please confirm your password!',
-            },
-            ({ getFieldValue }) => ({
-              validator(rule, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('The two passwords that you entered do not match!');
-              },
-            }),
-          ]}
-        >
-          <Input.Password />
+          <Input.Password
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            placeholder="Password. At least 8 characters"
+          />
         </Form.Item>
         <Form.Item
         >

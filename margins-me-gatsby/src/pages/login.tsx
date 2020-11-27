@@ -100,7 +100,10 @@ const Login = () => {
         name="username"
         rules={[{ required: true, message: 'Please input your Username or Email!' }]}
       >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="Username or Email"
+        />
       </Form.Item>
       <Form.Item
         name="password"

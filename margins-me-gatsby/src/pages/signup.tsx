@@ -11,6 +11,7 @@ import styled from '@emotion/styled';
 import { signup } from "../amplify/auth";
 import { currentAccountVar, passwordVar } from '../apollo/cache';
 import { AuthPageLayout } from '../components';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 const CenteredSignup = styled.div`
   margin: 0 auto;
@@ -91,11 +92,10 @@ const Signup = () => {
       >
         <Form.Item
           name="email"
-          label="E-mail"
           rules={[
             {
               type: 'email',
-              message: 'The input is not valid E-mail!',
+              message: 'The input is not a valid E-mail!',
             },
             {
               required: true,
@@ -103,12 +103,14 @@ const Signup = () => {
             },
           ]}
         >
-          <Input />
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="Email"
+          />
         </Form.Item>
 
         <Form.Item
           name="password"
-          label="Password"
           rules={[
             {
               required: true,
@@ -119,32 +121,11 @@ const Signup = () => {
           ]}
           hasFeedback
         >
-          <Input.Password  placeholder="At least 8 characters"/>
+          <Input.Password
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            placeholder="Password. At least 8 characters"
+          />
         </Form.Item>
-
-        <Form.Item
-          name="confirm"
-          label="Confirm Password"
-          dependencies={['password']}
-          hasFeedback
-          rules={[
-            {
-              required: true,
-              message: 'Please confirm your password!',
-            },
-            ({ getFieldValue }) => ({
-              validator(rule, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('The two passwords that you entered do not match!');
-              },
-            }),
-          ]}
-        >
-          <Input.Password />
-        </Form.Item>
-
         <Form.Item
           // {...tailFormItemLayout}
         >
