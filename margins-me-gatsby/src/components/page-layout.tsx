@@ -11,7 +11,7 @@ import { useLocation } from "@reach/router"
 import { Link } from 'gatsby';
 import { LoginOrLogout } from '../components';
 import { blue } from '@ant-design/colors';
-import { useStaticQuery, graphql } from "gatsby";
+import { useStaticQuery, graphql, navigate } from "gatsby";
 import Logo from '../images/margins-me-logo.inline.svg';
 import './layout.less';
 
@@ -43,7 +43,10 @@ export const PageLayout: React.FC = (props) => {
       <Header
         css={{
           color: 'black',
-          backgroundColor: 'transparent'
+          backgroundColor: 'transparent',
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'nowrap'
         }}
       >
         <div
@@ -70,6 +73,21 @@ export const PageLayout: React.FC = (props) => {
             </Link>
           </h1>
         </div>
+        <div
+          css={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            flexGrow: 1
+          }}
+        >
+          <Button
+            size='large'
+            type='text'
+            onClick={() => navigate('/login')}
+          >
+            Login
+          </Button>
+        </div>
       </Header>
       <Content
         css={{
@@ -90,13 +108,18 @@ export const PageLayout: React.FC = (props) => {
             fontSize: ".85rem",
           }}
         >
-          <div css={{ color: blue.primary, fontWeight: 700 }}>
-            <a
+          <div css={{ fontWeight: 700 }}>
+            {/* <a
               css={{ textDecoration: "none" }}
               href="https://github.com/gillkyle/gatsby-starter-landing-page"
             >
               Contact Us
-            </a>
+            </a> */}
+            <p>
+              Contact Us:
+              <br/>
+              support@margins.me
+            </p>
           </div>
           <div css={{ color: 'grey' }}>
             © {new Date().getFullYear()}

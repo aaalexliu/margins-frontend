@@ -35,7 +35,8 @@ const Hero: React.FC = () => (
       Home For Your Margins
     </Title>
     <p css={{ textAlign: "center", maxWidth: 440 }}>
-      One place to store, organize, and edit all your marginalia. Record the life of your mind.
+      One place to save, organize, and search your highlights and notes.
+      Augment the life of your mind.
     </p>
     <Button
       onClick={() => {navigate('/signup')}}
@@ -45,6 +46,7 @@ const Hero: React.FC = () => (
       margin: 60,
       minWidth: `400px`,
       width: '50%',
+      maxWidth: '600px',
       position: "relative",
       }}>
         <MockupBrowser
