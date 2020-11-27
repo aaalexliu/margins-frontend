@@ -1,0 +1,17 @@
+mutation DeletePublicationByPublicationId($publicationId: String!) {
+  __typename
+  deletePublicationByPublicationId(input: {publicationId: $publicationId}) {
+    publication {
+      ...PublicationAuthorAnnotationCount
+    }
+  }
+}
+
+mutation UpdatePublicationByPublicationId($publicationId: String!, $publicationPatch: PublicationPatch!) {
+  __typename
+  updatePublicationByPublicationId(input: {publicationPatch: $publicationPatch, publicationId: $publicationId}) {
+    publication {
+      ...PublicationAuthorAnnotationCount
+    }
+  }
+}

@@ -12,7 +12,6 @@ import {
   AddAuthorToPublicationDocument,
   CreateAuthorAndAddToPublicationDocument,
   DeletePublicationAuthorDocument,
-  DeleteAuthorDocument,
   UpdatePublicationDocument
 } from '../__generated__/graphql-types';
 import Modal from 'antd/lib/modal/Modal';

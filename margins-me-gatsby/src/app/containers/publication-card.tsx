@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { useMutation, useQuery, gql } from '@apollo/client';
-import { Card, Descriptions, Button, Typography } from 'antd';
+import { Card, Descriptions, Button, Typography, Modal } from 'antd';
 import { EditOutlined, DeleteOutlined, FileTextOutlined } from '@ant-design/icons';
 import { Loading } from '../components';
 import { PublicationFormModal } from './publication-form-modal';
@@ -11,7 +11,10 @@ import { Link } from 'gatsby';
 import {
   extractPublicationAuthorAnnotationCount
 } from '../graphql/fragments';
-import { GetPublicationByPublicationIdDocument } from '../__generated__/graphql-types';
+import { useDeletePublication } from '../graphql';
+import {
+  GetPublicationByPublicationIdDocument,
+} from '../__generated__/graphql-types';
 
 const { Meta } = Card;
 const { Text } = Typography;
@@ -72,6 +75,9 @@ const PublicationCard: React.FC<PublicationCardProps>
     }
   );
 
+  const [ confirmDelete, setConfirmDelete ] = useState(false);
+  const [ deletePublication ] = useDeletePublication();
+
   if (loading) return <Loading />;
   if (error || !data) return <p>Error in retrieving publication data</p>
 
@@ -87,8 +93,33 @@ const PublicationCard: React.FC<PublicationCardProps>
     authors
   } = extractPublicationAuthorAnnotationCount(publication);
 
-  console.log('current authors:', authors);
+  // console.log('current authors:', authors);
   return (
+  <Fragment>
+    <PublicationFormModal
+      visible={isEditing}
+      setVisible={setIsEditing}
+      initialValues={
+        {
+          publicationId,
+          title,
+          authors
+        }
+      }
+    />
+    <Modal
+      visible={confirmDelete}
+      title="Confirm Delete"
+      okText="Delete"
+      okButtonProps={{danger: true}}
+      onOk={() => {
+        deletePublication({ variables: { publicationId: publication.publicationId }})
+        setConfirmDelete(false);
+      }}
+      onCancel={() => setConfirmDelete(false)}
+    >
+      Are you sure you want to delete this Publication? All associated annotations will also be deleted.
+    </Modal>
     <Card
       title={title}
       extra={[
@@ -96,7 +127,7 @@ const PublicationCard: React.FC<PublicationCardProps>
           onClick={() => setIsEditing(!isEditing)}
         />,
         <Button key="Delete" icon={<DeleteOutlined />} size="small" shape="circle" type="link"
-          // onClick={onDelete}
+          onClick={() => setConfirmDelete(true)}
         />,
       ]}
       // css={{
@@ -115,22 +146,8 @@ const PublicationCard: React.FC<PublicationCardProps>
           <MarginParagraph><Text strong={true}>Annotations: </Text>View {annotationCount} <FileTextOutlined /></MarginParagraph>
         </Link>
       </div>
-      {/* <PublicationDescription
-        authorNames={authorNames}
-        annotationCount={annotationCount}
-      /> */}
-      <PublicationFormModal
-        visible={isEditing}
-        setVisible={setIsEditing}
-        initialValues={
-          {
-            publicationId,
-            title,
-            authors
-          }
-        }
-      />
     </Card>
+  </Fragment>
   )
 }
 
