@@ -10,7 +10,7 @@ const CallToAction = () => (
       title="Try it out!"
       description="Free until my AWS Free Tier expires"
     />
-    <Button onClick={() => navigate('/signup')}>Sign up</Button>
+    <Button type='primary' onClick={() => navigate('/signup')}>Sign up</Button>
   </div>
 )
 
