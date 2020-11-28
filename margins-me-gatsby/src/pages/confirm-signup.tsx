@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { navigate } from '@reach/router';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import { AuthPageLayout } from '../components';
 
 import { confirmSignup } from '../amplify/auth';
@@ -23,6 +23,10 @@ const ConfirmSignup = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const email = currentAccountVar().email;
+  if (passwordVar() == null) {
+    navigate('/login');
+    message.error('Confirming your account requires your password. Redirecting you to login');
+  }
 
   const onFinish = async (values: any) => {
     console.log('success: ', values);
