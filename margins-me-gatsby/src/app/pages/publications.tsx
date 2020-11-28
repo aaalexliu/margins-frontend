@@ -143,16 +143,16 @@ const Publications: React.FC<RouteComponentProps> = () => {
           css={{
             display: 'flex',
             flexWrap: 'wrap',
-            justifyContent: 'flex-start',
+            justifyContent: 'center',
             alignItems: 'stretch',
           }}
         >
-          { displayedPublications ? 
+        { displayedPublications ?
               displayedPublications.map(publication => {
                 return (
                   <div
                     css={{
-                      width: '280px',
+                      width: '500px',
                       margin: '2px',
                     }}
                     key={publication.publicationId}

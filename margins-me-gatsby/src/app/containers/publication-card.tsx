@@ -6,7 +6,7 @@ import { Loading } from '../components';
 import { PublicationFormModal } from './publication-form-modal';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import { Link } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 
 import {
   extractPublicationAuthorAnnotationCount
@@ -113,8 +113,9 @@ const PublicationCard: React.FC<PublicationCardProps>
       okText="Delete"
       okButtonProps={{danger: true}}
       onOk={() => {
-        deletePublication({ variables: { publicationId: publication.publicationId }})
+        deletePublication({ variables: { publicationId: publication.publicationId }});
         setConfirmDelete(false);
+        navigate('/app/publications');
       }}
       onCancel={() => setConfirmDelete(false)}
     >
