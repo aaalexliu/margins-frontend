@@ -6,7 +6,8 @@ import { Loading } from '../components';
 import { PublicationFormModal } from './publication-form-modal';
 import styled from '@emotion/styled';
 import { css } from '@emotion/core';
-import { Link, navigate } from 'gatsby';
+// import { Link, navigate } from 'gatsby';
+import { Link, navigate } from '@reach/router';
 
 import {
   extractPublicationAuthorAnnotationCount

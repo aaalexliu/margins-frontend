@@ -7,11 +7,12 @@
 
 import React, { useState } from "react"
 import { Layout, Menu, Button, Input, Avatar } from 'antd';
-import { useLocation } from "@reach/router"
-import { Link, navigate } from 'gatsby';
+import { useLocation, Link, navigate } from "@reach/router"
+// import { Link, navigate } from 'gatsby';
 import { LogoutButton } from '../containers';
 import { currentAccountVar } from '../../apollo/cache';
 import { BookOutlined, TagOutlined, ContactsOutlined, UserOutlined } from '@ant-design/icons';
+import Logo from '../../images/margins-me-logo.inline.svg';
 
 const { Header, Content, Footer } = Layout;
 const { SubMenu } = Menu;
@@ -32,6 +33,16 @@ export default function PageLayout (props: any) {
           alignItems: 'center'
         }}
       >
+        <Logo css={{
+            height: '3em',
+            width: '3em',
+            padding: '0.3em 0',
+            marginRight: '10px',
+            fill: 'black',
+            backgroundColor: 'white',
+            borderRadius: '25%'
+          }}
+        />
         <Menu theme="dark" mode="horizontal"
           css={{
             flexGrow: 1

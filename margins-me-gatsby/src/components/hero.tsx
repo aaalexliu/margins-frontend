@@ -39,7 +39,7 @@ const Hero: React.FC = () => (
       Augment the life of your mind 🧠💭✍️
     </p>
     <Button
-      onClick={() => {navigate('/signup')}}
+      onClick={() => {navigate('/signup/')}}
       type="primary"
     >Sign Up</Button>
     <div css={{

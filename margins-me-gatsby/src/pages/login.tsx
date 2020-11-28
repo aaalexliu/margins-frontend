@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -9,7 +9,7 @@ import { gql, useQuery } from '@apollo/client';
 import { navigate, Link } from 'gatsby';
 
 import { currentAccountVar, passwordVar } from '../apollo/cache';
-import { login } from '../amplify/auth';
+import { login, getAccountFromSession } from '../amplify/auth';
 
 // const CenteredDiv = styled.div`
 //   margin: 0 auto;
@@ -37,6 +37,23 @@ const Login = () => {
   const [passwordStatus, setPasswordStatus] = useState<
     "" | "error" | "success" | "warning" | "validating" | undefined
   >("");
+
+  useEffect(() => {
+    (async () => {
+      const accountResponse = await getAccountFromSession();
+      if (accountResponse?.account !== undefined) {
+        const { accessToken, email, sub } = accountResponse.account;
+        currentAccountVar({
+          isLoggedIn: true,
+          email,
+          sub,
+          accessToken
+        });
+        message.success('Already logged in. Redirecting to App');
+        navigate('/app')
+      }
+    })()
+  });
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
@@ -70,7 +87,7 @@ const Login = () => {
             email: username
           });
           passwordVar(password);
-          navigate('/confirm-signup');
+          navigate('/confirm-signup/');
           break;
         case 'NotAuthorizedException':
           setIsLoading(false);

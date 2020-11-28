@@ -3,8 +3,9 @@ import {
   Form,
   Input,
   Button,
+  message
 } from 'antd';
-import { navigate } from '@reach/router';
+import { navigate } from 'gatsby';
 
 import styled from '@emotion/styled';
 
@@ -65,15 +66,15 @@ const Signup = () => {
 
       passwordVar(password);
 
-      navigate('/confirm-signup');
+      navigate('/confirm-signup/');
     } else {
       const { error } = signupResponse;
       console.log('error signing up:', error);
       const code = error.code;
       switch (code) {
         case 'UsernameExistsException':
-          alert('User already exists, please Login!');
-          navigate('/login');
+          message.error('User already exists, please Login!');
+          navigate('/login/')
       }
     }
   };

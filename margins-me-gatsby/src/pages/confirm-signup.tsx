@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { navigate } from '@reach/router';
+import { navigate } from 'gatsby';
 import { Form, Input, Button, message } from 'antd';
 import { AuthPageLayout } from '../components';
 
@@ -24,7 +24,7 @@ const ConfirmSignup = () => {
 
   const email = currentAccountVar().email;
   if (passwordVar() == null) {
-    navigate('/login');
+    navigate('/login/');
     message.error('Confirming your account requires your password. Redirecting you to login');
   }
 
