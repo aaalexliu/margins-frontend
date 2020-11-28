@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `margins.me`,
-    description: `Home for your margins`,
+    title: `Margins`,
+    description: `Home for your marginalia`,
     author: `Alex Liu`,
   },
   plugins: [

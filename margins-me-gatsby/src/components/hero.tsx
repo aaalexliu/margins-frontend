@@ -32,11 +32,11 @@ const Hero: React.FC = () => (
       }}
     />
     <Title level={1}css={{ textAlign: "center" }}>
-      Home For Your Margins
+      Home For Your Marginalia
     </Title>
     <p css={{ textAlign: "center", maxWidth: 440 }}>
       One place to save, organize, and search your highlights and notes.
-      Augment the life of your mind.
+      Augment the life of your mind 🧠💭✍️
     </p>
     <Button
       onClick={() => {navigate('/signup')}}

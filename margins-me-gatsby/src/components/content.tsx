@@ -57,13 +57,13 @@ const Content = () => {
   >
     <SectionHeader
       title="Features"
-      description="One tool to import, organize, and view your annotations"
+      description="Make collecting and retrieving your notes effortless"
     />
       <Row align='middle'>
         <Col sm={24} md={12}>
           <h3>Import</h3>
           <p>
-            Email your annotations directly from the Kindle app, and automatically add tags with #. Example: #nice
+            Email your annotations straight from the Kindle app, and automatically tag your annotations with inline #️⃣ tags. #nice
           </p>
         </Col>
         <Col sm={24} md={12}>
@@ -82,7 +82,7 @@ const Content = () => {
         <Col sm={24} md={{order: 2, span: 12}}>
           <h3>Organize</h3>
           <p>
-            Tag your annotations, view your publications by author, change highlight color, and more.
+            Tag your annotations, view your publications by author, change highlight color, and more 🌟.
           </p>
         </Col>
         <Col sm={24} md={{order: 1, span: 12}}>
@@ -101,7 +101,7 @@ const Content = () => {
         <Col sm={24} md={12}>
           <h3>View</h3>
           <p>
-            Search for individual annotations, or view them automatically arranged by location metadata
+            Search 🔍 for individual annotations, or view them automatically arranged by location metadata
           </p>
         </Col>
         <Col sm={24} md={12}>
