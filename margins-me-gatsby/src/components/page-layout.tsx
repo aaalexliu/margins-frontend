@@ -83,7 +83,7 @@ export const PageLayout: React.FC = (props) => {
           <Button
             size='large'
             type='text'
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/login/')}
           >
             Login
           </Button>

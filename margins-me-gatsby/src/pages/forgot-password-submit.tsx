@@ -37,7 +37,7 @@ const ForgetPasswordSubmit = () => {
     setIsLoading(false);
     if (forgotPasswordRes.success) {
       message.success('Successfully rest password! Redirecting to Login');
-      navigate('/login');
+      navigate('/login/');
     }
     console.log('error in submit', forgotPasswordRes.error);
     message.error(forgotPasswordRes.error.message);

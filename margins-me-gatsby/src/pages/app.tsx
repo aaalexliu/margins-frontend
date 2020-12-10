@@ -38,7 +38,7 @@ const App =  () => {
         setIsLoading(false);
       }
       else {
-        navigate('/login');
+        navigate('/login/');
         message.warning('Please Log In!', 5);
       }
     })()
