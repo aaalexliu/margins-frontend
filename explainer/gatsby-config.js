@@ -2,10 +2,9 @@ console.log(process.env.NODE_ENV);
 const NODE_ENV = process.env.NODE_ENV;
 
 module.exports = {
-  pathPrefix: NODE_ENV === 'production' ? '/projects/margins-me' : null,
   siteMetadata: {
     title: `How I Built Margins`,
-    description: `A technical overview of how I Margins, which is essentially a Readwise clone`,
+    description: `A technical overview of how I built Margins, one place for all your marginalia`,
     author: `Alex Liu`,
   },
   plugins: [
@@ -38,4 +37,5 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
   ],
+  pathPrefix: NODE_ENV === 'production' ? '/projects/margins-me' : null
 }
