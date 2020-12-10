@@ -1,10 +1,10 @@
 {
   "config": {
-    "title": "Margins",
+    "title": "Margins: Technical Overview",
     "description": "How I Built Margins",
     "menu": [],
     "version": "0.1.0",
-    "repository": "https://github.com/alexliusq/margins-me-frontend",
+    "repository": "https://github.com/alexliusq/margins-me-frontend/tree/master/explainer",
     "native": false,
     "themeConfig": {},
     "separator": "-",
@@ -17,7 +17,7 @@
       "value": {
         "name": "Overview",
         "route": "/",
-        "link": "https://github.com/gatsbyjs/gatsby-starter-default/edit/master/explainer/docs/docs/docs/index.mdx",
+        "link": "",
         "id": "73498ad0e1e62a714b08085d318f9de1",
         "filepath": "docs/docs/index.mdx",
         "fullpath": "/Users/Alex/projects/margins-me/margins-me-frontend/explainer/docs/index.mdx",
@@ -26,14 +26,19 @@
         "menu": "",
         "headings": [
           {
-            "slug": "overview",
-            "depth": 1,
-            "value": "Overview"
+            "slug": "the-stack-and-the-infrastructure",
+            "depth": 2,
+            "value": "The Stack and the Infrastructure"
           },
           {
-            "slug": "the-stack",
-            "depth": 2,
-            "value": "The Stack"
+            "slug": "backend-github",
+            "depth": 3,
+            "value": "Backend  (Github)"
+          },
+          {
+            "slug": "frontend-github",
+            "depth": 3,
+            "value": "Frontend:  (Github)"
           }
         ]
       }
