@@ -1,9 +1,12 @@
+console.log(process.env.NODE_ENV);
+const NODE_ENV = process.env.NODE_ENV;
+
 module.exports = {
-  pathPrefix: '/projects/margins-me',
+  pathPrefix: NODE_ENV === 'production' ? '/projects/margins-me' : null,
   siteMetadata: {
-    title: `Gatsby Default Starter`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@gatsbyjs`,
+    title: `How I Built Margins`,
+    description: `A technical overview of how I Margins, which is essentially a Readwise clone`,
+    author: `Alex Liu`,
   },
   plugins: [
     {
