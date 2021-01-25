@@ -32,11 +32,11 @@ const Home: React.FC<RouteComponentProps> = () => {
           display: 'flex',
           flexDirection: 'column',
           width: '80%',
-          maxWidth: '700px',
+          maxWidth: '600px',
           alignItems: 'center'
         }}
       >
-        <Title level={3} >Welcome to Margins Me</Title>
+        <Title level={3} >Welcome to Margins</Title>
         <Title level={5} type='secondary'
           css={{
             marginTop: '0px !important'
