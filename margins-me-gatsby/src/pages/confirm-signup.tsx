@@ -29,7 +29,7 @@ const ConfirmSignup = () => {
   }
 
   const onFinish = async (values: any) => {
-    console.log('success: ', values);
+    // console.log('success: ', values);
     setIsLoading(true);
     const signupConfirmResponse = await confirmSignup(
       email,
@@ -55,6 +55,7 @@ const ConfirmSignup = () => {
   return (
   <AuthPageLayout>
     <Form
+      layout="vertical"
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
     >
@@ -92,6 +93,9 @@ const ConfirmSignup = () => {
           Verify
         </Button>
       </Form.Item>
+      <p>
+      Please check for an email from <b>hello@margins.me</b> for your verification code
+      </p>
     </Form>
   </AuthPageLayout>
   );
