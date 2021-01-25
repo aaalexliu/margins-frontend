@@ -2,6 +2,7 @@
 
 All actively developed and deployed code is in `margins-me-gatsby`. I started with an SPA in `margins-me-react` and wrapped the SPA in a Gatsby site in order to get the benefits of Static Site Generation.
 
+For a deep dive in the architecture decisions (why Apollo, why Gatsby, why GraphQL, etc.) check out my post on [Margin's Front End Architecture](https://alexliusiqing.com/portfolio/margins/front-end)
 ## 🧐 What's inside?
 
 ```text
