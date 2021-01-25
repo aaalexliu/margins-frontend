@@ -11,7 +11,8 @@ import {
   TagAnnotations,
   Authors,
   Search,
-  Account
+  Account,
+  ImportExport
 } from '../app/pages';
 import { Home } from '../app/pages';
 import { Router, Redirect } from "@reach/router";
@@ -60,6 +61,7 @@ const App =  () => {
         <Authors path='/authors'/>
         <Search path='/search' />
         <Account path='/account' />
+        <ImportExport path='/import-export'/>
         <NotFound default={true}/>
       </Router>
     </PageLayout>
