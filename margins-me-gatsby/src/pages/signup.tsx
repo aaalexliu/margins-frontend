@@ -11,7 +11,7 @@ import styled from '@emotion/styled';
 
 import { signup } from "../amplify/auth";
 import { currentAccountVar, passwordVar } from '../apollo/cache';
-import { AuthPageLayout } from '../components';
+import { AuthPageLayout, SEO } from '../components';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 const CenteredSignup = styled.div`
@@ -81,6 +81,7 @@ const Signup = () => {
 
   return (
   <AuthPageLayout>
+      <SEO title="Sign Up"/>
       <Form
         // {...formItemLayout}
         layout='vertical'

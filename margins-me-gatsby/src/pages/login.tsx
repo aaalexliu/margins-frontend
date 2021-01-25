@@ -3,7 +3,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
-import { AuthPageLayout } from '../components';
+import { AuthPageLayout, SEO } from '../components';
 
 import { gql, useQuery } from '@apollo/client';
 import { navigate, Link } from 'gatsby';
@@ -106,6 +106,7 @@ const Login = () => {
 
   return (
   <AuthPageLayout>
+    <SEO title="Login"/>
     <Form
       name="normal-login"
       className="login-form"

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { navigate } from 'gatsby';
 import { Form, Input, Button, message } from 'antd';
-import { AuthPageLayout } from '../components';
+import { AuthPageLayout, SEO } from '../components';
 
 import { confirmSignup } from '../amplify/auth';
 import { currentAccountVar, passwordVar } from '../apollo/cache';
@@ -54,6 +54,7 @@ const ConfirmSignup = () => {
 
   return (
   <AuthPageLayout>
+    <SEO title="Confirm Sign Up"/>
     <Form
       layout="vertical"
       onFinish={onFinish}

@@ -4,6 +4,7 @@ import { Form, Input, Button, Checkbox, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import { AuthPageLayout } from '../components/page-layout';
+import { SEO } from '../components';
 
 import { navigate, Link } from 'gatsby';
 
@@ -32,6 +33,7 @@ const ForgotPassword = () => {
 
   return (
   <AuthPageLayout>
+    <SEO title="Forgot Password" />
     <Form
       name="forget-password"
       className="forgot-password"
