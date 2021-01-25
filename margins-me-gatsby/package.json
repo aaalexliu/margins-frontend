@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "margins-gatsby",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Front end for margins.me, developed in Gatsby",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Alex Liu <alexliusiqing@gmail.com>",
   "dependencies": {
     "@ant-design/colors": "^5.0.0",
     "@apollo/client": "^3.2.5",
