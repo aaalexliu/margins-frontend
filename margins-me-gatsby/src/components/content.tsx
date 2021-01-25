@@ -61,9 +61,9 @@ const Content = () => {
     />
       <Row align='middle'>
         <Col sm={24} md={12}>
-          <h3>Import</h3>
+          <h3>Import and Export</h3>
           <p>
-            Email your annotations straight from the Kindle app, and automatically tag your annotations with inline #️⃣ tags. #nice
+            Email your annotations straight from the Kindle app, and automatically tag your annotations with inline #️⃣ tags. Export your Annotations in JSON format using GraphiQL.
           </p>
         </Col>
         <Col sm={24} md={12}>
